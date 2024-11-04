@@ -1,4 +1,4 @@
-# softw
+# M12_camping
 <b>Autores: Carlos Alejos (872342) y Diego Valenzuela (874085)</b>  
 <b>Asignatura:</b> Ingeniería del Software, Universidad de Zaragoza
 
