@@ -1,5 +1,5 @@
 # softw
-<b>Autores: Carlos Alejos (872342) y Diego Valenzuela (874085)  </b>
+<b>Autores: Carlos Alejos (872342) y Diego Valenzuela (874085)</b>  
 <b>Asignatura:</b> Ingeniería del Software
 
 El siguiente código es una implementación de un sistema para una aplicación que se encarga de la gestión de las reservas de un camping el cual cuenta con una serie de parcelas, que pueden ser reservadas por el propietario.  
