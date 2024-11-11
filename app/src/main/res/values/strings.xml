@@ -1,16 +1,19 @@
 <resources>
-    <string name="app_name">Notepad</string>
+    <string name="app_name">M12_camping</string>
     <string name="hint_nombre">Escribe un nombre ...</string>
     <string name="hint_maxOcupantes">Maximos ocupantes ...</string>
     <string name="hint_precioXpersona">Precio por persona ...</string>
     <string name="hint_descripcion">Escribe una descripcion ...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Parcela no guardada porque no hay nombre.</string>
-    <string name="add_note">Añadir Parcela</string>
+    <string name="add_parcela">Añadir Parcela</string>
     <string name="menu_delete">Borrar Parcela</string>
     <string name="menu_edit">Editar Parcela</string>
     <string name="cambiar_a_reservas">Listado Reservas</string>
     <string name="cambiar_a_parcelas">Listado Parcelas</string>
+    <string name="ordenar_por_nombre">Ordenar por nombre</string>
+    <string name="ordenar_por_maxocupantes">Ordenar por ocupantes</string>
+    <string name="ordenar_por_precioxpersona">Ordenar por precio</string>
     <string name="nombre">Nombre</string>
     <string name="maxOcupantes">MaxOcupantes</string>
     <string name="precioXpersona">PrecioXpersona</string>
