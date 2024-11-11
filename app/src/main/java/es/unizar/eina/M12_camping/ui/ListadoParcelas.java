@@ -51,7 +51,7 @@ public class ListadoParcelas extends AppCompatActivity {
         mParcelaViewModel = new ViewModelProvider(this).get(ParcelaViewModel.class);
 
         mParcelaViewModel.getAllParcelas().observe(this, parcelas -> {
-            // Update the cached copy of the notes in the adapter.
+            // Update the cached copy of the parcelas in the adapter.
             mAdapter.submitList(parcelas);
         });
 
@@ -75,9 +75,19 @@ public class ListadoParcelas extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == INSERT_ID) {
-            createParcela();
-            return true;
+        switch (item.getItemId()) {
+            case CHANGE_ID:
+
+                return true;
+            case ORDER_ID_NOMBRE:
+                ordenarParcelasNombre();
+                return true;
+            case ORDER_ID_MAXOCUPANTES:
+                ordenarParcelasMaxOcupantes();
+                return true;
+            case ORDER_ID_PRECIOXPERSONA:
+                ordenarParcelasPrecioXpersona();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -101,6 +111,18 @@ public class ListadoParcelas extends AppCompatActivity {
 
     private void createParcela() {
         mStartCreateParcela.launch(new Intent(this, ParcelaEdit.class));
+    }
+
+    private void ordenarParcelasNombre() {
+        mParcelaViewModel.getParcelasOrderedNombre();
+    }
+
+    private void ordenarParcelasMaxOcupantes() {
+        mParcelaViewModel.getParcelasOrderedOcupantes();
+    }
+
+    private void ordenarParcelasPrecioXpersona() {
+        mParcelaViewModel.getParcelasOrderedPrecio();
     }
 
     ActivityResultLauncher<Intent> mStartCreateParcela = newActivityResultLauncher(new ExecuteActivityResult() {
