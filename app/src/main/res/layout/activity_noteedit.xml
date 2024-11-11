@@ -12,17 +12,60 @@
 
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title"
+            android:text="@string/nombre"
             android:layout_margin="@dimen/big_padding"
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/title"
+            android:id="@+id/nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/big_padding"
             android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_title"
+            android:hint="@string/hint_nombre"
+            android:inputType="textAutoComplete"
+            android:minHeight="@dimen/min_height"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/maxOcupantes"
+            android:layout_margin="@dimen/big_padding"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/maxOcupantes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_padding"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/hint_maxOcupantes"
+            android:inputType="textAutoComplete"
+            android:minHeight="@dimen/min_height"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/precioXpersona"
+            android:layout_margin="@dimen/big_padding"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/precioXpersona"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_padding"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/hint_precioXpersona"
             android:inputType="textAutoComplete"
             android:minHeight="@dimen/min_height"
             android:textSize="18sp" />
@@ -30,16 +73,16 @@
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/body"
+        android:text="@string/descripcion"
         android:layout_margin="@dimen/big_padding"
         android:textSize="18sp" />
-    <EditText android:id="@+id/body"
+    <EditText android:id="@+id/descripcion"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/hint_body"
+        android:hint="@string/descripcion"
         android:inputType="textAutoComplete"
         android:layout_margin="@dimen/big_padding"
         android:textSize="18sp" />
