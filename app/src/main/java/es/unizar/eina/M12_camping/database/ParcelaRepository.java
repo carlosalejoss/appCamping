@@ -32,7 +32,7 @@ public class ParcelaRepository {
     public ParcelaRepository(Application application) {
         CampingRoomDatabase db = CampingRoomDatabase.getDatabase(application);
         mParcelaDao = db.parcelaDao();
-        mAllParcelas = mParcelaDao.getOrderedParcelas();
+        mAllParcelas = mParcelaDao.getUnOrderedParcelas();
     }
 
     /** Devuelve un objeto de tipo LiveData con todas las notas.
@@ -44,8 +44,8 @@ public class ParcelaRepository {
     }
 
     /** Inserta una nota nueva en la base de datos
-     * @param parcela La nota consta de: un título (parcela.getTitle()) no nulo (parcela.getTitle()!=null) y no vacío
-     *             (parcela.getTitle().length()>0); y un cuerpo (parcela.getBody()) no nulo.
+     * @param parcela La nota consta de: un nombre (parcela.getNombre()) no nulo (parcela.getNombre()!=null) y no vacío
+     *             (parcela.getNombre().length()>0); y un cuerpo (parcela.getBody()) no nulo.
      * @return Si la nota se ha insertado correctamente, devuelve el identificador de la nota que se ha creado. En caso
      *         contrario, devuelve -1 para indicar el fallo.
      */
@@ -67,7 +67,8 @@ public class ParcelaRepository {
 
     /** Actualiza una nota en la base de datos
      * @param parcela La nota que se desea actualizar y que consta de: un identificador (parcela.getId()) mayor que 0; un
-     *             título (parcela.getTitle()) no nulo y no vacío; y un cuerpo (parcela.getBody()) no nulo.
+     *             nombre (parcela.getNombre()) no nulo y no vacío; un numero maximo de ocupantes (parcela.getMaxOcupantes());
+     *             un precio por persona (parcela.getPrecioXpersona()); y una descripción (parcela.getDescripcion()).
      * @return Un valor entero con el número de filas modificadas: 1 si el identificador se corresponde con una nota
      *         previamente insertada; 0 si no existe previamente una nota con ese identificador, o hay algún problema
      *         con los atributos.

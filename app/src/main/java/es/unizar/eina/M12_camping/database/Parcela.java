@@ -13,15 +13,23 @@ public class Parcela {
     private int id;
 
     @NonNull
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "nombre")
+    private String nombre;
 
-    @ColumnInfo(name = "body")
-    private String body;
+    @ColumnInfo(name = "maxOcupantes")
+    private int maxOcupantes;
 
-    public Parcela(@NonNull String title, String body) {
-        this.title = title;
-        this.body = body;
+    @ColumnInfo(name = "precioXpersona")
+    private double precioXpersona;
+
+    @ColumnInfo(name = "descripcion")
+    private String descripcion;
+
+    public Parcela(@NonNull String nombre, int maxOcupantes, double precioXpersona, String descripcion) {
+        this.nombre = nombre;
+        this.maxOcupantes = maxOcupantes;
+        this.precioXpersona = precioXpersona;
+        this.descripcion = descripcion;
     }
 
     /** Devuelve el identificador de la parcela */
@@ -34,14 +42,44 @@ public class Parcela {
         this.id = id;
     }
 
-    /** Devuelve el título de la parcela */
-    public String getTitle(){
-        return this.title;
+    /** Devuelve el nombre de la parcela */
+    public String getNombre(){
+        return this.nombre;
     }
 
-    /** Devuelve el cuerpo de la parcela */
-    public String getBody(){
-        return this.body;
+    /** Permite actualizar el nombre de una parcela */
+    public void setNombre(@NonNull String nombre) {
+        this.nombre = nombre;
+    }
+
+    /** Devuelve el numero máximo de ocupantes de la parcela */
+    public int getMaxOcupantes(){
+        return this.maxOcupantes;
+    }
+
+    /** Permite actualizar el numero maximo de ocupantes de una parcela */
+    public void setMaxOcupantes(int maxOcupantes) {
+        this.maxOcupantes = maxOcupantes;
+    }
+
+    /** Devuelve el precio por persona de la parcela */
+    public double getPrecioXpersona(){
+        return this.precioXpersona;
+    }
+
+    /** Permite actualizar el precio por persona de una parcela */
+    public void setPrecioXpersona(int precioXpersona) {
+        this.precioXpersona = precioXpersona;
+    }
+
+    /** Devuelve el numero máximo de ocupantes de la parcela */
+    public String getDescripcion(){
+        return this.descripcion;
+    }
+
+    /** Permite actualizar el numero maximo de ocupantes de una parcela */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
 }
