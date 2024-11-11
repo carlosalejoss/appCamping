@@ -27,5 +27,6 @@ public class ParcelaViewModel extends AndroidViewModel {
     public void insert(Parcela parcela) { mRepository.insert(parcela); }
 
     public void update(Parcela parcela) { mRepository.update(parcela); }
+
     public void delete(Parcela parcela) { mRepository.delete(parcela); }
 }

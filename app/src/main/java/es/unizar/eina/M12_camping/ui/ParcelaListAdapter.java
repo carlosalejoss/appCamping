@@ -37,7 +37,7 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
     public void onBindViewHolder(ParcelaViewHolder holder, int position) {
 
         Parcela current = getItem(position);
-        holder.bind(current.getTitle());
+        holder.bind(current.getNombre());
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -59,9 +59,9 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
 
         @Override
         public boolean areContentsTheSame(@NonNull Parcela oldItem, @NonNull Parcela newItem) {
-            //android.util.Log.d ( "ParcelaDiff" , "areContentsTheSame " + oldItem.getTitle() + " vs " + newItem.getTitle() + " " + oldItem.getTitle().equals(newItem.getTitle()));
+            //android.util.Log.d ( "ParcelaDiff" , "areContentsTheSame " + oldItem.getNombre() + " vs " + newItem.getNombre() + " " + oldItem.getNombre().equals(newItem.getNombre()));
             // We are just worried about differences in visual representation, i.e. changes in the title
-            return oldItem.getTitle().equals(newItem.getTitle());
+            return oldItem.getNombre().equals(newItem.getNombre());
         }
     }
 }

@@ -25,6 +25,8 @@ public class ListadoParcelas extends AppCompatActivity {
     static final int INSERT_ID = Menu.FIRST;
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
+    static final int CHANGE_ID = Menu.FIRST + 3;
+
 
     RecyclerView mRecyclerView;
 
@@ -59,7 +61,7 @@ public class ListadoParcelas extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_note);
-        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
+        menu.add(Menu.NONE, CHANGE_ID, Menu.NONE, R.string.cambiar_a_reservas);
         return result;
     }
 
@@ -79,7 +81,7 @@ public class ListadoParcelas extends AppCompatActivity {
             case DELETE_ID:
                 Toast.makeText(
                         getApplicationContext(),
-                        "Deleting " + current.getTitle(),
+                        "Deleting " + current.getNombre(),
                         Toast.LENGTH_LONG).show();
                 mParcelaViewModel.delete(current);
                 return true;
@@ -107,8 +109,11 @@ public class ListadoParcelas extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Bundle extras = result.getData().getExtras();
-                        es.unizar.eina.M12_camping.database.Parcela parcela = new es.unizar.eina.M12_camping.database.Parcela(extras.getString(ParcelaEdit.PARCELA_TITLE),
-                                extras.getString(ParcelaEdit.PARCELA_BODY));
+                        es.unizar.eina.M12_camping.database.Parcela parcela = new es.unizar.eina.M12_camping.database.Parcela(
+                                extras.getString(ParcelaEdit.PARCELA_NOMBRE),
+                                extras.getInt(ParcelaEdit.PARCELA_MAXOCUPANTES),
+                                extras.getDouble(ParcelaEdit.PARCELA_PRECIOXPERSONA),
+                                extras.getString(ParcelaEdit.PARCELA_DESCRIPCION));
                         executable.process(extras, parcela);
                     }
                 });
@@ -116,8 +121,10 @@ public class ListadoParcelas extends AppCompatActivity {
 
     private void editParcela(es.unizar.eina.M12_camping.database.Parcela current) {
         Intent intent = new Intent(this, ParcelaEdit.class);
-        intent.putExtra(ParcelaEdit.PARCELA_TITLE, current.getTitle());
-        intent.putExtra(ParcelaEdit.PARCELA_BODY, current.getBody());
+        intent.putExtra(ParcelaEdit.PARCELA_NOMBRE, current.getNombre());
+        intent.putExtra(ParcelaEdit.PARCELA_MAXOCUPANTES, current.getMaxOcupantes());
+        intent.putExtra(ParcelaEdit.PARCELA_PRECIOXPERSONA, current.getPrecioXpersona());
+        intent.putExtra(ParcelaEdit.PARCELA_DESCRIPCION, current.getDescripcion());
         intent.putExtra(ParcelaEdit.PARCELA_ID, current.getId());
         mStartUpdateParcela.launch(intent);
     }
