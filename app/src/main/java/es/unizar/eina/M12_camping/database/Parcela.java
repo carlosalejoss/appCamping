@@ -43,6 +43,7 @@ public class Parcela {
     }
 
     /** Devuelve el nombre de la parcela */
+    @NonNull
     public String getNombre(){
         return this.nombre;
     }
