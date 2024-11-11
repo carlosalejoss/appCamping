@@ -69,7 +69,7 @@ public class Parcela {
     }
 
     /** Permite actualizar el precio por persona de una parcela */
-    public void setPrecioXpersona(int precioXpersona) {
+    public void setPrecioXpersona(double precioXpersona) {
         this.precioXpersona = precioXpersona;
     }
 
