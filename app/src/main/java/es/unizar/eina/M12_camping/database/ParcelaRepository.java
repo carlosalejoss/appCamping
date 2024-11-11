@@ -20,6 +20,10 @@ public class ParcelaRepository {
 
     private final ParcelaDao mParcelaDao;
     private final LiveData<List<Parcela>> mAllParcelas;
+    private final LiveData<List<Parcela>> mParcelasOrdNombre;
+    private final LiveData<List<Parcela>> mParcelasOrdOcupantes;
+    private final LiveData<List<Parcela>> mParcelasOrdPrecio;
+
 
     private final long TIMEOUT = 15000;
 
@@ -33,6 +37,10 @@ public class ParcelaRepository {
         CampingRoomDatabase db = CampingRoomDatabase.getDatabase(application);
         mParcelaDao = db.parcelaDao();
         mAllParcelas = mParcelaDao.getUnOrderedParcelas();
+        mParcelasOrdNombre = mParcelaDao.getOrderedParcelasNombre();
+        mParcelasOrdOcupantes = mParcelaDao.getOrderedParcelasMaxOcupantes();
+        mParcelasOrdPrecio = mParcelaDao.getOrderedParcelasPrecioXpersona();
+
     }
 
     /** Devuelve un objeto de tipo LiveData con todas las notas.
@@ -41,6 +49,18 @@ public class ParcelaRepository {
      */
     public LiveData<List<Parcela>> getAllParcelas() {
         return mAllParcelas;
+    }
+
+    public LiveData<List<Parcela>> getParcelasOrderedNombre() {
+        return mParcelasOrdNombre;
+    }
+
+    public LiveData<List<Parcela>> getParcelasOrderedOcupantes() {
+        return mParcelasOrdOcupantes;
+    }
+
+    public LiveData<List<Parcela>> getParcelasOrderedPrecio() {
+        return mParcelasOrdPrecio;
     }
 
     /** Inserta una nota nueva en la base de datos
