@@ -18,6 +18,8 @@ import es.unizar.eina.M12_camping.R;
 
 import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 
+import java.util.Objects;
+
 /** Pantalla principal de la aplicación ListadoParcelas */
 public class ListadoParcelas extends AppCompatActivity {
     private ParcelaViewModel mParcelaViewModel;
@@ -26,6 +28,9 @@ public class ListadoParcelas extends AppCompatActivity {
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
     static final int CHANGE_ID = Menu.FIRST + 3;
+    static final int ORDER_ID_NOMBRE = Menu.FIRST + 4;
+    static final int ORDER_ID_MAXOCUPANTES = Menu.FIRST + 5;
+    static final int ORDER_ID_PRECIOXPERSONA = Menu.FIRST + 6;
 
 
     RecyclerView mRecyclerView;
@@ -60,17 +65,19 @@ public class ListadoParcelas extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_note);
         menu.add(Menu.NONE, CHANGE_ID, Menu.NONE, R.string.cambiar_a_reservas);
+        menu.add(Menu.NONE, ORDER_ID_NOMBRE, Menu.NONE, R.string.ordenar_por_nombre);
+        menu.add(Menu.NONE, ORDER_ID_MAXOCUPANTES, Menu.NONE, R.string.ordenar_por_maxocupantes);
+        menu.add(Menu.NONE, ORDER_ID_PRECIOXPERSONA, Menu.NONE, R.string.ordenar_por_precioxpersona);
+
         return result;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case INSERT_ID:
-                createParcela();
-                return true;
+        if (item.getItemId() == INSERT_ID) {
+            createParcela();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -108,9 +115,11 @@ public class ListadoParcelas extends AppCompatActivity {
                 new StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
+                        assert result.getData() != null;
                         Bundle extras = result.getData().getExtras();
+                        assert extras != null;
                         es.unizar.eina.M12_camping.database.Parcela parcela = new es.unizar.eina.M12_camping.database.Parcela(
-                                extras.getString(ParcelaEdit.PARCELA_NOMBRE),
+                                Objects.requireNonNull(extras.getString(ParcelaEdit.PARCELA_NOMBRE)),
                                 extras.getInt(ParcelaEdit.PARCELA_MAXOCUPANTES),
                                 extras.getDouble(ParcelaEdit.PARCELA_PRECIOXPERSONA),
                                 extras.getString(ParcelaEdit.PARCELA_DESCRIPCION));
