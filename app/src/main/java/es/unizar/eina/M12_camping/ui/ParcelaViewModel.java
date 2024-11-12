@@ -10,15 +10,25 @@ import java.util.List;
 import es.unizar.eina.M12_camping.database.Parcela;
 import es.unizar.eina.M12_camping.database.ParcelaRepository;
 
+/**
+ * ViewModel para gestionar la UI de parcelas y almacenar datos para la actividad ListadoParcelas.
+ * Proporciona métodos para obtener listas de parcelas y realizar operaciones CRUD a través del repositorio.
+ */
 public class ParcelaViewModel extends AndroidViewModel {
 
-    private ParcelaRepository mRepository;
+    private final ParcelaRepository mRepository;
 
     private final LiveData<List<Parcela>> mAllParcelas;
     private final LiveData<List<Parcela>> mParcelasOrdNombre;
     private final LiveData<List<Parcela>> mParcelasOrdOcupantes;
     private final LiveData<List<Parcela>> mParcelasOrdPrecio;
 
+    /**
+     * Constructor de ParcelaViewModel.
+     * Inicializa el repositorio y obtiene las listas de parcelas.
+     *
+     * @param application La aplicación actual, que proporciona el contexto para inicializar el repositorio.
+     */
     public ParcelaViewModel(Application application) {
         super(application);
         mRepository = new ParcelaRepository(application);
@@ -28,23 +38,66 @@ public class ParcelaViewModel extends AndroidViewModel {
         mParcelasOrdPrecio = mRepository.getParcelasOrderedPrecio();
     }
 
-    LiveData<List<Parcela>> getAllParcelas() { return mAllParcelas; }
+    /**
+     * Obtiene todas las parcelas sin un orden específico.
+     *
+     * @return Un objeto LiveData que contiene la lista de todas las parcelas.
+     */
+    LiveData<List<Parcela>> getAllParcelas() {
+        return mAllParcelas;
+    }
 
+    /**
+     * Obtiene todas las parcelas ordenadas por nombre.
+     *
+     * @return Un objeto LiveData que contiene la lista de parcelas ordenadas alfabéticamente.
+     */
     LiveData<List<Parcela>> getParcelasOrderedNombre() {
         return mParcelasOrdNombre;
     }
 
+    /**
+     * Obtiene todas las parcelas ordenadas por el número máximo de ocupantes.
+     *
+     * @return Un objeto LiveData que contiene la lista de parcelas ordenadas por ocupantes.
+     */
     LiveData<List<Parcela>> getParcelasOrderedOcupantes() {
         return mParcelasOrdOcupantes;
     }
 
+    /**
+     * Obtiene todas las parcelas ordenadas por el precio por persona.
+     *
+     * @return Un objeto LiveData que contiene la lista de parcelas ordenadas por precio.
+     */
     LiveData<List<Parcela>> getParcelasOrderedPrecio() {
         return mParcelasOrdPrecio;
     }
 
-    public void insert(Parcela parcela) { mRepository.insert(parcela); }
+    /**
+     * Inserta una nueva parcela en la base de datos.
+     *
+     * @param parcela La parcela a insertar.
+     */
+    public void insert(Parcela parcela) {
+        mRepository.insert(parcela);
+    }
 
-    public void update(Parcela parcela) { mRepository.update(parcela); }
+    /**
+     * Actualiza una parcela existente en la base de datos.
+     *
+     * @param parcela La parcela a actualizar.
+     */
+    public void update(Parcela parcela) {
+        mRepository.update(parcela);
+    }
 
-    public void delete(Parcela parcela) { mRepository.delete(parcela); }
+    /**
+     * Elimina una parcela de la base de datos.
+     *
+     * @param parcela La parcela a eliminar.
+     */
+    public void delete(Parcela parcela) {
+        mRepository.delete(parcela);
+    }
 }

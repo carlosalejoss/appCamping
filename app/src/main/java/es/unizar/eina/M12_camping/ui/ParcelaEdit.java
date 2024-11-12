@@ -12,9 +12,14 @@ import android.widget.Toast;
 
 import es.unizar.eina.M12_camping.R;
 
-/** Pantalla utilizada para la creación o edición de una parcela */
+/**
+ * Pantalla utilizada para la creación o edición de una parcela.
+ * Esta actividad permite al usuario ingresar o modificar los detalles de una parcela.
+ * Una vez completados los cambios, los datos se envían de vuelta a la actividad principal.
+ */
 public class ParcelaEdit extends AppCompatActivity {
 
+    /** Constantes para identificar los datos que se pasan en el Intent */
     public static final String PARCELA_NOMBRE = "nombre";
     public static final String PARCELA_MAXOCUPANTES = "maxOcupantes";
     public static final String PARCELA_PRECIOXPERSONA = "precioXpersona";
@@ -29,6 +34,12 @@ public class ParcelaEdit extends AppCompatActivity {
 
     Button mSaveButton;
 
+    /**
+     * Método que se llama cuando se crea la actividad.
+     * Configura los elementos de la interfaz de usuario y carga los datos existentes si están disponibles.
+     *
+     * @param savedInstanceState Estado anterior de la actividad, si se ha guardado.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +80,14 @@ public class ParcelaEdit extends AppCompatActivity {
         populateFields();
     }
 
+    /**
+     * Rellena los campos de texto con los datos de una parcela existente si están disponibles.
+     * Recupera los datos pasados en el Intent y los asigna a los campos correspondientes.
+     */
     private void populateFields() {
         mRowId = null;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-
             Log.d("ParcelaEdit", "Extras Nombre: " + extras.getString(ParcelaEdit.PARCELA_NOMBRE));
             Log.d("ParcelaEdit", "Extras MaxOcupantes: " + extras.getInt(ParcelaEdit.PARCELA_MAXOCUPANTES, 0));
             Log.d("ParcelaEdit", "Extras PrecioXpersona: " + extras.getDouble(ParcelaEdit.PARCELA_PRECIOXPERSONA, 0.0));

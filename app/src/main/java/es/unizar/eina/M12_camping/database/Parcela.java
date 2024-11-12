@@ -5,26 +5,44 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-/** Clase anotada como entidad que representa una parcela y que consta de título y cuerpo */
+/**
+ * Esta clase representa una parcela en un camping.
+ * La clase incluye el nombre, el número máximo de ocupantes,
+ * el precio por persona y la descripción de la parcela.
+ */
 @Entity(tableName = "parcela")
 public class Parcela {
+
+    /** id de la parcela */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 
+    /** nombre de la parcela */
     @NonNull
     @ColumnInfo(name = "nombre")
     private String nombre;
 
+    /** numero maximo de ocupantes de la parcela */
     @ColumnInfo(name = "maxOcupantes")
     private int maxOcupantes;
 
+    /** precio por persona de la parcela */
     @ColumnInfo(name = "precioXpersona")
     private double precioXpersona;
 
+    /** descripcion de la parcela */
     @ColumnInfo(name = "descripcion")
     private String descripcion;
 
+    /**
+     * Constructor para inicializar los detalles de la parcela.
+     *
+     * @param nombre El nombre de la parcela.
+     * @param maxOcupantes El número máximo de ocupantes de la parcela.
+     * @param precioXpersona El precio por persona para esta parcela.
+     * @param descripcion La descripción de la parcela.
+     */
     public Parcela(@NonNull String nombre, int maxOcupantes, double precioXpersona, String descripcion) {
         this.nombre = nombre;
         this.maxOcupantes = maxOcupantes;
@@ -73,12 +91,12 @@ public class Parcela {
         this.precioXpersona = precioXpersona;
     }
 
-    /** Devuelve el numero máximo de ocupantes de la parcela */
+    /** Devuelve la descripcion de la parcela */
     public String getDescripcion(){
         return this.descripcion;
     }
 
-    /** Permite actualizar el numero maximo de ocupantes de una parcela */
+    /** Permite actualizar la descripcion de una parcela */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }

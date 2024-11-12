@@ -1,6 +1,5 @@
 package es.unizar.eina.M12_camping.database;
 
-
 import android.app.Application;
 import android.util.Log;
 
@@ -13,8 +12,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Clase que gestiona el acceso la fuente de datos.
- * Interacciona con la base de datos a través de las clases CampingRoomDatabase y ParcelaDao.
+ * Clase que gestiona el acceso a la fuente de datos para las parcelas.
+ * Interactúa con la base de datos a través de las clases {@link CampingRoomDatabase} y {@link ParcelaDao}.
+ * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en las parcelas.
  */
 public class ParcelaRepository {
 
@@ -24,14 +24,14 @@ public class ParcelaRepository {
     private final LiveData<List<Parcela>> mParcelasOrdOcupantes;
     private final LiveData<List<Parcela>> mParcelasOrdPrecio;
 
-
+    /** Tiempo máximo de espera para operaciones de base de datos en milisegundos */
     private final long TIMEOUT = 15000;
 
     /**
-     * Constructor de ParcelaRepository utilizando el contexto de la aplicación para instanciar la base de datos.
-     * Alternativamente, se podría estudiar la instanciación del repositorio con una referencia a la base de datos
-     * siguiendo el ejemplo de
-     * <a href="https://github.com/android/architecture-components-samples/blob/main/BasicSample/app/src/main/java/com/example/android/persistence/DataRepository.java">architecture-components-samples/.../persistence/DataRepository</a>
+     * Constructor de ParcelaRepository.
+     * Utiliza el contexto de la aplicación para obtener la instancia de la base de datos.
+     *
+     * @param application La aplicación que proporciona el contexto para instanciar la base de datos.
      */
     public ParcelaRepository(Application application) {
         CampingRoomDatabase db = CampingRoomDatabase.getDatabase(application);
@@ -40,41 +40,53 @@ public class ParcelaRepository {
         mParcelasOrdNombre = mParcelaDao.getOrderedParcelasNombre();
         mParcelasOrdOcupantes = mParcelaDao.getOrderedParcelasMaxOcupantes();
         mParcelasOrdPrecio = mParcelaDao.getOrderedParcelasPrecioXpersona();
-
     }
 
-    /** Devuelve un objeto de tipo LiveData con todas las notas.
-     * Room ejecuta todas las consultas en un hilo separado.
-     * El objeto LiveData notifica a los observadores cuando los datos cambian.
+    /**
+     * Obtiene todas las parcelas en la base de datos sin un orden específico.
+     * Room ejecuta todas las consultas en un hilo separado, y LiveData notifica a los observadores cuando los datos cambian.
+     *
+     * @return Un objeto LiveData con la lista de todas las parcelas.
      */
     public LiveData<List<Parcela>> getAllParcelas() {
         return mAllParcelas;
     }
 
+    /**
+     * Obtiene todas las parcelas ordenadas alfabéticamente por nombre.
+     *
+     * @return Un objeto LiveData con la lista de parcelas ordenadas por nombre en orden ascendente.
+     */
     public LiveData<List<Parcela>> getParcelasOrderedNombre() {
         return mParcelasOrdNombre;
     }
 
+    /**
+     * Obtiene todas las parcelas ordenadas por el número máximo de ocupantes.
+     *
+     * @return Un objeto LiveData con la lista de parcelas ordenadas por número máximo de ocupantes en orden ascendente.
+     */
     public LiveData<List<Parcela>> getParcelasOrderedOcupantes() {
         return mParcelasOrdOcupantes;
     }
 
+    /**
+     * Obtiene todas las parcelas ordenadas por precio por persona.
+     *
+     * @return Un objeto LiveData con la lista de parcelas ordenadas por precio por persona en orden ascendente.
+     */
     public LiveData<List<Parcela>> getParcelasOrderedPrecio() {
         return mParcelasOrdPrecio;
     }
 
-    /** Inserta una nota nueva en la base de datos
-     * @param parcela La nota consta de: un nombre (parcela.getNombre()) no nulo (parcela.getNombre()!=null) y no vacío
-     *             (parcela.getNombre().length()>0); y un cuerpo (parcela.getBody()) no nulo.
-     * @return Si la nota se ha insertado correctamente, devuelve el identificador de la nota que se ha creado. En caso
-     *         contrario, devuelve -1 para indicar el fallo.
+    /**
+     * Inserta una nueva parcela en la base de datos.
+     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     *
+     * @param parcela La parcela a insertar. Debe tener un nombre no nulo y no vacío.
+     * @return El identificador de la parcela insertada, o -1 si la inserción falla.
      */
     public long insert(Parcela parcela) {
-        /* Para que la App funcione correctamente y no lance una excepción, la modificación de la
-         * base de datos se debe lanzar en un hilo de ejecución separado
-         * (databaseWriteExecutor.submit). Para poder sincronizar la recuperación del resultado
-         * devuelto por la base de datos, se puede utilizar un Future.
-         */
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
                 () -> mParcelaDao.insert(parcela));
         try {
@@ -85,13 +97,13 @@ public class ParcelaRepository {
         }
     }
 
-    /** Actualiza una nota en la base de datos
-     * @param parcela La nota que se desea actualizar y que consta de: un identificador (parcela.getId()) mayor que 0; un
-     *             nombre (parcela.getNombre()) no nulo y no vacío; un numero maximo de ocupantes (parcela.getMaxOcupantes());
-     *             un precio por persona (parcela.getPrecioXpersona()); y una descripción (parcela.getDescripcion()).
-     * @return Un valor entero con el número de filas modificadas: 1 si el identificador se corresponde con una nota
-     *         previamente insertada; 0 si no existe previamente una nota con ese identificador, o hay algún problema
-     *         con los atributos.
+    /**
+     * Actualiza una parcela en la base de datos.
+     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     *
+     * @param parcela La parcela que se desea actualizar. Debe tener un ID mayor que 0, un nombre no nulo y no vacío,
+     *                un número máximo de ocupantes, un precio por persona y una descripción.
+     * @return El número de filas modificadas (1 si se actualiza correctamente, 0 si no existe una parcela con ese ID).
      */
     public int update(Parcela parcela) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -104,13 +116,12 @@ public class ParcelaRepository {
         }
     }
 
-
-    /** Elimina una nota en la base de datos.
-     * @param parcela Objeto nota cuyo atributo identificador (parcela.getId()) contiene la clave primaria de la nota que se
-     *             va a eliminar de la base de datos. Se debe cumplir: parcela.getId() > 0.
-     * @return Un valor entero con el número de filas eliminadas: 1 si el identificador se corresponde con una nota
-     *         previamente insertada; 0 si no existe previamente una nota con ese identificador o el identificador no es
-     *         un valor aceptable.
+    /**
+     * Elimina una parcela de la base de datos.
+     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     *
+     * @param parcela La parcela a eliminar. Debe tener un ID mayor que 0.
+     * @return El número de filas eliminadas (1 si se elimina correctamente, 0 si no existe una parcela con ese ID).
      */
     public int delete(Parcela parcela) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
