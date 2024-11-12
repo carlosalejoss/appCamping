@@ -2,6 +2,7 @@ package es.unizar.eina.M12_camping.ui;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,17 +16,19 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import es.unizar.eina.M12_camping.R;
+import es.unizar.eina.M12_camping.database.Parcela;
 
 import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
- * Pantalla principal de la aplicación ListadoParcelas.
+ * Pantalla principal de la aplicación M12_camping.
  * Esta actividad muestra una lista de parcelas y permite realizar operaciones como
  * insertar, editar, eliminar y ordenar las parcelas.
  */
-public class ListadoParcelas extends AppCompatActivity {
+public class M12_camping extends AppCompatActivity {
 
     private ParcelaViewModel mParcelaViewModel;
 
@@ -100,14 +103,20 @@ public class ListadoParcelas extends AppCompatActivity {
             case CHANGE_ID:
                 return true;
             case ORDER_ID_NOMBRE:
-                ordenarParcelasNombre();
-                return true;
+                mParcelaViewModel.getParcelasOrderedNombre().observe(this, parcelas -> {
+                    mAdapter.submitList(parcelas);
+                });
+                break;
             case ORDER_ID_MAXOCUPANTES:
-                ordenarParcelasMaxOcupantes();
-                return true;
+                mParcelaViewModel.getParcelasOrderedOcupantes().observe(this, parcelas -> {
+                    mAdapter.submitList(parcelas);
+                });
+                break;
             case ORDER_ID_PRECIOXPERSONA:
-                ordenarParcelasPrecioXpersona();
-                return true;
+                mParcelaViewModel.getParcelasOrderedPrecio().observe(this, parcelas -> {
+                    mAdapter.submitList(parcelas);
+                });
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -143,24 +152,17 @@ public class ListadoParcelas extends AppCompatActivity {
     }
 
     /**
-     * Ordena las parcelas por nombre.
-     */
-    private void ordenarParcelasNombre() {
-        mParcelaViewModel.getParcelasOrderedNombre();
-    }
-
-    /**
      * Ordena las parcelas por número máximo de ocupantes.
      */
-    private void ordenarParcelasMaxOcupantes() {
-        mParcelaViewModel.getParcelasOrderedOcupantes();
+    private LiveData<List<Parcela>> ordenarParcelasMaxOcupantes() {
+        return mParcelaViewModel.getParcelasOrderedOcupantes();
     }
 
     /**
      * Ordena las parcelas por precio por persona.
      */
-    private void ordenarParcelasPrecioXpersona() {
-        mParcelaViewModel.getParcelasOrderedPrecio();
+    private LiveData<List<Parcela>> ordenarParcelasPrecioXpersona() {
+        return mParcelaViewModel.getParcelasOrderedPrecio();
     }
 
     /**
