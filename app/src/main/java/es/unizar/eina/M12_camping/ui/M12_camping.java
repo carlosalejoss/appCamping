@@ -62,9 +62,7 @@ public class M12_camping extends AppCompatActivity {
         mParcelaViewModel = new ViewModelProvider(this).get(ParcelaViewModel.class);
 
         // Observa los cambios en la lista de parcelas y actualiza el adaptador
-        mParcelaViewModel.getAllParcelas().observe(this, parcelas -> {
-            mAdapter.submitList(parcelas);
-        });
+        mParcelaViewModel.getAllParcelas().observe(this, parcelas -> mAdapter.submitList(parcelas));
 
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(view -> createParcela());
@@ -99,21 +97,16 @@ public class M12_camping extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case CHANGE_ID:
+                //cambiar pantalla
                 return true;
             case ORDER_ID_NOMBRE:
-                mParcelaViewModel.getParcelasOrderedNombre().observe(this, parcelas -> {
-                    mAdapter.submitList(parcelas);
-                });
+                mParcelaViewModel.getParcelasOrderedNombre().observe(this, parcelas -> mAdapter.submitList(parcelas));
                 break;
             case ORDER_ID_MAXOCUPANTES:
-                mParcelaViewModel.getParcelasOrderedOcupantes().observe(this, parcelas -> {
-                    mAdapter.submitList(parcelas);
-                });
+                mParcelaViewModel.getParcelasOrderedOcupantes().observe(this, parcelas -> mAdapter.submitList(parcelas));
                 break;
             case ORDER_ID_PRECIOXPERSONA:
-                mParcelaViewModel.getParcelasOrderedPrecio().observe(this, parcelas -> {
-                    mAdapter.submitList(parcelas);
-                });
+                mParcelaViewModel.getParcelasOrderedPrecio().observe(this, parcelas -> mAdapter.submitList(parcelas));
                 break;
         }
         return super.onOptionsItemSelected(item);
