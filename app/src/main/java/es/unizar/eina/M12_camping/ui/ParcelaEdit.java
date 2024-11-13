@@ -44,7 +44,7 @@ public class ParcelaEdit extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_noteedit);
+        setContentView(R.layout.activity_parcelaedit);
 
         mNombreText = findViewById(R.id.nombre);
         mMaxOcupantes = findViewById(R.id.maxOcupantes);
