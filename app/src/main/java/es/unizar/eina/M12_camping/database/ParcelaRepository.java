@@ -133,4 +133,35 @@ public class ParcelaRepository {
             return -1;
         }
     }
+
+    /**
+     * Verifica si ya existe una parcela con el nombre dado en la base de datos.
+     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     *
+     * @param nombre El nombre de la parcela a buscar.
+     * @return true si ya existe una parcela con ese nombre, false en caso contrario.
+     */
+    public boolean isParcelaNombreDuplicado(String nombre) {
+        Future<Parcela> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaDao.getParcelaByNombre(nombre));
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS) != null;
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            Log.d("ParcelaRepository", ex.getClass().getSimpleName() + ex.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela específica.
+     *
+     * @param nombre El nombre de la parcela a verificar.
+     * @param id     El ID de la parcela que se está excluyendo de la verificación.
+     * @return true si el nombre ya existe (excluyendo la parcela especificada), false en caso contrario.
+     */
+    public boolean isNombreDuplicadoExceptId(String nombre, int id) {
+        int count = mParcelaDao.isNombreDuplicadoExceptId(nombre, id);
+        return count > 0;
+    }
+
 }
