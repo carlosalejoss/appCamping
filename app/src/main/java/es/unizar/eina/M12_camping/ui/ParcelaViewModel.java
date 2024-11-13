@@ -100,4 +100,27 @@ public class ParcelaViewModel extends AndroidViewModel {
     public void delete(Parcela parcela) {
         mRepository.delete(parcela);
     }
+
+    /**
+     * Verifica si ya existe una parcela con el nombre dado.
+     *
+     * @param nombre El nombre de la parcela a verificar.
+     * @return true si ya existe una parcela con ese nombre, false en caso contrario.
+     */
+    public boolean isNombreDuplicado(String nombre) {
+        return mRepository.isParcelaNombreDuplicado(nombre);
+    }
+
+    /**
+     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela específica.
+     *
+     * @param nombre El nombre de la parcela a verificar.
+     * @param id     El ID de la parcela que se está excluyendo de la verificación.
+     * @return true si el nombre ya existe (excluyendo la parcela especificada), false en caso contrario.
+     */
+    public boolean isNombreDuplicadoExceptId(String nombre, int id) {
+        // Consulta en el repositorio excluyendo el ID actual
+        return mRepository.isNombreDuplicadoExceptId(nombre, id);
+    }
+
 }
