@@ -2,7 +2,6 @@ package es.unizar.eina.M12_camping.ui;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,6 @@ import es.unizar.eina.M12_camping.database.Parcela;
 
 import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -54,7 +52,7 @@ public class M12_camping extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notepad); // Cambiar nombre de pantallas
+        setContentView(R.layout.activity_m12camping); // Cambiar nombre de pantallas
 
         mRecyclerView = findViewById(R.id.recyclerview);
         mAdapter = new ParcelaListAdapter(new ParcelaListAdapter.ParcelaDiff());
@@ -198,7 +196,7 @@ public class M12_camping extends AppCompatActivity {
                         assert result.getData() != null;
                         Bundle extras = result.getData().getExtras();
                         assert extras != null;
-                        es.unizar.eina.M12_camping.database.Parcela parcela = new es.unizar.eina.M12_camping.database.Parcela(
+                        Parcela parcela = new es.unizar.eina.M12_camping.database.Parcela(
                                 Objects.requireNonNull(extras.getString(ParcelaEdit.PARCELA_NOMBRE)),
                                 extras.getInt(ParcelaEdit.PARCELA_MAXOCUPANTES),
                                 extras.getDouble(ParcelaEdit.PARCELA_PRECIOXPERSONA),
@@ -219,5 +217,5 @@ interface ExecuteActivityResult {
      * @param extras  Los datos adicionales de la actividad.
      * @param parcela La parcela creada o editada.
      */
-    void process(Bundle extras, es.unizar.eina.M12_camping.database.Parcela parcela);
+    void process(Bundle extras, Parcela parcela);
 }
