@@ -108,7 +108,7 @@ public class ParcelaViewModel extends AndroidViewModel {
      * @return true si ya existe una parcela con ese nombre, false en caso contrario.
      */
     public boolean isNombreDuplicado(String nombre) {
-        return mRepository.isParcelaNombreDuplicado(nombre);
+        return mRepository.isNombreDuplicado(nombre);
     }
 
     /**
