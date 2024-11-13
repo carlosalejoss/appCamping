@@ -135,17 +135,15 @@ public class ParcelaRepository {
     }
 
     /**
-     * Verifica si ya existe una parcela con el nombre dado en la base de datos.
-     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
-     *
-     * @param nombre El nombre de la parcela a buscar.
-     * @return true si ya existe una parcela con ese nombre, false en caso contrario.
+     * Verifica si existe una parcela con el nombre especificado.
+     * @param nombre El nombre a verificar.
+     * @return true si existe una parcela con el mismo nombre, de lo contrario false.
      */
-    public boolean isParcelaNombreDuplicado(String nombre) {
-        Future<Parcela> future = CampingRoomDatabase.databaseWriteExecutor.submit(
-                () -> mParcelaDao.getParcelaByNombre(nombre));
+    public boolean isNombreDuplicado(String nombre) {
+        Future<Boolean> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaDao.isNombreDuplicado(nombre));
         try {
-            return future.get(TIMEOUT, TimeUnit.MILLISECONDS) != null;
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             Log.d("ParcelaRepository", ex.getClass().getSimpleName() + ex.getMessage());
             return false;
@@ -153,15 +151,20 @@ public class ParcelaRepository {
     }
 
     /**
-     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela específica.
-     *
-     * @param nombre El nombre de la parcela a verificar.
-     * @param id     El ID de la parcela que se está excluyendo de la verificación.
-     * @return true si el nombre ya existe (excluyendo la parcela especificada), false en caso contrario.
+     * Verifica si existe una parcela con el nombre especificado que no tenga el ID proporcionado.
+     * @param nombre El nombre a verificar.
+     * @param id     El ID de la parcela que se está editando.
+     * @return true si existe otra parcela con el mismo nombre, de lo contrario false.
      */
     public boolean isNombreDuplicadoExceptId(String nombre, int id) {
-        int count = mParcelaDao.isNombreDuplicadoExceptId(nombre, id);
-        return count > 0;
+        Future<Boolean> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaDao.isNombreDuplicadoExceptId(nombre, id));
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            Log.d("ParcelaRepository", ex.getClass().getSimpleName() + ex.getMessage());
+            return false;
+        }
     }
 
 }
