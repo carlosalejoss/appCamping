@@ -5,7 +5,10 @@
     <string name="hint_precioXpersona">Precio por persona ...</string>
     <string name="hint_descripcion">Escribe una descripcion ...</string>
     <string name="button_save">Save</string>
-    <string name="empty_not_saved">Parcela no guardada porque no hay nombre.</string>
+    <string name="duplicate_name_error">Parcela no guardada porque existe otra con el mismo nombre.</string>
+    <string name="empty_not_saved_nombre">Parcela no guardada porque no hay nombre.</string>
+    <string name="empty_not_saved_ocupantes">Parcela no guardada porque no hay ocupantes.</string>
+    <string name="empty_not_saved_precio">Parcela no guardada porque no hay precio.</string>
     <string name="add_parcela">Añadir Parcela</string>
     <string name="menu_delete">Borrar Parcela</string>
     <string name="menu_edit">Editar Parcela</string>
