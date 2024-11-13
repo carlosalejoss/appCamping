@@ -61,7 +61,7 @@ class ParcelaViewHolder extends RecyclerView.ViewHolder implements View.OnCreate
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        menu.add(Menu.NONE, M12_camping.EDIT_ID, Menu.NONE, R.string.menu_edit);
-        menu.add(Menu.NONE, M12_camping.DELETE_ID, Menu.NONE, R.string.menu_delete);
+        menu.add(Menu.NONE, M12_camping.EDIT_ID, Menu.NONE, R.string.edit_parcela);
+        menu.add(Menu.NONE, M12_camping.DELETE_ID, Menu.NONE, R.string.delete_parcela);
     }
 }
