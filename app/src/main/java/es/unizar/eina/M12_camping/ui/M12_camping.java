@@ -152,20 +152,6 @@ public class M12_camping extends AppCompatActivity {
     }
 
     /**
-     * Ordena las parcelas por número máximo de ocupantes.
-     */
-    private LiveData<List<Parcela>> ordenarParcelasMaxOcupantes() {
-        return mParcelaViewModel.getParcelasOrderedOcupantes();
-    }
-
-    /**
-     * Ordena las parcelas por precio por persona.
-     */
-    private LiveData<List<Parcela>> ordenarParcelasPrecioXpersona() {
-        return mParcelaViewModel.getParcelasOrderedPrecio();
-    }
-
-    /**
      * Inicia la actividad para editar una parcela existente.
      *
      * @param current La parcela que se desea editar.
