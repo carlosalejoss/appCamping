@@ -63,10 +63,19 @@ public class ParcelaEdit extends AppCompatActivity {
                 return;
             }
 
-            // Verificar si ya existe una parcela con el mismo nombre
-            if (mParcelaViewModel.isNombreDuplicado(nombre)) {
-                Toast.makeText(getApplicationContext(), R.string.duplicate_name_error, Toast.LENGTH_LONG).show();
-                return;
+            // Verificar si ya existe una parcela con el mismo nombre (excluyendo la parcela actual si estamos editando)
+            if (mRowId == null) {
+                // Si es una nueva parcela
+                if (mParcelaViewModel.isNombreDuplicado(nombre)) {
+                    Toast.makeText(getApplicationContext(), R.string.duplicate_name_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } else {
+                // Si estamos editando, permitir el nombre si pertenece a la parcela actual
+                if (mParcelaViewModel.isNombreDuplicadoExceptId(nombre, mRowId)) {
+                    Toast.makeText(getApplicationContext(), R.string.duplicate_name_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
 
             if (TextUtils.isEmpty(mMaxOcupantes.getText())) {
@@ -106,13 +115,12 @@ public class ParcelaEdit extends AppCompatActivity {
         if (extras != null) {
             mNombreText.setText(extras.getString(PARCELA_NOMBRE));
 
-            int maxOcupantes = extras.getInt(PARCELA_MAXOCUPANTES);
-            mMaxOcupantes.setText(String.valueOf(maxOcupantes));
+            mMaxOcupantes.setText(String.valueOf(extras.getInt(PARCELA_MAXOCUPANTES)));
 
-            double precioXpersona = extras.getDouble(PARCELA_PRECIOXPERSONA);
-            mPrecioXpersona.setText(String.valueOf(precioXpersona));
+            mPrecioXpersona.setText(String.valueOf(extras.getDouble(PARCELA_PRECIOXPERSONA)));
 
             mDescripcionText.setText(extras.getString(PARCELA_DESCRIPCION));
+            
             mRowId = extras.getInt(PARCELA_ID);
         }
     }
