@@ -86,20 +86,21 @@ public interface ParcelaDao {
     /**
      * Verifica si existe una parcela con el nombre especificado.
      *
-     * @param nombre El nombre de la parcela a buscar.
-     * @return Una lista de parcelas que coinciden con el nombre dado.
+     * @param nombre El nombre a verificar.
+     * @return true si existe una parcela con el mismo nombre, de lo contrario false.
      */
-    @Query("SELECT * FROM Parcela WHERE nombre = :nombre LIMIT 1")
-    Parcela getParcelaByNombre(String nombre);
+    @Query("SELECT COUNT(*) > 0 FROM Parcela WHERE nombre = :nombre")
+    boolean isNombreDuplicado(String nombre);
 
     /**
-     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela específica.
+     * Verifica si existe una parcela con el nombre especificado que no tenga el ID proporcionado.
+     * Este método es útil para la edición de parcelas, donde se permite que el nombre no cambie.
      *
-     * @param nombre El nombre de la parcela a verificar.
-     * @param id     El ID de la parcela que se está excluyendo de la verificación.
-     * @return Un entero indicando el número de parcelas con el mismo nombre (excluyendo la parcela especificada).
+     * @param nombre El nombre a verificar.
+     * @param id     El ID de la parcela que se está editando.
+     * @return true si existe otra parcela con el mismo nombre, de lo contrario false.
      */
-    @Query("SELECT COUNT(*) FROM Parcela WHERE nombre = :nombre AND id != :id")
-    int isNombreDuplicadoExceptId(String nombre, int id);
+    @Query("SELECT COUNT(*) > 0 FROM Parcela WHERE nombre = :nombre AND id != :id")
+    boolean isNombreDuplicadoExceptId(String nombre, int id);
 
 }
