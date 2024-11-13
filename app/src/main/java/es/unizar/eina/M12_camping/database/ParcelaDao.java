@@ -82,4 +82,24 @@ public interface ParcelaDao {
      */
     @Query("SELECT * FROM Parcela ORDER BY precioXpersona ASC")
     LiveData<List<Parcela>> getOrderedParcelasPrecioXpersona();
+
+    /**
+     * Verifica si existe una parcela con el nombre especificado.
+     *
+     * @param nombre El nombre de la parcela a buscar.
+     * @return Una lista de parcelas que coinciden con el nombre dado.
+     */
+    @Query("SELECT * FROM Parcela WHERE nombre = :nombre LIMIT 1")
+    Parcela getParcelaByNombre(String nombre);
+
+    /**
+     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela específica.
+     *
+     * @param nombre El nombre de la parcela a verificar.
+     * @param id     El ID de la parcela que se está excluyendo de la verificación.
+     * @return Un entero indicando el número de parcelas con el mismo nombre (excluyendo la parcela especificada).
+     */
+    @Query("SELECT COUNT(*) FROM Parcela WHERE nombre = :nombre AND id != :id")
+    int isNombreDuplicadoExceptId(String nombre, int id);
+
 }
