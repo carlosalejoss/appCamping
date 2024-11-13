@@ -1,24 +1,54 @@
 <resources>
     <string name="app_name">M12_camping</string>
+
     <string name="hint_nombre">Escribe un nombre ...</string>
     <string name="hint_maxOcupantes">Maximos ocupantes ...</string>
     <string name="hint_precioXpersona">Precio por persona ...</string>
     <string name="hint_descripcion">Escribe una descripcion ...</string>
+
+    <string name="hint_nombreCliente">Escribe el nombre del cliente ...</string>
+    <string name="hint_telefono">Numero de telefono del cliente ...</string>
+    <string name="hint_fechaEntrada">Fecha de entrada ...</string>
+    <string name="hint_fechaSalida">Fecha de salida ...</string>
+
     <string name="button_save">Save</string>
+
     <string name="duplicate_name_error">Parcela no guardada porque existe otra con el mismo nombre.</string>
     <string name="empty_not_saved_nombre">Parcela no guardada porque no hay nombre.</string>
     <string name="empty_not_saved_ocupantes">Parcela no guardada porque no hay ocupantes.</string>
     <string name="empty_not_saved_precio">Parcela no guardada porque no hay precio.</string>
+
+    <string name="empty_not_saved_nombreCliente">Reserva no guardada porque no hay nombre de cliente.</string>
+    <string name="empty_not_saved_telefono">Reserva no guardada porque no hay telefono.</string>
+    <string name="empty_not_saved_fechaEntrada">Reserva no guardada porque no hay fecha de entrada.</string>
+    <string name="empty_not_saved_fechaSalida">Reserva no guardada porque no hay fecha de salida.</string>
+
     <string name="add_parcela">Añadir Parcela</string>
-    <string name="menu_delete">Borrar Parcela</string>
-    <string name="menu_edit">Editar Parcela</string>
+    <string name="delete_parcela">Borrar Parcela</string>
+    <string name="edit_parcela">Editar Parcela</string>
+
+    <string name="add_reserva">Añadir Reserva</string>
+    <string name="delete_reserva">Borrar Reserva</string>
+    <string name="edit_reserva">Editar Reserva</string>
+
     <string name="cambiar_a_reservas">Listado Reservas</string>
     <string name="cambiar_a_parcelas">Listado Parcelas</string>
+
     <string name="ordenar_por_nombre">Ordenar por nombre</string>
     <string name="ordenar_por_maxocupantes">Ordenar por ocupantes</string>
     <string name="ordenar_por_precioxpersona">Ordenar por precio</string>
+
+    <string name="ordenar_por_nombreCliente">Ordenar por nombre</string>
+    <string name="ordenar_por_telefono">Ordenar por telefono</string>
+    <string name="ordenar_por_fechaEntrada">Ordenar por fecha ent.</string>
+
     <string name="nombre">Nombre</string>
     <string name="maxOcupantes">MaxOcupantes</string>
     <string name="precioXpersona">PrecioXpersona</string>
     <string name="descripcion">Descripcion</string>
+
+    <string name="nombreCliente">Nombre</string>
+    <string name="telefono">Telefono</string>
+    <string name="FechaEntrada">Fecha de entrada</string>
+    <string name="FechaSalida">FechaSalida</string>
 </resources>
