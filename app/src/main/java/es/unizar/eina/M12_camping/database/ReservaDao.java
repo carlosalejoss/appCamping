@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 import androidx.room.Delete;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,4 +91,12 @@ public interface ReservaDao {
     Reserva getReservaById(int id);
 
     // Métodos adicionales para validaciones y consultas específicas...
+
+    @Query("SELECT DISTINCT r.* FROM reserva r " +
+            "INNER JOIN parcelaReservada pr ON r.id = pr.reservaId " +
+            "WHERE r.id != :reservaId AND " +
+            "r.fechaEntrada < :fechaFin AND r.fechaSalida > :fechaInicio AND " +
+            "pr.parcelaId IN (:idParcelas)")
+    List<Reserva> getReservasSolapadas(Date fechaInicio, Date fechaFin, List<Integer> idParcelas, int reservaId);
+
 }
