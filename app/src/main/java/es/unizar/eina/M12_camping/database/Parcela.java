@@ -35,6 +35,10 @@ public class Parcela {
     @ColumnInfo(name = "descripcion")
     private String descripcion;
 
+    public Parcela() {
+
+    }
+
     /**
      * Constructor para inicializar los detalles de la parcela.
      *

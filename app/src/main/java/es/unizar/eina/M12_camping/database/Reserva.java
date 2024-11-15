@@ -44,15 +44,14 @@ public class Reserva {
     @TypeConverters(DateConverter.class)
     private Date fechaSalida;
 
-     /** Lista de parcelas reservadas con número de ocupantes*/
-     @NonNull
-     @ColumnInfo(name = "parcelasReservadas")
-     @TypeConverters(ParcelaReservadaConverter.class)
-     private List<ParcelaReservada> parcelasReservadas;
-
     /** Precio total de la reserva. */
     @ColumnInfo(name = "precioTotal")
     private double precioTotal;
+
+
+    public Reserva() {
+
+    }
 
     /**
      * Constructor para la clase Reserva.
@@ -65,12 +64,11 @@ public class Reserva {
      */
     public Reserva(@NonNull String nombreCliente, @NonNull Integer numeroMovil,
                    @NonNull Date fechaEntrada, @NonNull Date fechaSalida,
-                   @NonNull List<ParcelaReservada> parcelasReservadas, double precioTotal) {
+                   double precioTotal) {
         this.nombreCliente = nombreCliente;
         this.numeroMovil = numeroMovil;
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
-        this.parcelasReservadas = parcelasReservadas;
         this.precioTotal = precioTotal;
     }
 
@@ -126,11 +124,6 @@ public class Reserva {
 
     public void setPrecioTotal(double precioTotal) {
         this.precioTotal = precioTotal;
-    }
-
-    @NonNull
-    public List<ParcelaReservada> getParcelasReservadas() {
-        return parcelasReservadas;
     }
 
 }
