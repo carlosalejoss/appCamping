@@ -1,88 +1,91 @@
 package es.unizar.eina.M12_camping.database;
 
-import java.util.Objects;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
 /**
- * Representa una parcela reservada dentro de una reserva.
- * Contiene el ID de la parcela y el número de ocupantes asignados.
+ * Representa la relación entre una reserva y una parcela reservada.
  */
+@Entity(tableName = "parcelaReservada",
+        foreignKeys = {
+                @ForeignKey(entity = Reserva.class,
+                        parentColumns = "id",
+                        childColumns = "reservaId",
+                        onDelete = ForeignKey.CASCADE),
+                @ForeignKey(entity = Parcela.class,
+                        parentColumns = "id",
+                        childColumns = "parcelaId",
+                        onDelete = ForeignKey.CASCADE)
+        })
 public class ParcelaReservada {
 
+    /** ID único de ParcelaReservada */
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private int id;
+
+    /** ID de la reserva asociada */
+    @NonNull
+    @ColumnInfo(name = "reservaId", index = true)
+    private int reservaId;
+
     /** ID de la parcela reservada */
-    private int idParcela;
+    @NonNull
+    @ColumnInfo(name = "parcelaId", index = true)
+    private int parcelaId;
 
     /** Número de ocupantes en la parcela */
+    @NonNull
+    @ColumnInfo(name = "numeroOcupantes")
     private int numeroOcupantes;
 
-    /**
-     * Constructor para crear una nueva instancia de ParcelaReservada.
-     *
-     * @param idParcela       El ID de la parcela reservada.
-     * @param numeroOcupantes El número de ocupantes en la parcela.
-     */
-    public ParcelaReservada(int idParcela, int numeroOcupantes) {
-        this.idParcela = idParcela;
+    // Constructor, getters y setters
+
+    public ParcelaReservada() {
+
+    }
+
+    public ParcelaReservada(int reservaId, int parcelaId, int numeroOcupantes) {
+        this.reservaId = reservaId;
+        this.parcelaId = parcelaId;
         this.numeroOcupantes = numeroOcupantes;
     }
 
-    /**
-     * Obtiene el ID de la parcela reservada.
-     *
-     * @return El ID de la parcela.
-     */
-    public int getIdParcela() {
-        return idParcela;
+    // Getters y setters para cada campo...
+
+    public int getId() {
+        return id;
     }
 
-    /**
-     * Establece el ID de la parcela reservada.
-     *
-     * @param idParcela El nuevo ID de la parcela.
-     */
-    public void setIdParcela(int idParcela) {
-        this.idParcela = idParcela;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    /**
-     * Obtiene el número de ocupantes en la parcela.
-     *
-     * @return El número de ocupantes.
-     */
+    public int getReservaId() {
+        return reservaId;
+    }
+
+    public void setReservaId(int reservaId) {
+        this.reservaId = reservaId;
+    }
+
+    public int getParcelaId() {
+        return parcelaId;
+    }
+
+    public void setParcelaId(int parcelaId) {
+        this.parcelaId = parcelaId;
+    }
+
     public int getNumeroOcupantes() {
         return numeroOcupantes;
     }
 
-    /**
-     * Establece el número de ocupantes en la parcela.
-     *
-     * @param numeroOcupantes El nuevo número de ocupantes.
-     */
     public void setNumeroOcupantes(int numeroOcupantes) {
         this.numeroOcupantes = numeroOcupantes;
     }
 
-    /**
-     * Verifica si dos objetos ParcelaReservada son iguales.
-     *
-     * @param o El objeto a comparar.
-     * @return true si son iguales, false en caso contrario.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ParcelaReservada that = (ParcelaReservada) o;
-        return idParcela == that.idParcela && numeroOcupantes == that.numeroOcupantes;
-    }
-
-    /**
-     * Genera un código hash para el objeto ParcelaReservada.
-     *
-     * @return El código hash generado.
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(idParcela, numeroOcupantes);
-    }
 }
