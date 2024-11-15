@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import es.unizar.eina.M12_camping.R;
 
-
 /**
  * Pantalla utilizada para la creación o edición de una parcela.
  * Esta actividad permite al usuario ingresar o modificar los detalles de una parcela.
