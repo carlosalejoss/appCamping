@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
  * Define la estructura de la base de datos y proporciona métodos para obtener
  * la instancia de la base de datos y el DAO de Parcela.
  */
-@Database(entities = {Parcela.class, Reserva.class}, version = 1, exportSchema = false)
+@Database(entities = {Parcela.class, Reserva.class, ParcelaReservada.class}, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class CampingRoomDatabase extends RoomDatabase {
 
