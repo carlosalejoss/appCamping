@@ -11,7 +11,7 @@ import es.unizar.eina.M12_camping.database.Parcela;
 import es.unizar.eina.M12_camping.database.ParcelaRepository;
 
 /**
- * ViewModel para gestionar la UI de parcelas y almacenar datos para la actividad M12_camping.
+ * ViewModel para gestionar la UI de parcelas y almacenar datos para la actividad ListadoParcelas.
  * Proporciona métodos para obtener listas de parcelas y realizar operaciones CRUD a través del repositorio.
  */
 public class ParcelaViewModel extends AndroidViewModel {
