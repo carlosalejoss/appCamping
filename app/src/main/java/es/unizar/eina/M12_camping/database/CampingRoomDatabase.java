@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
  * la instancia de la base de datos y el DAO de Parcela.
  */
 @Database(entities = {Parcela.class, Reserva.class}, version = 1, exportSchema = false)
-@TypeConverters({DateConverter.class, ParcelaReservadaConverter.class})
+@TypeConverters({DateConverter.class})
 public abstract class CampingRoomDatabase extends RoomDatabase {
 
     /**
@@ -36,6 +36,13 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
      * @return El DAO de Reserva.
      */
     public abstract ReservaDao reservaDao();
+
+    /**
+     * Proporciona acceso al DAO de la relación parcela - reserva.
+     *
+     * @return El DAO de ParcelaReservada.
+     */
+    public abstract ParcelaReservadaDao parcelaReservadaDao();
 
     /** Instancia única de la base de datos */
     private static volatile CampingRoomDatabase INSTANCE;
@@ -78,21 +85,23 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
 
                 ParcelaDao parcelaDao = INSTANCE.parcelaDao();
                 ReservaDao reservaDao = INSTANCE.reservaDao();
+                ParcelaReservadaDao parcelaReservadaDao = INSTANCE.parcelaReservadaDao();
 
                 parcelaDao.deleteAll();
                 reservaDao.deleteAll();
+                parcelaReservadaDao.deleteAll();
 
                 Parcela parcela = new Parcela("Aneto", 8, 17.0, "120m2, SI agua, SI luz");
                 parcelaDao.insert(parcela);
                 parcela = new Parcela("Cinca", 4, 25.0, "80m2, SI agua, NO luz");
                 parcelaDao.insert(parcela);
 
-                Reserva reserva = new Reserva("Cliente 1", 123456789, new Date(), new Date(), 150.0, );
+                Reserva reserva = new Reserva("Cliente 1", 123456789, new Date(), new Date(), 150.0);
                 reservaDao.insert(reserva);
-                reserva = new Reserva("Cliente 2", 987654321, new Date(), new Date(), 200.0, );
+                reserva = new Reserva("Cliente 2", 987654321, new Date(), new Date(), 200.0);
                 reservaDao.insert(reserva);
 
-                ParcelaReservada pYr1 = new ParcelaReservada(1, )
+                //ParcelaReservada pYr1 = new ParcelaReservada(1, )
             });
         }
     };
