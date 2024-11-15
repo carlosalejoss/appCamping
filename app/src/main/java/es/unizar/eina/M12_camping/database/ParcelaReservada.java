@@ -44,10 +44,6 @@ public class ParcelaReservada {
 
     // Constructor, getters y setters
 
-    public ParcelaReservada() {
-
-    }
-
     public ParcelaReservada(int reservaId, int parcelaId, int numeroOcupantes) {
         this.reservaId = reservaId;
         this.parcelaId = parcelaId;

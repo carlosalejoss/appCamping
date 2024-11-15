@@ -49,10 +49,6 @@ public class Reserva {
     private double precioTotal;
 
 
-    public Reserva() {
-
-    }
-
     /**
      * Constructor para la clase Reserva.
      *
