@@ -10,6 +10,7 @@
     <string name="hint_telefono">Numero de telefono del cliente ...</string>
     <string name="hint_fechaEntrada">Fecha de entrada ...</string>
     <string name="hint_fechaSalida">Fecha de salida ...</string>
+    <string name="hint_precioTotal">Precio total</string>
 
     <string name="button_save">Save</string>
 
@@ -50,5 +51,6 @@
     <string name="nombreCliente">Nombre</string>
     <string name="telefono">Telefono</string>
     <string name="FechaEntrada">Fecha de entrada</string>
-    <string name="FechaSalida">FechaSalida</string>
+    <string name="FechaSalida">Fecha de salida</string>
+    <string name="precioTotal">Precio total</string>
 </resources>
