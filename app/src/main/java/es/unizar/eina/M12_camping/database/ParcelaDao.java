@@ -103,4 +103,12 @@ public interface ParcelaDao {
     @Query("SELECT COUNT(*) > 0 FROM Parcela WHERE nombre = :nombre AND id != :id")
     boolean isNombreDuplicadoExceptId(String nombre, int id);
 
+    /**
+     * Obtiene una parcela por su ID.
+     *
+     * @param id El ID de la parcela.
+     * @return La parcela correspondiente.
+     */
+    @Query("SELECT * FROM parcela WHERE id = :id")
+    Parcela getParcelaById(int id);
 }
