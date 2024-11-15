@@ -22,11 +22,11 @@ import static androidx.activity.result.contract.ActivityResultContracts.StartAct
 import java.util.Objects;
 
 /**
- * Pantalla principal de la aplicación M12_camping.
+ * Pantalla principal de la aplicación ListadoParcelas.
  * Esta actividad muestra una lista de parcelas y permite realizar operaciones como
  * insertar, editar, eliminar y ordenar las parcelas.
  */
-public class M12_camping extends AppCompatActivity {
+public class ListadoParcelas extends AppCompatActivity {
 
     private ParcelaViewModel mParcelaViewModel;
 
@@ -97,8 +97,8 @@ public class M12_camping extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case CHANGE_ID:
-                //cambiar pantalla
-                return true;
+                listadoReservas();
+                break;
             case ORDER_ID_NOMBRE:
                 mParcelaViewModel.getParcelasOrderedNombre().observe(this, parcelas -> mAdapter.submitList(parcelas));
                 break;
@@ -110,6 +110,11 @@ public class M12_camping extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void listadoReservas() {
+        //Intent intent = new Intent(this, ListadoReservas.class); // que redireccione a MenuReservas
+        //startActivity(intent);
     }
 
     /**
@@ -158,7 +163,7 @@ public class M12_camping extends AppCompatActivity {
     }
 
     /** ActivityResultLauncher para la creación de nuevas parcelas */
-    ActivityResultLauncher<Intent> mStartCreateParcela = newActivityResultLauncher(new ExecuteActivityResult() {
+    ActivityResultLauncher<Intent> mStartCreateParcela = newActivityResultLauncher(new ExecuteActivityResultParcelas() {
         @Override
         public void process(Bundle extras, es.unizar.eina.M12_camping.database.Parcela parcela) {
             mParcelaViewModel.insert(parcela);
@@ -166,7 +171,7 @@ public class M12_camping extends AppCompatActivity {
     });
 
     /** ActivityResultLauncher para la actualización de parcelas existentes */
-    ActivityResultLauncher<Intent> mStartUpdateParcela = newActivityResultLauncher(new ExecuteActivityResult() {
+    ActivityResultLauncher<Intent> mStartUpdateParcela = newActivityResultLauncher(new ExecuteActivityResultParcelas() {
         @Override
         public void process(Bundle extras, es.unizar.eina.M12_camping.database.Parcela parcela) {
             int id = extras.getInt(ParcelaEdit.PARCELA_ID);
@@ -181,7 +186,7 @@ public class M12_camping extends AppCompatActivity {
      * @param executable La interfaz que define la acción a ejecutar al recibir el resultado.
      * @return Un ActivityResultLauncher configurado para manejar los resultados de actividades.
      */
-    ActivityResultLauncher<Intent> newActivityResultLauncher(ExecuteActivityResult executable) {
+    ActivityResultLauncher<Intent> newActivityResultLauncher(ExecuteActivityResultParcelas executable) {
         return registerForActivityResult(
                 new StartActivityForResult(),
                 result -> {
@@ -203,7 +208,7 @@ public class M12_camping extends AppCompatActivity {
 /**
  * Interfaz funcional para definir el procesamiento de los resultados de actividades.
  */
-interface ExecuteActivityResult {
+interface ExecuteActivityResultParcelas {
     /**
      * Método que se ejecuta al recibir el resultado de una actividad.
      *
