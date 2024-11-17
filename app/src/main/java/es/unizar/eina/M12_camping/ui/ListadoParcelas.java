@@ -52,7 +52,7 @@ public class ListadoParcelas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_m12camping); // Cambiar nombre de pantallas
+        setContentView(R.layout.activity_listado_parcelas); // Cambiar nombre de pantallas
 
         mRecyclerView = findViewById(R.id.recyclerview);
         mAdapter = new ParcelaListAdapter(new ParcelaListAdapter.ParcelaDiff());
@@ -113,8 +113,8 @@ public class ListadoParcelas extends AppCompatActivity {
     }
 
     private void listadoReservas() {
-        //Intent intent = new Intent(this, ListadoReservas.class); // que redireccione a MenuReservas
-        //startActivity(intent);
+        Intent intent = new Intent(this, ListadoReservas.class); // que redireccione a MenuReservas
+        startActivity(intent);
     }
 
     /**
