@@ -1,127 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_height="wrap_content">
 
-
-
-    <LinearLayout android:orientation="horizontal"
+    <EditText
+        android:id="@+id/editNombreCliente"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:hint="Nombre del Cliente"
+        android:inputType="textPersonName"
+        android:layout_height="wrap_content" />
 
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nombreCliente"
-            android:layout_margin="@dimen/big_padding"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/nombreCliente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/big_padding"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_nombreCliente"
-            android:inputType="textAutoComplete"
-            android:minHeight="@dimen/min_height"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-
-    <LinearLayout android:orientation="horizontal"
+    <EditText
+        android:id="@+id/editNumeroMovil"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/telefono"
-            android:layout_margin="@dimen/big_padding"
-            android:textSize="18sp" />
+        android:hint="Número Móvil"
+        android:inputType="phone"
+        android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/telefono"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/big_padding"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_telefono"
-            android:inputType="textAutoComplete"
-            android:minHeight="@dimen/min_height"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout android:orientation="horizontal"
+    <EditText
+        android:id="@+id/editFechaEntrada"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/FechaEntrada"
-            android:layout_margin="@dimen/big_padding"
-            android:textSize="18sp" />
+        android:hint="Fecha de Entrada"
+        android:focusable="false"
+        android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/fechaEntrada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/big_padding"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_fechaEntrada"
-            android:inputType="textAutoComplete"
-            android:minHeight="@dimen/min_height"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout android:orientation="horizontal"
+    <EditText
+        android:id="@+id/editFechaSalida"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/FechaSalida"
-            android:layout_margin="@dimen/big_padding"
-            android:textSize="18sp" />
+        android:hint="Fecha de Salida"
+        android:focusable="false"
+        android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/fechaSalida"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/big_padding"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_fechaSalida"
-            android:inputType="textAutoComplete"
-            android:minHeight="@dimen/min_height"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout android:orientation="horizontal"
+    <Spinner
+        android:id="@+id/spinnerParcelas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/precioTotal"
-            android:layout_margin="@dimen/big_padding"
-            android:textSize="18sp" />
+        android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/precioTotal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/big_padding"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_precioTotal"
-            android:inputType="textAutoComplete"
-            android:minHeight="@dimen/min_height"
-            android:textSize="18sp" />
-    </LinearLayout>
+    <EditText
+        android:id="@+id/editNumeroOcupantes"
+        android:layout_width="match_parent"
+        android:hint="Número de Ocupantes"
+        android:inputType="number"
+        android:layout_height="wrap_content" />
 
-
+    <EditText
+        android:id="@+id/editPrecioTotal"
+        android:layout_width="match_parent"
+        android:hint="Precio Total"
+        android:focusable="false"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/button_save"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="@string/button_save"
-        android:layout_margin="@dimen/big_padding"
-        android:textColor="@color/buttonLabel" />
+        android:text="Guardar"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
