@@ -88,97 +88,39 @@ public class ReservaRepository {
     // Métodos CRUD
 
     /**
-     * Inserta una nueva reserva en la base de datos.
-     * Calcula el precio total antes de la inserción.
+     * Inserta una nueva parcela en la base de datos.
+     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
-     * @param reserva La reserva a insertar.
-     * @param parcelasReservadas Lista de parcelas reservadas asociadas a la reserva.
-     * @return El ID de la reserva insertada, o -1 si falla.
+     * @param reserva La reserva a insertar. Debe tener un todos sus parametros no nulos.
+     * @return El identificador de la parcela insertada, o -1 si la inserción falla.
      */
-    public long insert(Reserva reserva, List<ParcelaReservada> parcelasReservadas) {
-        Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> {
-            // Insertar la reserva sin el precio total
-            long reservaId = mReservaDao.insert(reserva);
-            if (reservaId <= 0) {
-                return -1L;
-            }
-
-            // Asignar el ID de la reserva a cada ParcelaReservada y guardarlas
-            for (ParcelaReservada pr : parcelasReservadas) {
-                pr.setReservaId((int) reservaId);
-                mParcelaReservadaDao.insert(pr);
-            }
-
-            // Actualizar la reserva con el precio total
-            reserva.setId((int) reservaId);
-            double precioTotal = calcularPrecioTotal((int) reservaId, reserva.getFechaEntrada(), reserva.getFechaSalida());
-            reserva.setPrecioTotal(precioTotal);
-            mReservaDao.update(reserva);
-
-            return reservaId;
-        });
-
+    public long insert(Reserva reserva) {
+        Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mReservaDao.insert(reserva));
         try {
             return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ": " + ex.getMessage());
+            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ex.getMessage());
             return -1;
         }
     }
 
     /**
-     * Actualiza una reserva existente en la base de datos.
-     * Recalcula el precio total si se modifican las parcelas o fechas.
+     * Actualiza una reserva en la base de datos.
+     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
-     * @param reserva La reserva a actualizar.
-     * @param parcelasReservadas Lista actualizada de parcelas reservadas asociadas a la reserva.
-     * @return El número de filas afectadas.
+     * @param reserva La reserva que se desea actualizar. Debe tener un ID mayor que 0, y todos sus
+     *                parametros no nulos y no vacios.
+     * @return El número de filas modificadas (1 si se actualiza correctamente,
+     * 0 si no existe una parcela con ese ID).
      */
-    public int update(Reserva reserva, List<ParcelaReservada> parcelasReservadas) {
-        Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> {
-            // Obtener la reserva original
-            Reserva reservaOriginal = mReservaDao.getReservaById(reserva.getId());
-            if (reservaOriginal == null) {
-                Log.d("ReservaRepository", "Reserva no encontrada con ID: " + reserva.getId());
-                return 0;
-            }
-
-            // Obtener las parcelas reservadas originales
-            List<ParcelaReservada> parcelasOriginales = mParcelaReservadaDao.getParcelasReservadasByReservaId(reserva.getId());
-
-            // Verificar si se han modificado las parcelas o fechas
-            boolean parcelasCambiadas = !compararListasParcelas(parcelasOriginales, parcelasReservadas);
-            boolean fechasCambiadas = !reservaOriginal.getFechaEntrada().equals(reserva.getFechaEntrada()) ||
-                    !reservaOriginal.getFechaSalida().equals(reserva.getFechaSalida());
-
-            if (parcelasCambiadas) {
-                // Eliminar las parcelas reservadas originales
-                for (ParcelaReservada pr : parcelasOriginales) {
-                    mParcelaReservadaDao.delete(pr);
-                }
-                // Insertar las nuevas parcelas reservadas
-                for (ParcelaReservada pr : parcelasReservadas) {
-                    pr.setReservaId(reserva.getId());
-                    mParcelaReservadaDao.insert(pr);
-                }
-            }
-
-            if (parcelasCambiadas || fechasCambiadas) {
-                // Recalcular el precio total
-                double precioTotal = calcularPrecioTotal(reserva.getId(), reserva.getFechaEntrada(), reserva.getFechaSalida());
-                reserva.setPrecioTotal(precioTotal);
-            } else {
-                // Mantener el precio total original
-                reserva.setPrecioTotal(reservaOriginal.getPrecioTotal());
-            }
-
-            return mReservaDao.update(reserva);
-        });
-
+    public int update(Reserva reserva) {
+        Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mReservaDao.update(reserva));
         try {
             return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ": " + ex.getMessage());
+            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ex.getMessage());
             return -1;
         }
     }
@@ -190,20 +132,12 @@ public class ReservaRepository {
      * @return El número de filas afectadas.
      */
     public int delete(Reserva reserva) {
-        Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> {
-            // Eliminar las parcelas reservadas asociadas
-            List<ParcelaReservada> parcelasReservadas = mParcelaReservadaDao.getParcelasReservadasByReservaId(reserva.getId());
-            for (ParcelaReservada pr : parcelasReservadas) {
-                mParcelaReservadaDao.delete(pr);
-            }
-            // Eliminar la reserva
-            return mReservaDao.delete(reserva);
-        });
-
+        Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mReservaDao.delete(reserva));
         try {
             return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ": " + ex.getMessage());
+            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ex.getMessage());
             return -1;
         }
     }
