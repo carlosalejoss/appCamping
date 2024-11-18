@@ -10,7 +10,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -66,7 +68,7 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
             synchronized (CampingRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    CampingRoomDatabase.class, "camping_database")
+                                    CampingRoomDatabase.class, "m12_camping_database")
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -96,12 +98,33 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
                 parcela = new Parcela("Cinca", 4, 25.0, "80m2, SI agua, NO luz");
                 parcelaDao.insert(parcela);
 
-                Reserva reserva = new Reserva("Cliente 1", 123456789, new Date(), new Date(), 150.0);
-                reservaDao.insert(reserva);
-                reserva = new Reserva("Cliente 2", 987654321, new Date(), new Date(), 200.0);
-                reservaDao.insert(reserva);
+                // Crear un SimpleDateFormat para analizar las fechas
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-                //ParcelaReservada pYr1 = new ParcelaReservada(1, )
+                try {
+                    // Insertar reservas
+                    Reserva reserva = new Reserva(
+                            "Juan",
+                            123456789,
+                            Objects.requireNonNull(dateFormat.parse("10-01-2024")),
+                            Objects.requireNonNull(dateFormat.parse("14-01-2024")),
+                            0.0
+                    );
+                    reservaDao.insert(reserva);
+
+                    reserva = new Reserva(
+                            "Luisa",
+                            987654321,
+                            Objects.requireNonNull(dateFormat.parse("12-02-2024")),
+                            Objects.requireNonNull(dateFormat.parse("14-02-2024")),
+                            0.0
+                    );
+                    reservaDao.insert(reserva);
+
+                } catch (Exception e) {
+                    // Manejar errores en caso de que las fechas no puedan analizarse
+                    e.printStackTrace();
+                }
             });
         }
     };

@@ -56,6 +56,8 @@ public class ParcelaEdit extends AppCompatActivity {
         mSaveButton = findViewById(R.id.button_save);
         mSaveButton.setOnClickListener(view -> {
             String nombre = mNombreText.getText().toString();
+            String maxOcupantesStr = mMaxOcupantes.getText().toString();
+            String precioXpersonaStr = mPrecioXpersona.getText().toString();
 
             // Verificar si el nombre está vacío
             if (TextUtils.isEmpty(nombre)) {
@@ -76,6 +78,30 @@ public class ParcelaEdit extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.duplicate_name_error, Toast.LENGTH_LONG).show();
                     return;
                 }
+            }
+
+            // Validar número máximo de ocupantes
+            if (TextUtils.isEmpty(maxOcupantesStr)) {
+                Toast.makeText(getApplicationContext(), R.string.empty_not_saved_ocupantes, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            int maxOcupantes = Integer.parseInt(maxOcupantesStr);
+            if (maxOcupantes <= 0) {
+                Toast.makeText(getApplicationContext(), R.string.invalid_max_ocupantes, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Validar precio por persona
+            if (TextUtils.isEmpty(precioXpersonaStr)) {
+                Toast.makeText(getApplicationContext(), R.string.empty_not_saved_precio, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            double precioXpersona = Double.parseDouble(precioXpersonaStr);
+            if (precioXpersona <= 0) {
+                Toast.makeText(getApplicationContext(), R.string.invalid_precio, Toast.LENGTH_LONG).show();
+                return;
             }
 
             if (TextUtils.isEmpty(mMaxOcupantes.getText())) {
@@ -99,6 +125,7 @@ public class ParcelaEdit extends AppCompatActivity {
             }
 
             setResult(RESULT_OK, replyIntent);
+            Toast.makeText(this, R.string.parcela_saved_successfully, Toast.LENGTH_SHORT).show();
             finish();
         });
 

@@ -136,6 +136,7 @@ public class ParcelaRepository {
 
     /**
      * Verifica si existe una parcela con el nombre especificado.
+     *
      * @param nombre El nombre a verificar.
      * @return true si existe una parcela con el mismo nombre, de lo contrario false.
      */
@@ -152,6 +153,7 @@ public class ParcelaRepository {
 
     /**
      * Verifica si existe una parcela con el nombre especificado que no tenga el ID proporcionado.
+     *
      * @param nombre El nombre a verificar.
      * @param id     El ID de la parcela que se está editando.
      * @return true si existe otra parcela con el mismo nombre, de lo contrario false.

@@ -112,6 +112,9 @@ public class ListadoParcelas extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Cambia a la pantalla de listado de reservas.
+     */
     private void listadoReservas() {
         Intent intent = new Intent(this, ListadoReservas.class); // que redireccione a MenuReservas
         startActivity(intent);
@@ -124,7 +127,7 @@ public class ListadoParcelas extends AppCompatActivity {
      * @return true si el evento fue manejado exitosamente.
      */
     public boolean onContextItemSelected(MenuItem item) {
-        es.unizar.eina.M12_camping.database.Parcela current = mAdapter.getCurrent();
+        Parcela current = mAdapter.getCurrent();
         switch (item.getItemId()) {
             case DELETE_ID:
                 Toast.makeText(
@@ -152,7 +155,7 @@ public class ListadoParcelas extends AppCompatActivity {
      *
      * @param current La parcela que se desea editar.
      */
-    private void editParcela(es.unizar.eina.M12_camping.database.Parcela current) {
+    private void editParcela(Parcela current) {
         Intent intent = new Intent(this, ParcelaEdit.class);
         intent.putExtra(ParcelaEdit.PARCELA_NOMBRE, current.getNombre());
         intent.putExtra(ParcelaEdit.PARCELA_MAXOCUPANTES, current.getMaxOcupantes());
@@ -162,18 +165,22 @@ public class ListadoParcelas extends AppCompatActivity {
         mStartUpdateParcela.launch(intent);
     }
 
-    /** ActivityResultLauncher para la creación de nuevas parcelas */
+    /**
+     * ActivityResultLauncher para la creación de nuevas parcelas
+     */
     ActivityResultLauncher<Intent> mStartCreateParcela = newActivityResultLauncher(new ExecuteActivityResultParcelas() {
         @Override
-        public void process(Bundle extras, es.unizar.eina.M12_camping.database.Parcela parcela) {
+        public void process(Bundle extras, Parcela parcela) {
             mParcelaViewModel.insert(parcela);
         }
     });
 
-    /** ActivityResultLauncher para la actualización de parcelas existentes */
+    /**
+     * ActivityResultLauncher para la actualización de parcelas existentes
+     */
     ActivityResultLauncher<Intent> mStartUpdateParcela = newActivityResultLauncher(new ExecuteActivityResultParcelas() {
         @Override
-        public void process(Bundle extras, es.unizar.eina.M12_camping.database.Parcela parcela) {
+        public void process(Bundle extras, Parcela parcela) {
             int id = extras.getInt(ParcelaEdit.PARCELA_ID);
             parcela.setId(id);
             mParcelaViewModel.update(parcela);
@@ -194,7 +201,7 @@ public class ListadoParcelas extends AppCompatActivity {
                         assert result.getData() != null;
                         Bundle extras = result.getData().getExtras();
                         assert extras != null;
-                        Parcela parcela = new es.unizar.eina.M12_camping.database.Parcela(
+                        Parcela parcela = new Parcela(
                                 Objects.requireNonNull(extras.getString(ParcelaEdit.PARCELA_NOMBRE)),
                                 extras.getInt(ParcelaEdit.PARCELA_MAXOCUPANTES),
                                 extras.getDouble(ParcelaEdit.PARCELA_PRECIOXPERSONA),

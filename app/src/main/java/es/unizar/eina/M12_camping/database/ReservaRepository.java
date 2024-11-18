@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * Repositorio que gestiona el acceso a los datos de las reservas.
+ * Proporciona métodos para realizar operaciones CRUD, validaciones y cálculos relacionados con las reservas.
  */
 public class ReservaRepository {
 
@@ -88,11 +89,11 @@ public class ReservaRepository {
     // Métodos CRUD
 
     /**
-     * Inserta una nueva parcela en la base de datos.
+     * Inserta una nueva reserva en la base de datos.
      * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
      * @param reserva La reserva a insertar. Debe tener un todos sus parametros no nulos.
-     * @return El identificador de la parcela insertada, o -1 si la inserción falla.
+     * @return El identificador de la reserva insertada, o -1 si la inserción falla.
      */
     public long insert(Reserva reserva) {
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -112,7 +113,7 @@ public class ReservaRepository {
      * @param reserva La reserva que se desea actualizar. Debe tener un ID mayor que 0, y todos sus
      *                parametros no nulos y no vacios.
      * @return El número de filas modificadas (1 si se actualiza correctamente,
-     * 0 si no existe una parcela con ese ID).
+     * 0 si no existe una reserva con ese ID).
      */
     public int update(Reserva reserva) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -142,7 +143,7 @@ public class ReservaRepository {
         }
     }
 
-    // Métodos auxiliares
+    // Métodos auxiliares no utilizados de momento a dia 17/11/2024
 
     /**
      * Calcula el precio total de una reserva.
@@ -244,7 +245,5 @@ public class ReservaRepository {
 
         return !reservasSolapadas.isEmpty();
     }
-
-    // Otros métodos y validaciones adicionales...
 
 }

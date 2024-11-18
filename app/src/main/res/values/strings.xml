@@ -24,6 +24,15 @@
     <string name="empty_not_saved_fechaEntrada">Reserva no guardada porque no hay fecha de entrada.</string>
     <string name="empty_not_saved_fechaSalida">Reserva no guardada porque no hay fecha de salida.</string>
 
+    <string name="invalid_precio">Precio invalido.</string>
+    <string name="invalid_max_ocupantes">Numero de ocupantes invalido.</string>
+    <string name="invalid_date_format">Fecha invalida.</string>
+    <string name="invalid_date_logic">La fecha de salida debe ser posterior a la fecha de entrada.</string>
+    <string name="invalid_phone_number">El número de móvil debe contener entre 9 y 15 dígitos.</string>
+
+    <string name="parcela_saved_successfully">Parcela guardada con éxito.</string>
+    <string name="reserva_saved_successfully">Reserva guardada con éxito.</string>
+
     <string name="add_parcela">Añadir Parcela</string>
     <string name="delete_parcela">Borrar Parcela</string>
     <string name="edit_parcela">Editar Parcela</string>
@@ -53,4 +62,6 @@
     <string name="FechaEntrada">Fecha de entrada</string>
     <string name="FechaSalida">Fecha de salida</string>
     <string name="precioTotal">Precio total</string>
+
+    <string name="ParcelasReservadas">Parcelas reservadas</string>
 </resources>

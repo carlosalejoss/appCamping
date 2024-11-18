@@ -81,10 +81,10 @@ public class ListadoReservas extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, CHANGE_ID, Menu.NONE, R.string.cambiar_a_reservas);
-        menu.add(Menu.NONE, ORDER_ID_NOMBRECLIENTE, Menu.NONE, R.string.ordenar_por_nombre);
-        menu.add(Menu.NONE, ORDER_ID_TELEFONO, Menu.NONE, R.string.ordenar_por_maxocupantes);
-        menu.add(Menu.NONE, ORDER_ID_FECHAENTRADA, Menu.NONE, R.string.ordenar_por_precioxpersona);
+        menu.add(Menu.NONE, CHANGE_ID, Menu.NONE, R.string.cambiar_a_parcelas);
+        menu.add(Menu.NONE, ORDER_ID_NOMBRECLIENTE, Menu.NONE, R.string.ordenar_por_nombreCliente);
+        menu.add(Menu.NONE, ORDER_ID_TELEFONO, Menu.NONE, R.string.ordenar_por_telefono);
+        menu.add(Menu.NONE, ORDER_ID_FECHAENTRADA, Menu.NONE, R.string.ordenar_por_fechaEntrada);
         return result;
     }
 
@@ -113,6 +113,9 @@ public class ListadoReservas extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Cambia a la pantalla de listado de parcelas.
+     */
     private void listadoParcelas() {
         Intent intent = new Intent(this, ListadoParcelas.class); // que redireccione a MenuReservas
         startActivity(intent);
@@ -163,7 +166,9 @@ public class ListadoReservas extends AppCompatActivity {
         mStartUpdateReserva.launch(intent);
     }
 
-    /** ActivityResultLauncher para la creación de nuevas reservas */
+    /**
+     * ActivityResultLauncher para la creación de nuevas reservas
+     */
     ActivityResultLauncher<Intent> mStartCreateReserva = newActivityResultLauncher(new ExecuteActivityResultReservas() {
         @Override
         public void process(Bundle extras, Reserva reserva) {
@@ -171,7 +176,9 @@ public class ListadoReservas extends AppCompatActivity {
         }
     });
 
-    /** ActivityResultLauncher para la actualización de reservas existentes */
+    /**
+     * ActivityResultLauncher para la actualización de reservas existentes
+     */
     ActivityResultLauncher<Intent> mStartUpdateReserva = newActivityResultLauncher(new ExecuteActivityResultReservas() {
         @Override
         public void process(Bundle extras, Reserva reserva) {

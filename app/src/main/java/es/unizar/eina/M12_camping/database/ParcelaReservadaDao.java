@@ -9,13 +9,15 @@ import androidx.room.Update;
 import java.util.List;
 
 /**
- * DAO para acceder a los datos de ParcelaReservada.
+ * DAO para acceder a los datos de la entidad ParcelaReservada.
+ * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * sobre la tabla de ParcelasReservadas en la base de datos.
  */
 @Dao
 public interface ParcelaReservadaDao {
 
     /**
-     * Inserta una nueva ParcelaReservada.
+     * Inserta una nueva ParcelaReservada en la base de datos.
      *
      * @param parcelaReservada La ParcelaReservada a insertar.
      * @return El ID de la ParcelaReservada insertada.
@@ -24,7 +26,7 @@ public interface ParcelaReservadaDao {
     long insert(ParcelaReservada parcelaReservada);
 
     /**
-     * Actualiza una reserva existente en la base de datos.
+     * Actualiza una ParcelaReservada existente en la base de datos.
      *
      * @param parcelaReservada La reserva a actualizar.
      * @return El número de filas afectadas.
@@ -44,7 +46,7 @@ public interface ParcelaReservadaDao {
     /**
      * Elimina todas las reservas de la base de datos.
      */
-    @Query("DELETE FROM Reserva")
+    @Query("DELETE FROM parcelaReservada")
     void deleteAll();
 
     /**
