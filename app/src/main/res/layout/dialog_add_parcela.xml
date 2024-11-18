@@ -8,13 +8,13 @@
         android:id="@+id/spinner_parcela"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="Seleccionar Parcela" />
+        android:prompt="@string/seleccionara_parcela" />
 
     <EditText
         android:id="@+id/numero_ocupantes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Número de ocupantes"
+        android:hint="@string/numero_ocupantes"
         android:inputType="number" />
 
 </LinearLayout>

@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="Parcela"
+        android:text="@string/parcela"
         android:textSize="16sp" />
 
     <TextView
@@ -18,18 +18,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Ocupantes"
+        android:text="@string/ocupantes"
         android:textSize="16sp" />
 
     <Button
         android:id="@+id/button_edit_parcela"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Editar" />
+        android:text="@string/editar" />
 
     <Button
         android:id="@+id/button_delete_parcela"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eliminar" />
+        android:text="@string/eliminar" />
 </LinearLayout>

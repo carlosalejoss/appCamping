@@ -143,40 +143,6 @@ public class ReservaRepository {
         }
     }
 
-    // Métodos auxiliares no utilizados de momento a dia 17/11/2024
-
-    /**
-     * Calcula el precio total de una reserva.
-     *
-     * @param reservaId El ID de la reserva.
-     * @param fechaEntrada Fecha de entrada de la reserva.
-     * @param fechaSalida Fecha de salida de la reserva.
-     * @return El precio total calculado.
-     */
-    private double calcularPrecioTotal(int reservaId, Date fechaEntrada, Date fechaSalida) {
-        long diffInMillies = Math.abs(fechaSalida.getTime() - fechaEntrada.getTime());
-        long diffDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        if (diffDays == 0) {
-            diffDays = 1; // Al menos una noche
-        }
-
-        double total = 0;
-
-        // Obtener las parcelas reservadas asociadas a la reserva
-        List<ParcelaReservada> parcelasReservadas = mParcelaReservadaDao.getParcelasReservadasByReservaId(reservaId);
-
-        for (ParcelaReservada pr : parcelasReservadas) {
-            // Obtener detalles de la parcela
-            Parcela parcela = obtenerParcelaPorId(pr.getParcelaId());
-            if (parcela != null) {
-                total += parcela.getPrecioXpersona() * pr.getNumeroOcupantes() * diffDays;
-            } else {
-                Log.d("ReservaRepository", "Parcela no encontrada con ID: " + pr.getParcelaId());
-            }
-        }
-        return total;
-    }
-
     /**
      * Obtiene una parcela por su ID.
      *
@@ -192,58 +158,6 @@ public class ReservaRepository {
             Log.d("ReservaRepository", ex.getClass().getSimpleName() + ": " + ex.getMessage());
             return null;
         }
-    }
-
-    /**
-     * Compara dos listas de ParcelaReservada para determinar si son iguales.
-     *
-     * @param lista1 Primera lista de ParcelaReservada.
-     * @param lista2 Segunda lista de ParcelaReservada.
-     * @return true si las listas son iguales, false en caso contrario.
-     */
-    private boolean compararListasParcelas(List<ParcelaReservada> lista1, List<ParcelaReservada> lista2) {
-        if (lista1.size() != lista2.size()) {
-            return false;
-        }
-
-        for (ParcelaReservada pr1 : lista1) {
-            boolean found = false;
-            for (ParcelaReservada pr2 : lista2) {
-                if (pr1.getParcelaId() == pr2.getParcelaId() &&
-                        pr1.getNumeroOcupantes() == pr2.getNumeroOcupantes()) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Método para verificar solapamientos
-
-    /**
-     * Verifica si hay solapamientos de reservas para las parcelas y fechas dadas.
-     *
-     * @param reserva La reserva que se está creando o actualizando.
-     * @param parcelasReservadas Lista de parcelas reservadas.
-     * @return true si hay solapamientos, false en caso contrario.
-     */
-    public boolean haySolapamientos(Reserva reserva, List<ParcelaReservada> parcelasReservadas) {
-        List<Integer> idParcelas = parcelasReservadas.stream()
-                .map(ParcelaReservada::getParcelaId)
-                .collect(Collectors.toList());
-
-        List<Reserva> reservasSolapadas = mReservaDao.getReservasSolapadas(
-                reserva.getFechaEntrada(),
-                reserva.getFechaSalida(),
-                idParcelas,
-                reserva.getId()
-        );
-
-        return !reservasSolapadas.isEmpty();
     }
 
 }

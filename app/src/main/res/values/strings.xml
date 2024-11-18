@@ -63,5 +63,16 @@
     <string name="FechaSalida">Fecha de salida</string>
     <string name="precioTotal">Precio total</string>
 
-    <string name="ParcelasReservadas">Parcelas reservadas</string>
+    <string name="parcela">Parcela</string>
+    <string name="ocupantes">Ocupantes</string>
+    <string name="ParcelasReservadas">PARCELAS RESERVADAS</string>
+
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="seleccionara_parcela">Seleccionar parcela</string>
+    <string name="numero_ocupantes">Numero de ocupantes</string>
+
+    <string name="no_parcelas_reservadas">No hay parcelas reservadas</string>
+
+
 </resources>
