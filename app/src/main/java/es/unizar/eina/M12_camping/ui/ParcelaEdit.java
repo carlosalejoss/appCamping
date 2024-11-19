@@ -20,6 +20,7 @@ import es.unizar.eina.M12_camping.R;
 public class ParcelaEdit extends AppCompatActivity {
 
     /** Constantes para identificar los datos que se pasan en el Intent */
+    /** Constantes para identificar los datos que se pasan en el Intent */
     public static final String PARCELA_NOMBRE = "nombre";
     public static final String PARCELA_MAXOCUPANTES = "maxOcupantes";
     public static final String PARCELA_PRECIOXPERSONA = "precioXpersona";

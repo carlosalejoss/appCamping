@@ -70,9 +70,18 @@
     <string name="editar">Editar</string>
     <string name="eliminar">Eliminar</string>
     <string name="seleccionara_parcela">Seleccionar parcela</string>
+
+    <string name="parcela_nombre">Nombre de parcela</string>
     <string name="numero_ocupantes">Numero de ocupantes</string>
+    <string name="edit_button">Editar</string>
+    <string name="delete_button">Eliminar</string>
+
+    <string name="delete_all">Eliminar todas las reservas</string>
+    <string name="all_reservas_deleted">Todas las reservas han sido eliminadas</string>
 
     <string name="no_parcelas_reservadas">No hay parcelas reservadas</string>
+    <string name="no_parcelas_disponibles">No hay parcelas disponibles</string>
 
+    <string name="cancel">Cancelar</string>
 
 </resources>

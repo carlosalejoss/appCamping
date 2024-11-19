@@ -93,6 +93,16 @@ public interface ReservaDao {
     Reserva getReservaById(int id);
 
     /**
+     * Obtiene las parcelas reservadas de una reserva específica.
+     *
+     * @param reservaId El ID de la reserva.
+     * @return Lista de ParcelasReservadas asociadas.
+     */
+    @Query("SELECT * FROM parcelaReservada WHERE reservaId = :reservaId")
+    List<ParcelaReservada> getParcelasReservadasByReservaId(int reservaId);
+
+
+    /**
      * Obtiene una lista de reservas que se solapan con las fechas y parcelas especificadas.
      *
      * @param fechaInicio Fecha de inicio para comprobar solapamientos.

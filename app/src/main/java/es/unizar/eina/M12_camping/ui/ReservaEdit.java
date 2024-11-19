@@ -1,41 +1,45 @@
 package es.unizar.eina.M12_camping.ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import es.unizar.eina.M12_camping.R;
+import es.unizar.eina.M12_camping.database.Parcela;
 import es.unizar.eina.M12_camping.database.ParcelaReservada;
+import es.unizar.eina.M12_camping.database.Reserva;
 
 /**
- * Pantalla utilizada para la creación o edición de una reserva.
- * Esta actividad permite al usuario ingresar o modificar los detalles de una reserva.
- * Una vez completados los cambios, los datos se envían de vuelta a la actividad principal.
+ * Actividad que permite crear o editar una reserva.
+ * Incluye la funcionalidad de agregar, editar y eliminar parcelas reservadas asociadas a la reserva.
  */
 public class ReservaEdit extends AppCompatActivity {
 
-    /** Constantes para identificar los datos que se pasan en el Intent */
-    public static final String RESERVA_NOMBRE_CLIENTE = "nombreCliente";
-    public static final String RESERVA_TELEFONO = "telefono";
-    public static final String RESERVA_FECHA_ENTRADA = "fechaEntrada";
-    public static final String RESERVA_FECHA_SALIDA = "fechaSalida";
-    public static final String RESERVA_PRECIO_TOTAL = "precioTotal";
+    public static final String RESERVA_NOMBRECLIENTE = "nombreCliente";
+    public static final String RESERVA_TELEFONO = "numeroMovil";
+    public static final String RESERVA_FECHAENTRADA = "fechaEntrada";
+    public static final String RESERVA_FECHASALIDA = "fechaSalida";
+    public static final String RESERVA_PRECIOTOTAL = "precioTotal";
     public static final String RESERVA_ID = "id";
 
     private EditText mNombreClienteText;
@@ -45,129 +49,304 @@ public class ReservaEdit extends AppCompatActivity {
     private TextView mPrecioTotalText;
     private Integer mRowId;
 
+    private RecyclerView mRecyclerViewParcelas;
+    private ParcelaReservadaAdapter mAdapter;
+
+    private List<ParcelaReservada> mParcelasReservadasTemp = new ArrayList<>();
     private ReservaViewModel mReservaViewModel;
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-    Button mSaveButton;
 
     /**
-     * Método que se llama cuando se crea la actividad.
+     * Método que se llama al crear la actividad.
      * Configura los elementos de la interfaz de usuario y carga los datos existentes si están disponibles.
      *
-     * @param savedInstanceState Estado anterior de la actividad, si se ha guardado.
+     * @param savedInstanceState El estado guardado de la actividad.
      */
-    @SuppressLint("WrongViewCast")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservaedit);
 
-        // Inicialización de los campos
+        // Inicializar vistas
         mNombreClienteText = findViewById(R.id.nombreCliente);
         mTelefonoText = findViewById(R.id.telefono);
         mFechaEntradaText = findViewById(R.id.fechaEntrada);
         mFechaSalidaText = findViewById(R.id.fechaSalida);
         mPrecioTotalText = findViewById(R.id.precioTotal);
 
-        // ViewModel para manejar la lógica de datos de las reservas
+        mRecyclerViewParcelas = findViewById(R.id.recyclerViewParcelas);
+        Button addParcelaButton = findViewById(R.id.button_add_parcela);
+        Button saveReservaButton = findViewById(R.id.button_save);
+
+        // Configurar RecyclerView y ViewModel
         mReservaViewModel = new ViewModelProvider(this).get(ReservaViewModel.class);
+        mAdapter = new ParcelaReservadaAdapter(mParcelasReservadasTemp,
+                this::onParcelaReservadaEdited,
+                this::onParcelaReservadaDeleted);
+        mRecyclerViewParcelas.setAdapter(mAdapter);
+        mRecyclerViewParcelas.setLayoutManager(new LinearLayoutManager(this));
 
-        // Configuración del botón de guardar
-        mSaveButton = findViewById(R.id.button_save);
-        mSaveButton.setOnClickListener(view -> {
-            String nombreCliente = mNombreClienteText.getText().toString();
-            String telefonoStr = mTelefonoText.getText().toString();
-            String fechaEntradaStr = mFechaEntradaText.getText().toString();
-            String fechaSalidaStr = mFechaSalidaText.getText().toString();
-            String precioTotalStr = mPrecioTotalText.getText().toString();
+        // Configurar botón para añadir parcelas
+        addParcelaButton.setOnClickListener(view -> openAddParcelaDialog());
 
-            // Validar campos obligatorios
-            if (TextUtils.isEmpty(nombreCliente)) {
-                showToast(R.string.empty_not_saved_nombreCliente);
-                return;
-            }
-            if (TextUtils.isEmpty(telefonoStr)) {
-                showToast(R.string.empty_not_saved_telefono);
-                return;
-            }
-            if (TextUtils.isEmpty(fechaEntradaStr)) {
-                showToast(R.string.empty_not_saved_fechaEntrada);
-                return;
-            }
-            if (TextUtils.isEmpty(fechaSalidaStr)) {
-                showToast(R.string.empty_not_saved_fechaSalida);
-                return;
-            }
+        // Configurar botón para guardar reserva
+        saveReservaButton.setOnClickListener(view -> saveReserva());
 
-            try {
-                // Convertir datos
-                int telefono = Integer.parseInt(telefonoStr);
-                Date fechaEntrada = dateFormat.parse(fechaEntradaStr);
-                Date fechaSalida = dateFormat.parse(fechaSalidaStr);
-                double precioTotal = Double.parseDouble(precioTotalStr);
-
-                // Validar la lógica de las fechas
-                assert fechaSalida != null;
-                if (fechaSalida.before(fechaEntrada)) {
-                    showToast(R.string.invalid_date_logic);
-                    return;
-                }
-
-                if (!telefonoStr.matches("\\d{9,15}")) {
-                    showToast(R.string.invalid_phone_number);
-                    return;
-                }
-
-
-                // Crear Intent con los datos
-                Intent replyIntent = new Intent();
-                replyIntent.putExtra(RESERVA_NOMBRE_CLIENTE, nombreCliente);
-                replyIntent.putExtra(RESERVA_TELEFONO, telefono);
-                assert fechaEntrada != null;
-                replyIntent.putExtra(RESERVA_FECHA_ENTRADA, fechaEntrada.getTime());
-                replyIntent.putExtra(RESERVA_FECHA_SALIDA, fechaSalida.getTime());
-                replyIntent.putExtra(RESERVA_PRECIO_TOTAL, precioTotal);
-
-                if (mRowId != null) {
-                    replyIntent.putExtra(RESERVA_ID, mRowId);
-                }
-
-                setResult(RESULT_OK, replyIntent);
-                finish();
-            } catch (ParseException e) {
-                // Manejo del error de conversión de fechas
-                showToast(R.string.invalid_date_format);
-            }
-        });
-
-        // Rellenar campos si es edición
+        // Rellenar campos si estamos editando
         populateFields();
     }
 
     /**
-     * Muestra un mensaje de error en un Toast.
-     *
-     * @param resId ID del recurso de cadena a mostrar.
+     * Abre un diálogo para añadir una nueva parcela reservada a la reserva.
      */
-    private void showToast(int resId) {
-        Toast.makeText(getApplicationContext(), resId, Toast.LENGTH_LONG).show();
+    private void openAddParcelaDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.add_parcela));
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_parcela, null);
+        builder.setView(dialogView);
+
+        Spinner parcelaSpinner = dialogView.findViewById(R.id.spinner_parcela);
+        EditText numeroOcupantesText = dialogView.findViewById(R.id.numero_ocupantes);
+
+        // Configurar Spinner con parcelas disponibles
+        List<Parcela> parcelas = mReservaViewModel.getAllParcelasSync();
+        if (parcelas == null || parcelas.isEmpty()) {
+            Toast.makeText(this, R.string.no_parcelas_disponibles, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ParcelaSpinnerAdapter spinnerAdapter = new ParcelaSpinnerAdapter(this, parcelas);
+        parcelaSpinner.setAdapter(spinnerAdapter);
+
+        builder.setPositiveButton(getString(R.string.add_parcela), (dialog, which) -> {
+            Parcela selectedParcela = (Parcela) parcelaSpinner.getSelectedItem();
+            String numeroOcupantesStr = numeroOcupantesText.getText().toString();
+
+            if (TextUtils.isEmpty(numeroOcupantesStr)) {
+                Toast.makeText(this, R.string.empty_not_saved_ocupantes, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int numeroOcupantes = Integer.parseInt(numeroOcupantesStr);
+            if (numeroOcupantes <= 0 || numeroOcupantes > selectedParcela.getMaxOcupantes()) {
+                Toast.makeText(this, R.string.invalid_max_ocupantes, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ParcelaReservada nuevaParcela = new ParcelaReservada(0, selectedParcela.getId(), numeroOcupantes);
+            mParcelasReservadasTemp.add(nuevaParcela);
+            mAdapter.notifyDataSetChanged();
+            updatePrecioTotal();
+        });
+
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
+
+    /**
+     * Método que se ejecuta cuando una parcela reservada es editada.
+     *
+     * @param parcelaReservada La parcela reservada que se va a editar.
+     */
+    private void onParcelaReservadaEdited(ParcelaReservada parcelaReservada) {
+        // Lógica para editar parcela reservada
+        openEditParcelaDialog(parcelaReservada);
+    }
+
+    /**
+     * Abre un cuadro de diálogo para editar los datos de una parcela reservada existente.
+     *
+     * @param parcelaReservada La parcela reservada a editar.
+     */
+    private void openEditParcelaDialog(ParcelaReservada parcelaReservada) {
+        // Crear un AlertDialog.Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.edit_parcela));
+
+        // Inflar la vista personalizada del diálogo
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_parcela, null);
+        builder.setView(dialogView);
+
+        // Referencias a los elementos de la interfaz del diálogo
+        Spinner parcelaSpinner = dialogView.findViewById(R.id.spinner_parcela);
+        EditText numeroOcupantesText = dialogView.findViewById(R.id.numero_ocupantes);
+
+        // Configurar el Spinner con la lista de parcelas existentes
+        List<Parcela> parcelas = mReservaViewModel.getAllParcelasSync(); // Método debe estar definido en el ViewModel
+        ArrayAdapter<Parcela> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parcelas);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        parcelaSpinner.setAdapter(adapter);
+
+        // Seleccionar la parcela actual en el Spinner
+        for (int i = 0; i < parcelas.size(); i++) {
+            if (parcelas.get(i).getId() == parcelaReservada.getParcelaId()) {
+                parcelaSpinner.setSelection(i);
+                break;
+            }
+        }
+
+        // Configurar el campo de número de ocupantes con el valor actual
+        numeroOcupantesText.setText(String.valueOf(parcelaReservada.getNumeroOcupantes()));
+
+        // Configurar los botones del diálogo
+        builder.setPositiveButton(getString(R.string.edit_parcela), (dialog, which) -> {
+            Parcela selectedParcela = (Parcela) parcelaSpinner.getSelectedItem();
+            String numeroOcupantesStr = numeroOcupantesText.getText().toString();
+
+            // Validaciones
+            if (TextUtils.isEmpty(numeroOcupantesStr)) {
+                Toast.makeText(this, getString(R.string.empty_not_saved_ocupantes), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int numeroOcupantes = Integer.parseInt(numeroOcupantesStr);
+            if (numeroOcupantes <= 0 || numeroOcupantes > selectedParcela.getMaxOcupantes()) {
+                Toast.makeText(this, getString(R.string.invalid_max_ocupantes), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Actualizar la parcela reservada
+            parcelaReservada.setParcelaId(selectedParcela.getId());
+            parcelaReservada.setNumeroOcupantes(numeroOcupantes);
+            mAdapter.notifyDataSetChanged(); // Notificar cambios al adaptador
+            updatePrecioTotal(); // Actualizar el precio total dinámicamente
+        });
+
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
+
+        // Mostrar el cuadro de diálogo
+        builder.create().show();
     }
 
 
     /**
-     * Rellena los campos de texto con los datos de una reserva existente si están disponibles.
-     * Recupera los datos pasados en el Intent y los asigna a los campos correspondientes.
+     * Método que se ejecuta cuando una parcela reservada es eliminada.
+     *
+     * @param parcelaReservada La parcela reservada que se va a eliminar.
+     */
+    private void onParcelaReservadaDeleted(ParcelaReservada parcelaReservada) {
+        mParcelasReservadasTemp.remove(parcelaReservada);
+        mAdapter.notifyDataSetChanged();
+        updatePrecioTotal();
+    }
+
+    /**
+     * Calcula y actualiza el precio total de la reserva.
+     */
+    private void updatePrecioTotal() {
+        double total = 0;
+        for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
+            Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
+            total += parcela.getPrecioXpersona() * parcelaReservada.getNumeroOcupantes();
+        }
+        mPrecioTotalText.setText(String.valueOf(total));
+    }
+
+    /**
+     * Guarda la reserva en la base de datos.
+     */
+    private void saveReserva() {
+        String nombreCliente = mNombreClienteText.getText().toString();
+        String telefonoStr = mTelefonoText.getText().toString();
+        String fechaEntradaStr = mFechaEntradaText.getText().toString();
+        String fechaSalidaStr = mFechaSalidaText.getText().toString();
+
+        // Validaciones
+        if (TextUtils.isEmpty(nombreCliente)) {
+            Toast.makeText(this, R.string.empty_not_saved_nombreCliente, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(telefonoStr)) {
+            Toast.makeText(this, R.string.empty_not_saved_telefono, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            int telefono = Integer.parseInt(telefonoStr);
+            Date fechaEntrada = dateFormat.parse(fechaEntradaStr);
+            Date fechaSalida = dateFormat.parse(fechaSalidaStr);
+
+            if (fechaEntrada == null || fechaSalida == null) {
+                return; // Error ya manejado en parseDate()
+            }
+
+            if (fechaSalida.before(fechaEntrada)) {
+                Toast.makeText(this, R.string.invalid_date_logic, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!telefonoStr.matches("\\d{9,15}")) {
+                Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Reserva nuevaReserva = new Reserva(nombreCliente, telefono, fechaEntrada, fechaSalida, 0);
+            if (mRowId != null) {
+                nuevaReserva.setId(mRowId);
+                mReservaViewModel.update(nuevaReserva);
+            } else {
+                long reservaId = mReservaViewModel.insert(nuevaReserva);
+                if (reservaId == -1) {
+                    Toast.makeText(this, "Error al guardar la reserva", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
+                    parcelaReservada.setReservaId((int) reservaId);
+                    mReservaViewModel.insertParcelaReservada(parcelaReservada);
+                }
+            }
+            Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Convierte un String en un objeto Date utilizando un formato específico.
+     *
+     * @param dateString El String que representa la fecha.
+     * @return Un objeto Date si la conversión es exitosa, o null si falla.
+     */
+    private Date parseDate(String dateString) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        try {
+            return formatter.parse(dateString);
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.invalid_date_format, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
+
+    /**
+     * Rellena los campos de la reserva si se están editando.
      */
     private void populateFields() {
-        mRowId = null;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mNombreClienteText.setText(extras.getString(RESERVA_NOMBRE_CLIENTE));
-            mTelefonoText.setText(String.valueOf(extras.getInt(RESERVA_TELEFONO)));
-            mFechaEntradaText.setText(dateFormat.format(new Date(extras.getLong(RESERVA_FECHA_ENTRADA))));
-            mFechaSalidaText.setText(dateFormat.format(new Date(extras.getLong(RESERVA_FECHA_SALIDA))));
-            mPrecioTotalText.setText(String.valueOf(extras.getDouble(RESERVA_PRECIO_TOTAL, 0.0)));
-            mRowId = extras.getInt(RESERVA_ID, -1);
+        // Obtener los datos del Intent
+        mRowId = getIntent().getIntExtra(RESERVA_ID, -1);
+        if (mRowId != -1) {
+            // Recuperar la reserva del ViewModel
+            Reserva reserva = mReservaViewModel.getReservaById(mRowId);
+            if (reserva == null) {
+                Toast.makeText(this, "Reserva no encontrada", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Asignar los valores a los campos
+            mNombreClienteText.setText(reserva.getNombreCliente());
+            mTelefonoText.setText(String.valueOf(reserva.getNumeroMovil()));
+            mFechaEntradaText.setText(dateFormat.format(reserva.getFechaEntrada()));
+            mFechaSalidaText.setText(dateFormat.format(reserva.getFechaSalida()));
+            mPrecioTotalText.setText(String.valueOf(reserva.getPrecioTotal()));
+
+            // Recuperar las parcelas reservadas y actualizar el adaptador
+            mParcelasReservadasTemp = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
+            mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Método explícito para actualizar la lista
         }
     }
 

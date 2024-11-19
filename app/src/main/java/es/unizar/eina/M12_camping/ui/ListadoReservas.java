@@ -1,6 +1,10 @@
 package es.unizar.eina.M12_camping.ui;
 
-import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,19 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Date;
-import java.util.Objects;
 
 import es.unizar.eina.M12_camping.R;
 import es.unizar.eina.M12_camping.database.Reserva;
+
+import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
+
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Pantalla principal de la aplicación ListadoReservas.
@@ -36,9 +36,9 @@ public class ListadoReservas extends AppCompatActivity {
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
     static final int CHANGE_ID = Menu.FIRST + 3;
-    static final int ORDER_ID_NOMBRECLIENTE = Menu.FIRST + 4;
-    static final int ORDER_ID_TELEFONO = Menu.FIRST + 5;
-    static final int ORDER_ID_FECHAENTRADA = Menu.FIRST + 6;
+    static final int ORDER_ID_NOMBRE = Menu.FIRST + 4;
+    static final int ORDER_ID_MAXOCUPANTES = Menu.FIRST + 5;
+    static final int ORDER_ID_PRECIOXPERSONA = Menu.FIRST + 6;
 
     RecyclerView mRecyclerView;
     ReservaListAdapter mAdapter;
@@ -53,9 +53,9 @@ public class ListadoReservas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listado_parcelas); // Cambiar nombre de pantallas
+        setContentView(R.layout.activity_listado_reservas); // Cambiar nombre de pantallas
 
-        mRecyclerView = findViewById(R.id.recyclerview);
+        mRecyclerView = findViewById(R.id.recyclerview_reservas);
         mAdapter = new ReservaListAdapter(new ReservaListAdapter.ReservaDiff());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -82,9 +82,9 @@ public class ListadoReservas extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, CHANGE_ID, Menu.NONE, R.string.cambiar_a_parcelas);
-        menu.add(Menu.NONE, ORDER_ID_NOMBRECLIENTE, Menu.NONE, R.string.ordenar_por_nombreCliente);
-        menu.add(Menu.NONE, ORDER_ID_TELEFONO, Menu.NONE, R.string.ordenar_por_telefono);
-        menu.add(Menu.NONE, ORDER_ID_FECHAENTRADA, Menu.NONE, R.string.ordenar_por_fechaEntrada);
+        menu.add(Menu.NONE, ORDER_ID_NOMBRE, Menu.NONE, R.string.ordenar_por_nombreCliente);
+        menu.add(Menu.NONE, ORDER_ID_MAXOCUPANTES, Menu.NONE, R.string.ordenar_por_telefono);
+        menu.add(Menu.NONE, ORDER_ID_PRECIOXPERSONA, Menu.NONE, R.string.ordenar_por_fechaEntrada);
         return result;
     }
 
@@ -98,15 +98,15 @@ public class ListadoReservas extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case CHANGE_ID:
-                listadoParcelas();
+                listadoReservas();
                 break;
-            case ORDER_ID_NOMBRECLIENTE:
+            case ORDER_ID_NOMBRE:
                 mReservaViewModel.getReservasOrderedNombreCliente().observe(this, reservas -> mAdapter.submitList(reservas));
                 break;
-            case ORDER_ID_TELEFONO:
+            case ORDER_ID_MAXOCUPANTES:
                 mReservaViewModel.getReservasOrderedTelefono().observe(this, reservas -> mAdapter.submitList(reservas));
                 break;
-            case ORDER_ID_FECHAENTRADA:
+            case ORDER_ID_PRECIOXPERSONA:
                 mReservaViewModel.getReservasOrderedFechaEntrada().observe(this, reservas -> mAdapter.submitList(reservas));
                 break;
         }
@@ -114,9 +114,9 @@ public class ListadoReservas extends AppCompatActivity {
     }
 
     /**
-     * Cambia a la pantalla de listado de parcelas.
+     * Cambia a la pantalla de listado de reservas.
      */
-    private void listadoParcelas() {
+    private void listadoReservas() {
         Intent intent = new Intent(this, ListadoParcelas.class); // que redireccione a MenuReservas
         startActivity(intent);
     }
@@ -158,10 +158,11 @@ public class ListadoReservas extends AppCompatActivity {
      */
     private void editReserva(Reserva current) {
         Intent intent = new Intent(this, ReservaEdit.class);
-        intent.putExtra(ReservaEdit.RESERVA_NOMBRE_CLIENTE, current.getNombreCliente());
+        intent.putExtra(ReservaEdit.RESERVA_NOMBRECLIENTE, current.getNombreCliente());
         intent.putExtra(ReservaEdit.RESERVA_TELEFONO, current.getNumeroMovil());
-        intent.putExtra(ReservaEdit.RESERVA_FECHA_ENTRADA, current.getFechaEntrada().getTime());
-        intent.putExtra(ReservaEdit.RESERVA_FECHA_SALIDA, current.getFechaSalida().getTime());
+        intent.putExtra(ReservaEdit.RESERVA_FECHAENTRADA, current.getFechaEntrada());
+        intent.putExtra(ReservaEdit.RESERVA_FECHASALIDA, current.getFechaSalida());
+        intent.putExtra(ReservaEdit.RESERVA_PRECIOTOTAL, current.getPrecioTotal());
         intent.putExtra(ReservaEdit.RESERVA_ID, current.getId());
         mStartUpdateReserva.launch(intent);
     }
@@ -203,11 +204,11 @@ public class ListadoReservas extends AppCompatActivity {
                         Bundle extras = result.getData().getExtras();
                         assert extras != null;
                         Reserva reserva = new Reserva(
-                                Objects.requireNonNull(extras.getString(ReservaEdit.RESERVA_NOMBRE_CLIENTE)),
+                                Objects.requireNonNull(extras.getString(ReservaEdit.RESERVA_NOMBRECLIENTE)),
                                 extras.getInt(ReservaEdit.RESERVA_TELEFONO),
-                                new Date(extras.getLong(ReservaEdit.RESERVA_FECHA_ENTRADA)),
-                                new Date(extras.getLong(ReservaEdit.RESERVA_FECHA_SALIDA)),
-                                0);
+                                new Date(extras.getLong(ReservaEdit.RESERVA_FECHAENTRADA)),
+                                new Date(extras.getLong(ReservaEdit.RESERVA_FECHASALIDA)),
+                                extras.getDouble(ReservaEdit.RESERVA_PRECIOTOTAL));
                         executable.process(extras, reserva);
                     }
                 });

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -90,21 +91,20 @@ public class ReservaRepository {
 
     /**
      * Inserta una nueva reserva en la base de datos.
-     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
-     * @param reserva La reserva a insertar. Debe tener un todos sus parametros no nulos.
-     * @return El identificador de la reserva insertada, o -1 si la inserción falla.
+     * @param reserva La reserva a insertar.
+     * @return El ID de la reserva recién insertada.
      */
     public long insert(Reserva reserva) {
-        Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
-                () -> mReservaDao.insert(reserva));
+        Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mReservaDao.insert(reserva));
         try {
             return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ex.getMessage());
-            return -1;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al insertar la reserva: " + e.getMessage());
+            return -1; // Devuelve -1 en caso de error.
         }
     }
+
 
     /**
      * Actualiza una reserva en la base de datos.
@@ -158,6 +158,83 @@ public class ReservaRepository {
             Log.d("ReservaRepository", ex.getClass().getSimpleName() + ": " + ex.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Obtiene todas las parcelas de manera síncrona.
+     *
+     * @return Una lista de todas las parcelas.
+     */
+    public List<Parcela> getAllParcelasSync() {
+        try {
+            Future<List<Parcela>> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                    () -> mParcelaDao.getUnOrderedParcelas().getValue());
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error obteniendo parcelas: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Obtiene una parcela por su ID.
+     *
+     * @param parcelaId El ID de la parcela.
+     * @return La parcela correspondiente, o null si no se encuentra.
+     */
+    public Parcela getParcelaById(int parcelaId) {
+        Future<Parcela> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaDao.getParcelaById(parcelaId)
+        );
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error obteniendo parcela por ID: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene una reserva específica por su ID.
+     *
+     * @param id El ID de la reserva.
+     * @return La reserva correspondiente, o null si no se encuentra.
+     */
+    public Reserva getReservaById(int id) {
+        Future<Reserva> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mReservaDao.getReservaById(id));
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al obtener la reserva por ID: " + e.getMessage());
+            return null; // Devuelve null en caso de error.
+        }
+    }
+
+    /**
+     * Obtiene las parcelas reservadas asociadas a una reserva específica.
+     *
+     * @param reservaId El ID de la reserva.
+     * @return Lista de ParcelasReservadas asociadas a la reserva.
+     */
+    public List<ParcelaReservada> getParcelasReservadasByReservaId(int reservaId) {
+        Future<List<ParcelaReservada>> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mParcelaReservadaDao.getParcelasReservadasByReservaId(reservaId));
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al obtener parcelas reservadas por reserva ID: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Inserta una nueva parcela reservada en la base de datos.
+     *
+     * @param parcelaReservada La parcela reservada que se desea insertar.
+     */
+    public void insertParcelaReservada(ParcelaReservada parcelaReservada) {
+        CampingRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mParcelaReservadaDao.insert(parcelaReservada);
+        });
     }
 
 }

@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import es.unizar.eina.M12_camping.database.Parcela;
+import es.unizar.eina.M12_camping.database.ParcelaReservada;
 import es.unizar.eina.M12_camping.database.Reserva;
 import es.unizar.eina.M12_camping.database.ReservaRepository;
 
@@ -78,10 +80,12 @@ public class ReservaViewModel extends AndroidViewModel {
      * Inserta una nueva reserva en la base de datos.
      *
      * @param reserva La reserva a insertar.
+     * @return El ID de la reserva recién insertada.
      */
-    public void insert(Reserva reserva) {
-        mRepository.insert(reserva);
+    public long insert(Reserva reserva) {
+        return mRepository.insert(reserva);
     }
+
 
     /**
      * Actualiza una reserva existente en la base de datos.
@@ -100,4 +104,53 @@ public class ReservaViewModel extends AndroidViewModel {
     public void delete(Reserva reserva) {
         mRepository.delete(reserva);
     }
+
+    /**
+     * Obtiene todas las parcelas disponibles de forma síncrona.
+     *
+     * @return Una lista de todas las parcelas.
+     */
+    public List<Parcela> getAllParcelasSync() {
+        return mRepository.getAllParcelasSync();
+    }
+
+    /**
+     * Obtiene una parcela por su ID.
+     *
+     * @param parcelaId El ID de la parcela.
+     * @return La parcela correspondiente.
+     */
+    public Parcela getParcelaById(int parcelaId) {
+        return mRepository.getParcelaById(parcelaId);
+    }
+
+    /**
+     * Obtiene una reserva específica por su ID.
+     *
+     * @param id El ID de la reserva.
+     * @return La reserva correspondiente, o null si no se encuentra.
+     */
+    public Reserva getReservaById(int id) {
+        return mRepository.getReservaById(id);
+    }
+
+    /**
+     * Obtiene las parcelas reservadas asociadas a una reserva específica.
+     *
+     * @param reservaId El ID de la reserva.
+     * @return Lista de ParcelasReservadas asociadas a la reserva.
+     */
+    public List<ParcelaReservada> getParcelasReservadasByReservaId(int reservaId) {
+        return mRepository.getParcelasReservadasByReservaId(reservaId);
+    }
+
+    /**
+     * Inserta una parcela reservada en la base de datos.
+     *
+     * @param parcelaReservada La parcela reservada que se desea insertar.
+     */
+    public void insertParcelaReservada(ParcelaReservada parcelaReservada) {
+        mRepository.insertParcelaReservada(parcelaReservada);
+    }
+
 }
