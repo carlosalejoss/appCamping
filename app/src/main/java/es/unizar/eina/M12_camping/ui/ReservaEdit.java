@@ -111,14 +111,15 @@ public class ReservaEdit extends AppCompatActivity {
         EditText numeroOcupantesText = dialogView.findViewById(R.id.numero_ocupantes);
 
         // Configurar Spinner con parcelas disponibles
-        List<Parcela> parcelas = mReservaViewModel.getAllParcelasSync();
-        if (parcelas == null || parcelas.isEmpty()) {
-            Toast.makeText(this, R.string.no_parcelas_disponibles, Toast.LENGTH_SHORT).show();
-            return;
-        }
+        mReservaViewModel.getAllParcelas().observe(this, parcelas -> {
+            if (parcelas != null && !parcelas.isEmpty()) {
+                ParcelaSpinnerAdapter spinnerAdapter = new ParcelaSpinnerAdapter(this, parcelas);
+                parcelaSpinner.setAdapter(spinnerAdapter);
+            } else {
+                Toast.makeText(this, R.string.no_parcelas_disponibles, Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        ParcelaSpinnerAdapter spinnerAdapter = new ParcelaSpinnerAdapter(this, parcelas);
-        parcelaSpinner.setAdapter(spinnerAdapter);
 
         builder.setPositiveButton(getString(R.string.add_parcela), (dialog, which) -> {
             Parcela selectedParcela = (Parcela) parcelaSpinner.getSelectedItem();
@@ -220,7 +221,6 @@ public class ReservaEdit extends AppCompatActivity {
         builder.create().show();
     }
 
-
     /**
      * Método que se ejecuta cuando una parcela reservada es eliminada.
      *
@@ -260,6 +260,10 @@ public class ReservaEdit extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(telefonoStr)) {
             Toast.makeText(this, R.string.empty_not_saved_telefono, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!fechaEntradaStr.matches("\\d{2}-\\d{2}-\\d{4}") || !fechaSalidaStr.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            Toast.makeText(this, R.string.invalid_date_format_2, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -304,22 +308,6 @@ public class ReservaEdit extends AppCompatActivity {
             Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Convierte un String en un objeto Date utilizando un formato específico.
-     *
-     * @param dateString El String que representa la fecha.
-     * @return Un objeto Date si la conversión es exitosa, o null si falla.
-     */
-    private Date parseDate(String dateString) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        try {
-            return formatter.parse(dateString);
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.invalid_date_format, Toast.LENGTH_SHORT).show();
-            return null;
         }
     }
 

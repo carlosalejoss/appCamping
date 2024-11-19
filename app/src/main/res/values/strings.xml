@@ -27,6 +27,7 @@
     <string name="invalid_precio">Precio invalido.</string>
     <string name="invalid_max_ocupantes">Numero de ocupantes invalido.</string>
     <string name="invalid_date_format">Fecha invalida.</string>
+    <string name="invalid_date_format_2">Fecha invalida, formato necesario dd-MM-yyyy.</string>
     <string name="invalid_date_logic">La fecha de salida debe ser posterior a la fecha de entrada.</string>
     <string name="invalid_phone_number">El número de móvil debe contener entre 9 y 15 dígitos.</string>
 
