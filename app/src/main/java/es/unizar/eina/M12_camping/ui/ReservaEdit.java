@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -84,7 +85,8 @@ public class ReservaEdit extends AppCompatActivity {
         mReservaViewModel = new ViewModelProvider(this).get(ReservaViewModel.class);
         mAdapter = new ParcelaReservadaAdapter(mParcelasReservadasTemp,
                 this::onParcelaReservadaEdited,
-                this::onParcelaReservadaDeleted);
+                this::onParcelaReservadaDeleted,
+                mReservaViewModel);
         mRecyclerViewParcelas.setAdapter(mAdapter);
         mRecyclerViewParcelas.setLayoutManager(new LinearLayoutManager(this));
 
@@ -102,6 +104,7 @@ public class ReservaEdit extends AppCompatActivity {
      * Abre un diálogo para añadir una nueva parcela reservada a la reserva.
      */
     private void openAddParcelaDialog() {
+        Log.d("openAddParcelaDialog", "mRowId actual: " + mRowId);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_parcela));
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_parcela, null);
@@ -136,8 +139,13 @@ public class ReservaEdit extends AppCompatActivity {
                 return;
             }
 
-            ParcelaReservada nuevaParcela = new ParcelaReservada(0, selectedParcela.getId(), numeroOcupantes);
-            mParcelasReservadasTemp.add(nuevaParcela);
+            ParcelaReservada nuevaParcela = new ParcelaReservada(mRowId, selectedParcela.getId(), numeroOcupantes);
+            mReservaViewModel.insertParcelaReservada(nuevaParcela);
+            Log.d("openAddParcelaDialog", "Insertada parcela reservada: " + nuevaParcela);
+            List<ParcelaReservada> parcelasActualizadas = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
+            mParcelasReservadasTemp.clear();
+            mParcelasReservadasTemp.addAll(parcelasActualizadas);
+            mAdapter.setParcelasReservadas(parcelasActualizadas);
             mAdapter.notifyDataSetChanged();
             updatePrecioTotal();
         });
@@ -230,6 +238,11 @@ public class ReservaEdit extends AppCompatActivity {
         mParcelasReservadasTemp.remove(parcelaReservada);
         mAdapter.notifyDataSetChanged();
         updatePrecioTotal();
+
+        // Eliminar la parcela reservada de la base de datos si tiene un ID válido
+        if (parcelaReservada.getId() > 0) {
+            mReservaViewModel.deleteParcelaReservada(parcelaReservada);
+        }
     }
 
     /**
@@ -286,7 +299,8 @@ public class ReservaEdit extends AppCompatActivity {
                 return;
             }
 
-            Reserva nuevaReserva = new Reserva(nombreCliente, telefono, fechaEntrada, fechaSalida, 0);
+            double precioTotal = calculatePrecioTotal();
+            Reserva nuevaReserva = new Reserva(nombreCliente, telefono, fechaEntrada, fechaSalida, precioTotal);
             if (mRowId != null) {
                 nuevaReserva.setId(mRowId);
                 mReservaViewModel.update(nuevaReserva);
@@ -312,6 +326,18 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
+     * Calcula el precio total basado en las parcelas reservadas.
+     */
+    private double calculatePrecioTotal() {
+        double total = 0;
+        for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
+            Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
+            total += parcela.getPrecioXpersona() * parcelaReservada.getNumeroOcupantes();
+        }
+        return total;
+    }
+
+    /**
      * Rellena los campos de la reserva si se están editando.
      */
     private void populateFields() {
@@ -319,6 +345,7 @@ public class ReservaEdit extends AppCompatActivity {
         mRowId = getIntent().getIntExtra(RESERVA_ID, -1);
         if (mRowId != -1) {
             // Recuperar la reserva del ViewModel
+            Log.d("ReservaEdit", "populateFields: mRowId = " + mRowId);
             Reserva reserva = mReservaViewModel.getReservaById(mRowId);
             if (reserva == null) {
                 Toast.makeText(this, "Reserva no encontrada", Toast.LENGTH_SHORT).show();
@@ -334,7 +361,14 @@ public class ReservaEdit extends AppCompatActivity {
 
             // Recuperar las parcelas reservadas y actualizar el adaptador
             mParcelasReservadasTemp = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
+            if (mParcelasReservadasTemp == null || mParcelasReservadasTemp.isEmpty()) {
+                Log.d("ReservaEdit", "populateFields: No se encontraron parcelas reservadas para mRowId = " + mRowId);
+            } else {
+                Log.d("ReservaEdit", "populateFields: Se encontraron " + mParcelasReservadasTemp.size() + " parcelas reservadas.");
+            }
+            
             mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Método explícito para actualizar la lista
+            mAdapter.notifyDataSetChanged();
         }
     }
 

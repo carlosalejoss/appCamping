@@ -1,5 +1,6 @@
 package es.unizar.eina.M12_camping.ui;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     private List<ParcelaReservada> mParcelasReservadas;
     private final OnParcelaReservadaEditListener onEditListener;
     private final OnParcelaReservadaDeleteListener onDeleteListener;
+    private final ReservaViewModel mReservaViewModel;
 
     /**
      * Constructor para inicializar el adaptador.
@@ -34,10 +37,12 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
      */
     public ParcelaReservadaAdapter(List<ParcelaReservada> parcelasReservadas,
                                    OnParcelaReservadaEditListener editListener,
-                                   OnParcelaReservadaDeleteListener deleteListener) {
+                                   OnParcelaReservadaDeleteListener deleteListener,
+                                   ReservaViewModel mReservaViewModel) {
         this.mParcelasReservadas = parcelasReservadas;
         this.onEditListener = editListener;
         this.onDeleteListener = deleteListener;
+        this.mReservaViewModel = mReservaViewModel;
     }
 
     @NonNull
@@ -50,12 +55,31 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     @Override
     public void onBindViewHolder(@NonNull ParcelaReservadaViewHolder holder, int position) {
         ParcelaReservada parcelaReservada = mParcelasReservadas.get(position);
-        //String nombreParcela = idToNombreMap.getOrDefault(parcelaReservada.getParcelaId(), "Parcela desconocida");
-        //holder.parcelaNombre.setText(nombreParcela);
+        Log.d("ParcelaReservadaAdapter", "onBindViewHolder: parcelaReservada = " + parcelaReservada);
+
+        String nombreParcela = mReservaViewModel.getNombreParcelaById(parcelaReservada.getParcelaId());
+        if (nombreParcela == null) {
+            Log.d("ParcelaReservadaAdapter", "onBindViewHolder: No se encontró nombre para parcelaId = " + parcelaReservada.getParcelaId());
+            holder.parcelaNombre.setText("Parcela desconocida");
+        } else {
+            Log.d("ParcelaReservadaAdapter", "onBindViewHolder: Nombre de parcela = " + nombreParcela);
+            holder.parcelaNombre.setText(nombreParcela);
+        }
         holder.numeroOcupantes.setText(String.valueOf(parcelaReservada.getNumeroOcupantes()));
 
-        holder.editButton.setOnClickListener(v -> onEditListener.onEdit(parcelaReservada));
-        holder.deleteButton.setOnClickListener(v -> onDeleteListener.onDelete(parcelaReservada));
+        holder.editButton.setOnClickListener(v -> {
+            onEditListener.onEdit(parcelaReservada); // Llama al listener definido en ReservaEdit
+            List<ParcelaReservada> parcelasActualizadas = mReservaViewModel.getParcelasReservadasByReservaId(parcelaReservada.getReservaId());
+            setParcelasReservadas(parcelasActualizadas); // Actualiza el adaptador con la lista actualizada
+        });
+
+        // Listener para el botón de eliminar
+        holder.deleteButton.setOnClickListener(v -> {
+            onDeleteListener.onDelete(parcelaReservada); // Llama al listener definido en ReservaEdit
+            mParcelasReservadas.remove(position); // Elimina localmente la parcela
+            notifyItemRemoved(position); // Notifica al adaptador que el elemento fue eliminado
+        });
+
     }
 
     @Override
@@ -69,7 +93,7 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
      * @param nuevasParcelas Nueva lista de parcelas reservadas.
      */
     public void updateData(List<ParcelaReservada> nuevasParcelas) {
-        this.mParcelasReservadas = nuevasParcelas;
+        this.mParcelasReservadas = new ArrayList<>(nuevasParcelas);
         notifyDataSetChanged();
     }
 
@@ -79,8 +103,7 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
      * @param parcelasReservadas La nueva lista de parcelas reservadas.
      */
     public void setParcelasReservadas(List<ParcelaReservada> parcelasReservadas) {
-        this.mParcelasReservadas.clear(); // Limpia la lista actual
-        this.mParcelasReservadas.addAll(parcelasReservadas); // Añade los nuevos elementos
+        this.mParcelasReservadas = new ArrayList<>(parcelasReservadas);
         notifyDataSetChanged(); // Notifica al adaptador de los cambios
     }
 

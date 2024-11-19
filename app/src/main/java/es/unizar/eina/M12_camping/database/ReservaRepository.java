@@ -217,9 +217,16 @@ public class ReservaRepository {
      * @return Lista de ParcelasReservadas asociadas a la reserva.
      */
     public List<ParcelaReservada> getParcelasReservadasByReservaId(int reservaId) {
+        Log.d("ReservaRepository", "getParcelasReservadasByReservaId: reservaId = " + reservaId);
         Future<List<ParcelaReservada>> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mParcelaReservadaDao.getParcelasReservadasByReservaId(reservaId));
         try {
-            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+            List<ParcelaReservada> parcelasReservadas = future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+            if (parcelasReservadas == null || parcelasReservadas.isEmpty()) {
+                Log.d("ReservaRepository", "getParcelasReservadasByReservaId: No se encontraron parcelas reservadas para reservaId = " + reservaId);
+            } else {
+                Log.d("ReservaRepository", "getParcelasReservadasByReservaId: Se encontraron " + parcelasReservadas.size() + " parcelas reservadas.");
+            }
+            return parcelasReservadas;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             Log.e("ReservaRepository", "Error al obtener parcelas reservadas por reserva ID: " + e.getMessage());
             return null;
@@ -234,6 +241,13 @@ public class ReservaRepository {
     public void insertParcelaReservada(ParcelaReservada parcelaReservada) {
         CampingRoomDatabase.databaseWriteExecutor.execute(() -> {
             mParcelaReservadaDao.insert(parcelaReservada);
+            Log.d("ReservaRepository", "Parcela reservada insertada: " + parcelaReservada);
+        });
+    }
+
+    public void deleteParcelaReservada(ParcelaReservada parcelaReservada) {
+        CampingRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mParcelaReservadaDao.delete(parcelaReservada);
         });
     }
 

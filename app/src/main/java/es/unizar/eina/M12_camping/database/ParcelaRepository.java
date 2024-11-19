@@ -169,4 +169,22 @@ public class ParcelaRepository {
         }
     }
 
+    public String getNombreParcelaById(int parcelaId) {
+        Log.d("ParcelaRepository", "getNombreParcelaById: parcelaId = " + parcelaId);
+
+        Future<String> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mParcelaDao.getNombreParcelaById(parcelaId));
+        try {
+            String nombreParcela = future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+            if (nombreParcela == null) {
+                Log.d("ParcelaRepository", "getNombreParcelaById: No se encontró nombre para parcelaId = " + parcelaId);
+            } else {
+                Log.d("ParcelaRepository", "getNombreParcelaById: Nombre de parcela = " + nombreParcela);
+            }
+            return nombreParcela;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ParcelaRepository", "getNombreParcelaById: Error al obtener nombre de parcela: " + e.getMessage());
+            return null;
+        }
+    }
+
 }

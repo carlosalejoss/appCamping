@@ -111,4 +111,7 @@ public interface ParcelaDao {
      */
     @Query("SELECT * FROM parcela WHERE id = :id")
     Parcela getParcelaById(int id);
+
+    @Query("SELECT nombre FROM parcela WHERE id = :id")
+    String getNombreParcelaById(int id);
 }

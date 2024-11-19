@@ -1,6 +1,7 @@
 package es.unizar.eina.M12_camping.ui;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -160,4 +161,18 @@ public class ReservaViewModel extends AndroidViewModel {
         return mParcelaRepository.getAllParcelas();
     }
 
+    public String getNombreParcelaById(int parcelaId) {
+        Log.d("ReservaViewModel", "getNombreParcelaById: parcelaId = " + parcelaId);
+        String nombreParcela = mParcelaRepository.getNombreParcelaById(parcelaId);
+        if (nombreParcela == null) {
+            Log.d("ReservaViewModel", "getNombreParcelaById: No se encontró nombre para parcelaId = " + parcelaId);
+        } else {
+            Log.d("ReservaViewModel", "getNombreParcelaById: Nombre de parcela = " + nombreParcela);
+        }
+        return nombreParcela;
+    }
+
+    public void deleteParcelaReservada(ParcelaReservada parcelaReservada) {
+        mRepository.deleteParcelaReservada(parcelaReservada);
+    }
 }
