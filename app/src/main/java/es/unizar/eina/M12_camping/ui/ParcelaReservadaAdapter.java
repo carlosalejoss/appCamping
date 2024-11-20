@@ -55,23 +55,20 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     @Override
     public void onBindViewHolder(@NonNull ParcelaReservadaViewHolder holder, int position) {
         ParcelaReservada parcelaReservada = mParcelasReservadas.get(position);
-        Log.d("ParcelaReservadaAdapter", "onBindViewHolder: parcelaReservada = " + parcelaReservada);
+        Log.d("Comprobaciones", "onBindViewHolder: parcelaReservada = " + parcelaReservada);
 
         String nombreParcela = mReservaViewModel.getNombreParcelaById(parcelaReservada.getParcelaId());
         if (nombreParcela == null) {
-            Log.d("ParcelaReservadaAdapter", "onBindViewHolder: No se encontró nombre para parcelaId = " + parcelaReservada.getParcelaId());
+            Log.d("Comprobaciones", "onBindViewHolder: No se encontró nombre para parcelaId = " + parcelaReservada.getParcelaId());
             holder.parcelaNombre.setText("Parcela desconocida");
         } else {
-            Log.d("ParcelaReservadaAdapter", "onBindViewHolder: Nombre de parcela = " + nombreParcela);
+            Log.d("Comprobaciones", "onBindViewHolder: Nombre de parcela = " + nombreParcela);
             holder.parcelaNombre.setText(nombreParcela);
         }
         holder.numeroOcupantes.setText(String.valueOf(parcelaReservada.getNumeroOcupantes()));
 
-        holder.editButton.setOnClickListener(v -> {
-            onEditListener.onEdit(parcelaReservada); // Llama al listener definido en ReservaEdit
-            List<ParcelaReservada> parcelasActualizadas = mReservaViewModel.getParcelasReservadasByReservaId(parcelaReservada.getReservaId());
-            setParcelasReservadas(parcelasActualizadas); // Actualiza el adaptador con la lista actualizada
-        });
+        // Listener para el botón de editar
+        holder.editButton.setOnClickListener(v -> onEditListener.onEdit(parcelaReservada));
 
         // Listener para el botón de eliminar
         holder.deleteButton.setOnClickListener(v -> {

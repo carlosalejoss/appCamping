@@ -68,7 +68,7 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
             synchronized (CampingRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    CampingRoomDatabase.class, "m12_camping_database")
+                                    CampingRoomDatabase.class, "m12_camping_database_p4")
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
