@@ -144,7 +144,7 @@ public class ReservaViewModel extends AndroidViewModel {
      * @param reservaId El ID de la reserva.
      * @return Lista de ParcelasReservadas asociadas a la reserva.
      */
-    public List<ParcelaReservada> getParcelasReservadasByReservaId(int reservaId) {
+    public LiveData<List<ParcelaReservada>> getParcelasReservadasByReservaId(int reservaId) {
         return mRepository.getParcelasReservadasByReservaId(reservaId);
     }
 

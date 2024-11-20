@@ -158,12 +158,16 @@ public class ReservaEdit extends AppCompatActivity {
             mReservaViewModel.insertParcelaReservada(nuevaParcela);
             Log.d("Comprobaciones", "Insertada parcela reservada: " + nuevaParcela);
 
-            List<ParcelaReservada> parcelasActualizadas = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
-            mParcelasReservadasTemp.clear();
-            mParcelasReservadasTemp.addAll(parcelasActualizadas);
-            mAdapter.setParcelasReservadas(parcelasActualizadas);
-            mAdapter.notifyDataSetChanged();
-            updatePrecioTotal();
+            mReservaViewModel.getParcelasReservadasByReservaId(mRowId).observe(this, parcelasReservadas -> {
+                if (parcelasReservadas != null) {
+                    mParcelasReservadasTemp.clear();
+                    mParcelasReservadasTemp.addAll(parcelasReservadas);
+                    mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Actualizar la lista en el adaptador
+                    mAdapter.notifyDataSetChanged(); // Notificar los cambios al adaptador
+                    updatePrecioTotal(); // Recalcular el precio total basado en las parcelas actuales
+                }
+            });
+
 
         });
 
@@ -287,7 +291,11 @@ public class ReservaEdit extends AppCompatActivity {
                 // Calcular el precio total en función de días, ocupantes y precio por persona
                 for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
                     Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
-                    total += parcela.getPrecioXpersona() * parcelaReservada.getNumeroOcupantes() * dias;
+                    if (parcela != null) {
+                        total += parcela.getPrecioXpersona() * parcelaReservada.getNumeroOcupantes() * dias;
+                    } else {
+                        Log.e("Error", "No se pudo encontrar la parcela con ID: " + parcelaReservada.getParcelaId());
+                    }
                 }
             }
         } catch (ParseException e) {
@@ -323,7 +331,11 @@ public class ReservaEdit extends AppCompatActivity {
                 // Calcular el precio total en función de días, ocupantes y precio por persona
                 for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
                     Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
-                    total += parcela.getPrecioXpersona() * parcelaReservada.getNumeroOcupantes() * dias;
+                    if (parcela != null) {
+                        total += parcela.getPrecioXpersona() * parcelaReservada.getNumeroOcupantes() * dias;
+                    } else {
+                        Log.e("Error", "No se pudo encontrar la parcela con ID: " + parcelaReservada.getParcelaId());
+                    }
                 }
             }
         } catch (ParseException e) {
@@ -431,15 +443,23 @@ public class ReservaEdit extends AppCompatActivity {
             mPrecioTotalText.setText(String.valueOf(reserva.getPrecioTotal()));
 
             // Recuperar las parcelas reservadas y actualizar el adaptador
-            mParcelasReservadasTemp = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
-            if (mParcelasReservadasTemp == null || mParcelasReservadasTemp.isEmpty()) {
-                Log.d("Comprobaciones", "populateFields: No se encontraron parcelas reservadas para mRowId = " + mRowId);
-            } else {
-                Log.d("Comprobaciones", "populateFields: Se encontraron " + mParcelasReservadasTemp.size() + " parcelas reservadas.");
-            }
-            
-            mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Método explícito para actualizar la lista
-            mAdapter.notifyDataSetChanged();
+//            mParcelasReservadasTemp = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
+//            mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Método explícito para actualizar la lista
+//            mAdapter.notifyDataSetChanged();
+//
+//            updatePrecioTotal();
+
+
+            mReservaViewModel.getParcelasReservadasByReservaId(mRowId).observe(this, parcelasReservadas -> {
+                if (parcelasReservadas != null) {
+                    mParcelasReservadasTemp.clear();
+                    mParcelasReservadasTemp.addAll(parcelasReservadas);
+                    mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Actualizar la lista en el adaptador
+                    mAdapter.notifyDataSetChanged(); // Notificar los cambios al adaptador
+                    updatePrecioTotal(); // Recalcular el precio total basado en las parcelas actuales
+                }
+            });
+
         }
     }
 

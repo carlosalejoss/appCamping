@@ -1,5 +1,6 @@
 package es.unizar.eina.M12_camping.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -56,7 +57,7 @@ public interface ParcelaReservadaDao {
      * @return Lista de ParcelasReservadas asociadas.
      */
     @Query("SELECT * FROM parcelaReservada WHERE reservaId = :reservaId")
-    List<ParcelaReservada> getParcelasReservadasByReservaId(int reservaId);
+    LiveData<List<ParcelaReservada>> getParcelasReservadasByReservaId(int reservaId);
 
     /**
      * Obtiene todas las ParcelasReservadas.
