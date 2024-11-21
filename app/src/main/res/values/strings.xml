@@ -25,6 +25,7 @@
     <string name="empty_not_saved_telefono">Reserva no guardada porque no hay telefono.</string>
     <string name="empty_not_saved_fechaEntrada">Reserva no guardada porque no hay fecha de entrada.</string>
     <string name="empty_not_saved_fechaSalida">Reserva no guardada porque no hay fecha de salida.</string>
+    <string name="empty_not_saved_parcelas">Reserva no guardada porque no hay parcelas asignadas.</string>
 
     <string name="invalid_precio">Precio invalido.</string>
     <string name="invalid_max_ocupantes">Numero de ocupantes invalido.</string>
@@ -89,5 +90,6 @@
 
     <string name="cancel">Cancelar</string>
     <string name="save_reserva_first">Por favor, guarda la reserva antes de añadir parcelas.</string>
+    <string name="invalid_data">Dato invalido.</string>
 
 </resources>

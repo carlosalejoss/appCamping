@@ -5,7 +5,10 @@ import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.List;
 
 import es.unizar.eina.M12_camping.database.Parcela;
@@ -22,6 +25,9 @@ public class ReservaViewModel extends AndroidViewModel {
 
     private final ReservaRepository mRepository;
     private final ParcelaRepository mParcelaRepository;
+    private final ExecutorService executorService;
+
+    private final MutableLiveData<Long> insertResult = new MutableLiveData<>();
 
     private final LiveData<List<Reserva>> mAllReservas;
     private final LiveData<List<Reserva>> mReservasOrdNombreCliente;
@@ -42,6 +48,46 @@ public class ReservaViewModel extends AndroidViewModel {
         mReservasOrdNombreCliente = mRepository.getReservasOrderedNombreCliente();
         mReservasOrdTelefono = mRepository.getReservasOrderedTelefono();
         mReservasOrdFechaEntrada = mRepository.getReservasOrderedFechaEntrada();
+        executorService = Executors.newSingleThreadExecutor();
+    }
+
+    /**
+     * Inserta una nueva reserva en la base de datos.
+     *
+     * @param reserva La reserva a insertar.
+     */
+    public void insert(Reserva reserva) {
+        executorService.execute(() -> {
+            long id = mRepository.insert(reserva);
+            insertResult.postValue(id); // Publicar el resultado de la inserción
+        });
+    }
+
+    /**
+     * Observa el resultado de la última operación de inserción.
+     *
+     * @return LiveData con el ID de la reserva insertada.
+     */
+    public LiveData<Long> getInsertResult() {
+        return insertResult;
+    }
+
+    /**
+     * Actualiza una reserva existente en la base de datos.
+     *
+     * @param reserva La reserva a actualizar.
+     */
+    public void update(Reserva reserva) {
+        executorService.execute(() -> mRepository.update(reserva));
+    }
+
+    /**
+     * Elimina una reserva existente de la base de datos.
+     *
+     * @param reserva La reserva a eliminar.
+     */
+    public void delete(Reserva reserva) {
+        executorService.execute(() -> mRepository.delete(reserva));
     }
 
     /**
@@ -54,68 +100,12 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene todas las reservas ordenadas por el nombre del cliente.
+     * Obtiene todas las parcelas disponibles.
      *
-     * @return Un objeto LiveData con la lista de reservas ordenadas alfabéticamente por el nombre del cliente.
+     * @return LiveData con la lista de parcelas.
      */
-    public LiveData<List<Reserva>> getReservasOrderedNombreCliente() {
-        return mReservasOrdNombreCliente;
-    }
-
-    /**
-     * Obtiene todas las reservas ordenadas por el número de teléfono del cliente.
-     *
-     * @return Un objeto LiveData con la lista de reservas ordenadas por el número de teléfono en orden ascendente.
-     */
-    public LiveData<List<Reserva>> getReservasOrderedTelefono() {
-        return mReservasOrdTelefono;
-    }
-
-    /**
-     * Obtiene todas las reservas ordenadas por la fecha de entrada.
-     *
-     * @return Un objeto LiveData con la lista de reservas ordenadas por la fecha de entrada en orden ascendente.
-     */
-    public LiveData<List<Reserva>> getReservasOrderedFechaEntrada() {
-        return mReservasOrdFechaEntrada;
-    }
-
-    /**
-     * Inserta una nueva reserva en la base de datos.
-     *
-     * @param reserva La reserva a insertar.
-     * @return El ID de la reserva recién insertada.
-     */
-    public long insert(Reserva reserva) {
-        return mRepository.insert(reserva);
-    }
-
-
-    /**
-     * Actualiza una reserva existente en la base de datos.
-     *
-     * @param reserva La reserva que se debe actualizar.
-     */
-    public void update(Reserva reserva) {
-        mRepository.update(reserva);
-    }
-
-    /**
-     * Elimina una reserva de la base de datos.
-     *
-     * @param reserva La reserva a eliminar.
-     */
-    public void delete(Reserva reserva) {
-        mRepository.delete(reserva);
-    }
-
-    /**
-     * Obtiene todas las parcelas disponibles de forma síncrona.
-     *
-     * @return Una lista de todas las parcelas.
-     */
-    public List<Parcela> getAllParcelasSync() {
-        return mRepository.getAllParcelasSync();
+    public LiveData<List<Parcela>> getAllParcelas() {
+        return mParcelaRepository.getAllParcelas();
     }
 
     /**
@@ -154,13 +144,33 @@ public class ReservaViewModel extends AndroidViewModel {
      * @param parcelaReservada La parcela reservada que se desea insertar.
      */
     public void insertParcelaReservada(ParcelaReservada parcelaReservada) {
-        mRepository.insertParcelaReservada(parcelaReservada);
+        executorService.execute(() -> mRepository.insertParcelaReservada(parcelaReservada));
     }
 
-    public LiveData<List<Parcela>> getAllParcelas() {
-        return mParcelaRepository.getAllParcelas();
+    /**
+     * Actualiza una parcela reservada en la base de datos.
+     *
+     * @param parcelaReservada La parcela reservada que se desea actualizar.
+     */
+    public void updateParcelaReservada(ParcelaReservada parcelaReservada) {
+        executorService.execute(() -> mRepository.updateParcelaReservada(parcelaReservada));
     }
 
+    /**
+     * Elimina una parcela reservada de la base de datos.
+     *
+     * @param parcelaReservada La parcela reservada que se desea eliminar.
+     */
+    public void deleteParcelaReservada(ParcelaReservada parcelaReservada) {
+        executorService.execute(() -> mRepository.deleteParcelaReservada(parcelaReservada));
+    }
+
+    /**
+     * Obtiene el nombre de una parcela específica por su ID.
+     *
+     * @param parcelaId El ID de la parcela.
+     * @return El nombre de la parcela, o null si no se encuentra.
+     */
     public String getNombreParcelaById(int parcelaId) {
         Log.d("Comprobaciones", "getNombreParcelaById: parcelaId = " + parcelaId);
         String nombreParcela = mParcelaRepository.getNombreParcelaById(parcelaId);
@@ -172,7 +182,37 @@ public class ReservaViewModel extends AndroidViewModel {
         return nombreParcela;
     }
 
-    public void deleteParcelaReservada(ParcelaReservada parcelaReservada) {
-        mRepository.deleteParcelaReservada(parcelaReservada);
+    /**
+     * Obtiene todas las reservas ordenadas por el nombre del cliente.
+     *
+     * @return Un objeto LiveData con la lista de reservas ordenadas alfabéticamente por el nombre del cliente.
+     */
+    public LiveData<List<Reserva>> getReservasOrderedNombreCliente() {
+        return mReservasOrdNombreCliente;
+    }
+
+    /**
+     * Obtiene todas las reservas ordenadas por el número de teléfono del cliente.
+     *
+     * @return Un objeto LiveData con la lista de reservas ordenadas por el número de teléfono en orden ascendente.
+     */
+    public LiveData<List<Reserva>> getReservasOrderedTelefono() {
+        return mReservasOrdTelefono;
+    }
+
+    /**
+     * Obtiene todas las reservas ordenadas por la fecha de entrada.
+     *
+     * @return Un objeto LiveData con la lista de reservas ordenadas por la fecha de entrada en orden ascendente.
+     */
+    public LiveData<List<Reserva>> getReservasOrderedFechaEntrada() {
+        return mReservasOrdFechaEntrada;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        executorService.shutdown(); // Cierra el pool de hilos al destruir el ViewModel
+        Log.d("ViewModelLifecycle", "onCleared llamado: ViewModel destruido");
     }
 }

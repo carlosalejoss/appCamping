@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -62,8 +63,14 @@ public class ListadoReservas extends AppCompatActivity {
 
         mReservaViewModel = new ViewModelProvider(this).get(ReservaViewModel.class);
 
-        // Observa los cambios en la lista de reservas y actualiza el adaptador
-        mReservaViewModel.getAllReservas().observe(this, reservas -> mAdapter.submitList(reservas));
+        // Observador del LiveData
+        mReservaViewModel.getAllReservas().observe(this, reservas -> {
+            if (reservas != null) {
+                mAdapter.submitList(reservas); // Actualizar el adaptador con la lista de reservas
+            } else {
+                Log.d("ListadoReservas", "La lista de reservas está vacía.");
+            }
+        });
 
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(view -> createReserva());

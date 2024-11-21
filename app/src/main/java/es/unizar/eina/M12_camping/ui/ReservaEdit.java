@@ -112,13 +112,61 @@ public class ReservaEdit extends AppCompatActivity {
      * Abre un diálogo para añadir una nueva parcela reservada a la reserva.
      */
     private void openAddParcelaDialog() {
-        Log.d("Comprobaciones", "openAddParcelaDialog mRowId actual: " + mRowId);
-        if (mRowId == null || mRowId <= 0) {
-            Toast.makeText(this, R.string.save_reserva_first, Toast.LENGTH_SHORT).show();
-            return; // No permitir añadir parcelas si la reserva no está guardada
+        if (mRowId == null) {
+            // Crear una reserva provisional
+            String nombreCliente = mNombreClienteText.getText().toString();
+            String telefonoStr = mTelefonoText.getText().toString();
+            String fechaEntradaStr = mFechaEntradaText.getText().toString();
+            String fechaSalidaStr = mFechaSalidaText.getText().toString();
+
+            // Validaciones básicas antes de guardar la reserva
+            if (TextUtils.isEmpty(nombreCliente)) {
+                Toast.makeText(this, R.string.empty_not_saved_nombre, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (TextUtils.isEmpty(telefonoStr)) {
+                Toast.makeText(this, R.string.empty_not_saved_telefono, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (TextUtils.isEmpty(fechaEntradaStr)) {
+                Toast.makeText(this, R.string.empty_not_saved_fechaEntrada, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (TextUtils.isEmpty(fechaSalidaStr)) {
+                Toast.makeText(this, R.string.empty_not_saved_fechaSalida, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                int telefono = Integer.parseInt(telefonoStr);
+                Date fechaEntrada = dateFormat.parse(fechaEntradaStr);
+                Date fechaSalida = dateFormat.parse(fechaSalidaStr);
+
+                if (fechaEntrada == null || fechaSalida == null || fechaSalida.before(fechaEntrada)) {
+                    Toast.makeText(this, R.string.invalid_date_logic, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                double precioTotal = calculatePrecioTotal();
+                Reserva nuevaReserva = new Reserva(nombreCliente, telefono, fechaEntrada, fechaSalida, precioTotal);
+
+                mReservaViewModel.insert(nuevaReserva); // Insertar reserva provisional
+                mReservaViewModel.getInsertResult().observe(this, reservaId -> {
+                    if (reservaId != -1) {
+                        mRowId = reservaId.intValue();
+                        Log.d("Comprobaciones", "Reserva provisional creada con ID: " + mRowId);
+                    } else {
+                        Toast.makeText(this, "Error al crear reserva provisional", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (ParseException | NumberFormatException e) {
+                Toast.makeText(this, R.string.invalid_data, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
-        Log.d("Comprobaciones", "mRowId actual: " + mRowId);
+        Log.d("Comprobaciones", "openAddParcelaDialog mRowId actual: " + mRowId);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_parcela));
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_parcela, null);
@@ -136,8 +184,6 @@ public class ReservaEdit extends AppCompatActivity {
                 parcelaSpinner.setAdapter(spinnerAdapter);
             }
         });
-
-
 
         builder.setPositiveButton(getString(R.string.add_parcela), (dialog, which) -> {
             Parcela selectedParcela = (Parcela) parcelaSpinner.getSelectedItem();
@@ -167,7 +213,6 @@ public class ReservaEdit extends AppCompatActivity {
                     updatePrecioTotal(); // Recalcular el precio total basado en las parcelas actuales
                 }
             });
-
 
         });
 
@@ -210,6 +255,8 @@ public class ReservaEdit extends AppCompatActivity {
 
             // Actualizar el número de ocupantes
             parcelaReservada.setNumeroOcupantes(numeroOcupantes);
+            mReservaViewModel.updateParcelaReservada(parcelaReservada); // Asegúrate de tener este método en el ViewModel
+
             mAdapter.notifyDataSetChanged(); // Reflejar los cambios en el RecyclerView
             updatePrecioTotal(); // Recalcular el precio total
         });
@@ -371,6 +418,11 @@ public class ReservaEdit extends AppCompatActivity {
             return;
         }
 
+        if (mParcelasReservadasTemp.isEmpty()) { // Si no hay parcelas asignadas a la reserva
+            Toast.makeText(this, R.string.empty_not_saved_parcelas, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             int telefono = Integer.parseInt(telefonoStr);
             Date fechaEntrada = dateFormat.parse(fechaEntradaStr);
@@ -396,23 +448,33 @@ public class ReservaEdit extends AppCompatActivity {
                 nuevaReserva.setId(mRowId);
                 mReservaViewModel.update(nuevaReserva);
                 Log.d("Comprobaciones", "Reserva actualizada con ID: " + mRowId);
+
+                Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
+                finish();
             } else {
-                long reservaId = mReservaViewModel.insert(nuevaReserva);
-                if (reservaId == -1) {
-                    Toast.makeText(this, "Error al guardar la reserva", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                mReservaViewModel.insert(nuevaReserva); // Llama al método insert que usa LiveData
+                mReservaViewModel.getInsertResult().observe(this, reservaId -> {
+                    if (reservaId == -1) {
+                        Toast.makeText(this, "Error al guardar la reserva", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                mRowId = (int) reservaId;
-                Log.d("Comprobaciones", "Reserva insertada con ID: " + reservaId);
+                    mRowId = reservaId.intValue();
+                    Log.d("Comprobaciones", "Reserva insertada con ID: " + reservaId);
 
-                for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
-                    parcelaReservada.setReservaId((int) reservaId);
-                    mReservaViewModel.insertParcelaReservada(parcelaReservada);
-                }
+                    // Inserta las parcelas reservadas asociadas
+                    for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
+                        parcelaReservada.setReservaId(reservaId.intValue());
+                        mReservaViewModel.insertParcelaReservada(parcelaReservada);
+                    }
+
+                    Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
+                });
+
+                Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
+                finish();
             }
-            Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
-            finish();
+
         } catch (NumberFormatException e) {
             Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
@@ -426,7 +488,11 @@ public class ReservaEdit extends AppCompatActivity {
     private void populateFields() {
         // Obtener los datos del Intent
         mRowId = getIntent().getIntExtra(RESERVA_ID, -1);
-        if (mRowId != -1) {
+
+        if (mRowId == -1) {
+            mRowId = null;
+            return;
+        } else {
             // Recuperar la reserva del ViewModel
             Log.d("Comprobaciones", "populateFields: mRowId = " + mRowId);
             Reserva reserva = mReservaViewModel.getReservaById(mRowId);
@@ -441,13 +507,6 @@ public class ReservaEdit extends AppCompatActivity {
             mFechaEntradaText.setText(dateFormat.format(reserva.getFechaEntrada()));
             mFechaSalidaText.setText(dateFormat.format(reserva.getFechaSalida()));
             mPrecioTotalText.setText(String.valueOf(reserva.getPrecioTotal()));
-
-            // Recuperar las parcelas reservadas y actualizar el adaptador
-//            mParcelasReservadasTemp = mReservaViewModel.getParcelasReservadasByReservaId(mRowId);
-//            mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Método explícito para actualizar la lista
-//            mAdapter.notifyDataSetChanged();
-//
-//            updatePrecioTotal();
 
 
             mReservaViewModel.getParcelasReservadasByReservaId(mRowId).observe(this, parcelasReservadas -> {

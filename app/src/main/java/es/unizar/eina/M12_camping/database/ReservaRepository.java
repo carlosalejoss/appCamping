@@ -143,38 +143,7 @@ public class ReservaRepository {
         }
     }
 
-    /**
-     * Obtiene una parcela por su ID.
-     *
-     * @param idParcela El ID de la parcela.
-     * @return La parcela correspondiente, o null si no se encuentra.
-     */
-    private Parcela obtenerParcelaPorId(int idParcela) {
-        Future<Parcela> future = CampingRoomDatabase.databaseWriteExecutor.submit(
-                () -> mParcelaDao.getParcelaById(idParcela));
-        try {
-            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            Log.d("ReservaRepository", ex.getClass().getSimpleName() + ": " + ex.getMessage());
-            return null;
-        }
-    }
 
-    /**
-     * Obtiene todas las parcelas de manera síncrona.
-     *
-     * @return Una lista de todas las parcelas.
-     */
-    public List<Parcela> getAllParcelasSync() {
-        try {
-            Future<List<Parcela>> future = CampingRoomDatabase.databaseWriteExecutor.submit(
-                    () -> mParcelaDao.getUnOrderedParcelas().getValue());
-            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            Log.e("ReservaRepository", "Error obteniendo parcelas: " + e.getMessage());
-            return new ArrayList<>();
-        }
-    }
 
     /**
      * Obtiene una parcela por su ID.
@@ -224,18 +193,53 @@ public class ReservaRepository {
      * Inserta una nueva parcela reservada en la base de datos.
      *
      * @param parcelaReservada La parcela reservada que se desea insertar.
+     * @return El ID de la parcela reservada recién insertada.
      */
-    public void insertParcelaReservada(ParcelaReservada parcelaReservada) {
-        CampingRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mParcelaReservadaDao.insert(parcelaReservada);
-            Log.d("ReservaRepository", "Parcela reservada insertada: " + parcelaReservada);
-        });
+    public long insertParcelaReservada(ParcelaReservada parcelaReservada) {
+        Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mParcelaReservadaDao.insert(parcelaReservada));
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al insertar la parcela reservada: " + e.getMessage());
+            return -1; // Retorna -1 en caso de error.
+        }
     }
 
-    public void deleteParcelaReservada(ParcelaReservada parcelaReservada) {
-        CampingRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mParcelaReservadaDao.delete(parcelaReservada);
-        });
+    /**
+     * Actualiza una parcela reservada existente en la base de datos.
+     *
+     * @param parcelaReservada La parcela reservada con los datos actualizados.
+     * @return El número de filas afectadas por la actualización.
+     */
+    public int updateParcelaReservada(ParcelaReservada parcelaReservada) {
+        Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaReservadaDao.update(parcelaReservada)
+        );
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al actualizar la parcela reservada: " + e.getMessage());
+            return -1; // Retorna -1 en caso de error.
+        }
     }
+
+    /**
+     * Elimina una parcela reservada de la base de datos.
+     *
+     * @param parcelaReservada La parcela reservada que se desea eliminar.
+     * @return El número de filas afectadas por la eliminación.
+     */
+    public int deleteParcelaReservada(ParcelaReservada parcelaReservada) {
+        Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaReservadaDao.delete(parcelaReservada)
+        );
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al eliminar la parcela reservada: " + e.getMessage());
+            return -1; // Retorna -1 en caso de error.
+        }
+    }
+
 
 }

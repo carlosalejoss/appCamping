@@ -85,16 +85,6 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     }
 
     /**
-     * Actualiza la lista de parcelas reservadas y notifica cambios al adaptador.
-     *
-     * @param nuevasParcelas Nueva lista de parcelas reservadas.
-     */
-    public void updateData(List<ParcelaReservada> nuevasParcelas) {
-        this.mParcelasReservadas = new ArrayList<>(nuevasParcelas);
-        notifyDataSetChanged();
-    }
-
-    /**
      * Actualiza la lista de parcelas reservadas en el adaptador.
      *
      * @param parcelasReservadas La nueva lista de parcelas reservadas.
