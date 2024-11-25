@@ -172,15 +172,32 @@ public class ReservaEdit extends AppCompatActivity {
         Spinner parcelaSpinner = dialogView.findViewById(R.id.spinner_parcela);
         EditText numeroOcupantesText = dialogView.findViewById(R.id.numero_ocupantes);
 
-        // Filtrar parcelas disponibles (excluir las ya añadidas)
-        mReservaViewModel.getAllParcelas().observe(this, parcelas -> {
-            if (parcelas != null) {
-                List<Parcela> disponibles = filtrarParcelasDisponibles(parcelas);
-                // Configurar el Spinner
-                ParcelaSpinnerAdapter spinnerAdapter = new ParcelaSpinnerAdapter(this, disponibles);
-                parcelaSpinner.setAdapter(spinnerAdapter);
+        // Obtener fechas de la reserva
+        try {
+            Date fechaInicio = dateFormat.parse(mFechaEntradaText.getText().toString());
+            Date fechaFin = dateFormat.parse(mFechaSalidaText.getText().toString());
+
+            if (fechaInicio == null || fechaFin == null || fechaInicio.after(fechaFin)) {
+                Toast.makeText(this, R.string.invalid_date_logic, Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
+
+            // Obtener parcelas disponibles
+            List<Parcela> parcelasDisponibles = mReservaViewModel.getParcelasDisponibles(fechaInicio, fechaFin);
+            if (parcelasDisponibles.isEmpty()) {
+                Toast.makeText(this, R.string.no_available_parcelas, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Configurar el Spinner
+            ParcelaSpinnerAdapter spinnerAdapter = new ParcelaSpinnerAdapter(this, parcelasDisponibles);
+            parcelaSpinner.setAdapter(spinnerAdapter);
+
+        } catch (ParseException e) {
+            Log.d("Prueba", "Catch de openAddParcelaDialog");
+            Toast.makeText(this, R.string.invalid_date_format, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         builder.setPositiveButton(getString(R.string.add_parcela), (dialog, which) -> {
             Parcela selectedParcela = (Parcela) parcelaSpinner.getSelectedItem();
@@ -280,7 +297,9 @@ public class ReservaEdit extends AppCompatActivity {
         Log.d("Comprobaciones", "Parcela eliminada y restaurada al listado: " + parcelaReservada.getParcelaId());
     }
 
-
+    /**
+     *
+     */
     private List<Parcela> filtrarParcelasDisponibles(List<Parcela> todasParcelas) {
         List<Parcela> parcelasDisponibles = new ArrayList<>();
         for (Parcela parcela : todasParcelas) {
@@ -298,6 +317,9 @@ public class ReservaEdit extends AppCompatActivity {
         return parcelasDisponibles;
     }
 
+    /**
+     *
+     */
     private void actualizarSpinnerParcelasDisponibles(List<Parcela> parcelas) {
         // Filtrar parcelas disponibles (excluir las ya añadidas)
         List<Parcela> disponibles = filtrarParcelasDisponibles(parcelas);
@@ -309,7 +331,6 @@ public class ReservaEdit extends AppCompatActivity {
             Log.d("Comprobaciones", "Parcelas disponibles: " + disponibles.size());
         }
     }
-
 
     /**
      * Calcula el precio total basado en las parcelas reservadas.
@@ -343,7 +364,7 @@ public class ReservaEdit extends AppCompatActivity {
                 }
             }
         } catch (ParseException e) {
-            Toast.makeText(this, R.string.invalid_date_format_2, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.invalid_date_format, Toast.LENGTH_SHORT).show();
             return 0; // Precio total es 0 si hay un problema de formato de fecha
         }
 
@@ -383,7 +404,7 @@ public class ReservaEdit extends AppCompatActivity {
                 }
             }
         } catch (ParseException e) {
-            Toast.makeText(this, R.string.invalid_date_format_2, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.invalid_date_format, Toast.LENGTH_SHORT).show();
             mPrecioTotalText.setText("0");
             return; // Precio total es 0 si hay un problema de formato de fecha
         }
@@ -411,7 +432,7 @@ public class ReservaEdit extends AppCompatActivity {
             return;
         }
         if (!fechaEntradaStr.matches("\\d{2}-\\d{2}-\\d{4}") || !fechaSalidaStr.matches("\\d{2}-\\d{2}-\\d{4}")) {
-            Toast.makeText(this, R.string.invalid_date_format_2, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.invalid_date_format, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -441,13 +462,10 @@ public class ReservaEdit extends AppCompatActivity {
 
             double precioTotal = calculatePrecioTotal();
             Reserva nuevaReserva = new Reserva(nombreCliente, telefono, fechaEntrada, fechaSalida, precioTotal);
+
             if (mRowId != null) {
                 nuevaReserva.setId(mRowId);
                 mReservaViewModel.update(nuevaReserva);
-                Log.d("Comprobaciones", "Reserva actualizada con ID: " + mRowId);
-
-                Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
-                finish();
             } else {
                 mReservaViewModel.insert(nuevaReserva); // Llama al método insert que usa LiveData
                 mReservaViewModel.getInsertResult().observe(this, reservaId -> {
@@ -457,20 +475,16 @@ public class ReservaEdit extends AppCompatActivity {
                     }
 
                     mRowId = reservaId.intValue();
-                    Log.d("Comprobaciones", "Reserva insertada con ID: " + reservaId);
 
                     // Inserta las parcelas reservadas asociadas
                     for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
                         parcelaReservada.setReservaId(reservaId.intValue());
                         mReservaViewModel.insertParcelaReservada(parcelaReservada);
                     }
-
-                    Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
                 });
-
-                Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
-                finish();
             }
+            Toast.makeText(this, R.string.reserva_saved_successfully, Toast.LENGTH_SHORT).show();
+            finish();
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();

@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -114,4 +115,12 @@ public interface ParcelaDao {
 
     @Query("SELECT nombre FROM parcela WHERE id = :id")
     String getNombreParcelaById(int id);
+
+    @Query("SELECT * FROM Parcela WHERE id NOT IN (SELECT pr.parcelaId FROM ParcelaReservada pr " +
+            "JOIN Reserva r ON pr.reservaId = r.id " +
+            "WHERE (:fechaInicio BETWEEN r.fechaEntrada AND r.fechaSalida) " +
+            "OR (:fechaFin BETWEEN r.fechaEntrada AND r.fechaSalida) " +
+            "OR (r.fechaEntrada BETWEEN :fechaInicio AND :fechaFin))")
+    List<Parcela> getParcelasDisponibles(Date fechaInicio, Date fechaFin);
+
 }

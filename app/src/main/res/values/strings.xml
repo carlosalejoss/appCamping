@@ -6,10 +6,10 @@
     <string name="hint_precioXpersona">Precio por persona ...</string>
     <string name="hint_descripcion">Escribe una descripcion ...</string>
 
-    <string name="hint_nombreCliente">Escribe el nombre del cliente ...</string>
-    <string name="hint_telefono">Numero de telefono del cliente ...</string>
-    <string name="hint_fechaEntrada">Fecha de entrada ...</string>
-    <string name="hint_fechaSalida">Fecha de salida ...</string>
+    <string name="hint_nombreCliente">Nombre del cliente ...</string>
+    <string name="hint_telefono">Numero de telefono ...</string>
+    <string name="hint_fechaEntrada">dd-MM-yyyy</string>
+    <string name="hint_fechaSalida">dd-MM-yyyy</string>
     <string name="hint_precioTotal">Precio total</string>
 
     <string name="hint_numero_ocupantes">Introduce el numero de ocupantes ...</string>
@@ -29,8 +29,7 @@
 
     <string name="invalid_precio">Precio invalido.</string>
     <string name="invalid_max_ocupantes">Numero de ocupantes invalido.</string>
-    <string name="invalid_date_format">Fecha invalida.</string>
-    <string name="invalid_date_format_2">Fecha invalida, formato necesario dd-MM-yyyy.</string>
+    <string name="invalid_date_format">Fecha invalida, formato necesario dd-MM-yyyy.</string>
     <string name="invalid_date_logic">La fecha de salida debe ser posterior a la fecha de entrada.</string>
     <string name="invalid_phone_number">El número de móvil debe contener entre 9 y 15 dígitos.</string>
 
@@ -91,5 +90,8 @@
     <string name="cancel">Cancelar</string>
     <string name="save_reserva_first">Por favor, guarda la reserva antes de añadir parcelas.</string>
     <string name="invalid_data">Dato invalido.</string>
+
+    <string name="no_available_parcelas">No hay parcelas disponibles para las fechas seleccionadas.</string>
+
 
 </resources>

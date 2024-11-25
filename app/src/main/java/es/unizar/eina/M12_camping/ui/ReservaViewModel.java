@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.List;
+import java.util.Date;
 
 import es.unizar.eina.M12_camping.database.Parcela;
 import es.unizar.eina.M12_camping.database.ParcelaRepository;
@@ -163,6 +164,17 @@ public class ReservaViewModel extends AndroidViewModel {
      */
     public void deleteParcelaReservada(ParcelaReservada parcelaReservada) {
         executorService.execute(() -> mRepository.deleteParcelaReservada(parcelaReservada));
+    }
+
+    /**
+     * Obtiene una lista de parcelas que no están reservadas en el rango de fechas especificado.
+     *
+     * @param fechaInicio La fecha de inicio.
+     * @param fechaFin La fecha de fin.
+     * @return Lista de parcelas disponibles.
+     */
+    public List<Parcela> getParcelasDisponibles(Date fechaInicio, Date fechaFin) {
+        return mRepository.getParcelasDisponibles(fechaInicio, fechaFin);
     }
 
     /**

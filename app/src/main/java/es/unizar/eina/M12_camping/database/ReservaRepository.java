@@ -241,5 +241,21 @@ public class ReservaRepository {
         }
     }
 
+    /**
+     * Obtiene una lista de parcelas que no están reservadas en el rango de fechas especificado.
+     *
+     * @param fechaInicio La fecha de inicio del rango.
+     * @param fechaFin La fecha de fin del rango.
+     * @return Lista de parcelas disponibles.
+     */
+    public List<Parcela> getParcelasDisponibles(Date fechaInicio, Date fechaFin) {
+        Future<List<Parcela>> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mParcelaDao.getParcelasDisponibles(fechaInicio, fechaFin));
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error al obtener parcelas disponibles: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 
 }
