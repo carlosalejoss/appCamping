@@ -53,7 +53,7 @@ class ReservaViewHolder extends RecyclerView.ViewHolder implements View.OnCreate
     }
 
     /**
-     * Crea un menú contextual con opciones para editar y eliminar la parcela.
+     * Crea un menú contextual con opciones para editar, enviar y eliminar la parcela.
      *
      * @param menu El menú contextual que se va a construir.
      * @param v La vista sobre la que se muestra el menú.
@@ -61,7 +61,8 @@ class ReservaViewHolder extends RecyclerView.ViewHolder implements View.OnCreate
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        menu.add(Menu.NONE, ListadoParcelas.EDIT_ID, Menu.NONE, R.string.edit_reserva);
-        menu.add(Menu.NONE, ListadoParcelas.DELETE_ID, Menu.NONE, R.string.delete_reserva);
+        menu.add(Menu.NONE, ListadoReservas.EDIT_ID, Menu.NONE, R.string.edit_reserva);
+        menu.add(Menu.NONE, ListadoReservas.SEND_ID, Menu.NONE, R.string.send_reserva);
+        menu.add(Menu.NONE, ListadoReservas.DELETE_ID, Menu.NONE, R.string.delete_reserva);
     }
 }

@@ -2,6 +2,7 @@ package es.unizar.eina.M12_camping.ui;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,16 +13,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import es.unizar.eina.M12_camping.R;
+import es.unizar.eina.M12_camping.database.Parcela;
+import es.unizar.eina.M12_camping.database.ParcelaReservada;
 import es.unizar.eina.M12_camping.database.Reserva;
+import es.unizar.eina.send.SMSImplementor;
+import es.unizar.eina.send.SendAbstraction;
+import es.unizar.eina.send.SendAbstractionImpl;
+import es.unizar.eina.send.WhatsAppImplementor;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.text.SimpleDateFormat;
 
 import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 
-import java.util.Date;
-import java.util.Objects;
 
 /**
  * Pantalla principal de la aplicación ListadoReservas.
@@ -33,7 +44,7 @@ public class ListadoReservas extends AppCompatActivity {
     private ReservaViewModel mReservaViewModel;
 
     /** Identificadores para los elementos del menú */
-    static final int INSERT_ID = Menu.FIRST;
+    static final int SEND_ID = Menu.FIRST;
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
     static final int CHANGE_ID = Menu.FIRST + 3;
@@ -147,6 +158,9 @@ public class ListadoReservas extends AppCompatActivity {
             case EDIT_ID:
                 editReserva(current);
                 return true;
+            case SEND_ID:
+                sendReservaInfo(current);
+                return true;
         }
         return super.onContextItemSelected(item);
     }
@@ -172,6 +186,63 @@ public class ListadoReservas extends AppCompatActivity {
         intent.putExtra(ReservaEdit.RESERVA_PRECIOTOTAL, current.getPrecioTotal());
         intent.putExtra(ReservaEdit.RESERVA_ID, current.getId());
         mStartUpdateReserva.launch(intent);
+    }
+
+
+    private void sendReservaInfo(Reserva reserva) {
+        if (reserva == null) {
+            Toast.makeText(this, "Reserva no encontrada para enviar información.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Construcción del mensaje
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("Reserva a nombre de: ").append(reserva.getNombreCliente())
+                .append("\nTeléfono: ").append(reserva.getNumeroMovil())
+                .append("\nFecha de entrada: ").append(new SimpleDateFormat("dd-MM-yyyy").format(reserva.getFechaEntrada()))
+                .append("\nFecha de salida: ").append(new SimpleDateFormat("dd-MM-yyyy").format(reserva.getFechaSalida()))
+                .append("\nPrecio total: ").append(reserva.getPrecioTotal());
+
+        // Obtener parcelas reservadas de forma reactiva (LiveData)
+        LiveData<List<ParcelaReservada>> parcelasLiveData = mReservaViewModel.getParcelasReservadasByReservaId(reserva.getId());
+        parcelasLiveData.observe(this, parcelasReservadas -> {
+            if (parcelasReservadas != null && !parcelasReservadas.isEmpty()) {
+                messageBuilder.append("\nParcelas reservadas: ");
+                for (ParcelaReservada parcelaReservada : parcelasReservadas) {
+                    // Obtener el nombre de la parcela asociado al ID
+                    String nombreParcela = mReservaViewModel.getNombreParcelaById(parcelaReservada.getParcelaId());
+                    messageBuilder.append("\n - Parcela: ").append(nombreParcela)
+                            .append(", Ocupantes: ").append(parcelaReservada.getNumeroOcupantes());
+                }
+            }
+
+            // Mostrar el diálogo para seleccionar método de envío
+            String message = messageBuilder.toString();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Enviar información de la reserva")
+                    .setItems(new CharSequence[]{"WhatsApp", "SMS"}, (dialog, which) -> {
+                        SendAbstraction sendAbstraction;
+                        switch (which) {
+                            case 0: // WhatsApp
+                                sendAbstraction = new SendAbstractionImpl(this, "WHATS");
+                                break;
+                            case 1: // SMS
+                                sendAbstraction = new SendAbstractionImpl(this, "SMS");
+                                break;
+                            default:
+                                Toast.makeText(this, "Opción inválida", Toast.LENGTH_SHORT).show();
+                                return;
+                        }
+                        try {
+                            sendAbstraction.send(String.valueOf(reserva.getNumeroMovil()), message);
+                            Toast.makeText(this, "Información enviada correctamente.", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Error al enviar la información: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("sendReservaInfo", "Error enviando información: ", e);
+                        }
+                    });
+            builder.show();
+        });
     }
 
     /**

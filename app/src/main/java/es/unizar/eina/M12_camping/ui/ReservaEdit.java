@@ -48,7 +48,7 @@ public class ReservaEdit extends AppCompatActivity {
     private Integer mRowId;
 
     private RecyclerView mRecyclerViewParcelas;
-    private ParcelaReservadaAdapter mAdapter;
+    private ParcelaReservadaAdapter mParcelaReservadaAdapter;
 
     private List<ParcelaReservada> mParcelasReservadasTemp = new ArrayList<>();
     private ReservaViewModel mReservaViewModel;
@@ -80,11 +80,11 @@ public class ReservaEdit extends AppCompatActivity {
 
         // Configurar RecyclerView y ViewModel
         mReservaViewModel = new ViewModelProvider(this).get(ReservaViewModel.class);
-        mAdapter = new ParcelaReservadaAdapter(mParcelasReservadasTemp,
+        mParcelaReservadaAdapter = new ParcelaReservadaAdapter(mParcelasReservadasTemp,
                 this::onParcelaReservadaEdited,
                 this::onParcelaReservadaDeleted,
                 mReservaViewModel);
-        mRecyclerViewParcelas.setAdapter(mAdapter);
+        mRecyclerViewParcelas.setAdapter(mParcelaReservadaAdapter);
         mRecyclerViewParcelas.setLayoutManager(new LinearLayoutManager(this));
 
         // Configurar observador único para las parcelas disponibles
@@ -222,8 +222,8 @@ public class ReservaEdit extends AppCompatActivity {
                 if (parcelasReservadas != null) {
                     mParcelasReservadasTemp.clear();
                     mParcelasReservadasTemp.addAll(parcelasReservadas);
-                    mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Actualizar la lista en el adaptador
-                    mAdapter.notifyDataSetChanged(); // Notificar los cambios al adaptador
+                    mParcelaReservadaAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Actualizar la lista en el adaptador
+                    mParcelaReservadaAdapter.notifyDataSetChanged(); // Notificar los cambios al adaptador
                     updatePrecioTotal(); // Recalcular el precio total basado en las parcelas actuales
                 }
             });
@@ -271,7 +271,7 @@ public class ReservaEdit extends AppCompatActivity {
             parcelaReservada.setNumeroOcupantes(numeroOcupantes);
             mReservaViewModel.updateParcelaReservada(parcelaReservada); // Asegúrate de tener este método en el ViewModel
 
-            mAdapter.notifyDataSetChanged(); // Reflejar los cambios en el RecyclerView
+            mParcelaReservadaAdapter.notifyDataSetChanged(); // Reflejar los cambios en el RecyclerView
             updatePrecioTotal(); // Recalcular el precio total
         });
 
@@ -286,7 +286,7 @@ public class ReservaEdit extends AppCompatActivity {
      */
     private void onParcelaReservadaDeleted(ParcelaReservada parcelaReservada) {
         mParcelasReservadasTemp.remove(parcelaReservada);
-        mAdapter.notifyDataSetChanged();
+        mParcelaReservadaAdapter.notifyDataSetChanged();
         updatePrecioTotal();
 
         // Eliminar la parcela reservada de la base de datos si tiene un ID válido
@@ -524,8 +524,8 @@ public class ReservaEdit extends AppCompatActivity {
                 if (parcelasReservadas != null) {
                     mParcelasReservadasTemp.clear();
                     mParcelasReservadasTemp.addAll(parcelasReservadas);
-                    mAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Actualizar la lista en el adaptador
-                    mAdapter.notifyDataSetChanged(); // Notificar los cambios al adaptador
+                    mParcelaReservadaAdapter.setParcelasReservadas(mParcelasReservadasTemp); // Actualizar la lista en el adaptador
+                    mParcelaReservadaAdapter.notifyDataSetChanged(); // Notificar los cambios al adaptador
                     updatePrecioTotal(); // Recalcular el precio total basado en las parcelas actuales
                 }
             });

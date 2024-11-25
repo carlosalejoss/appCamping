@@ -43,6 +43,7 @@
     <string name="add_reserva">Añadir Reserva</string>
     <string name="delete_reserva">Borrar Reserva</string>
     <string name="edit_reserva">Editar Reserva</string>
+    <string name="send_reserva">Enviar Reserva</string>
 
     <string name="cambiar_a_reservas">Listado Reservas</string>
     <string name="cambiar_a_parcelas">Listado Parcelas</string>
