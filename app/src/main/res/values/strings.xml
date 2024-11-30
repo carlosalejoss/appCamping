@@ -63,8 +63,8 @@
 
     <string name="nombreCliente">Nombre</string>
     <string name="telefono">Telefono</string>
-    <string name="FechaEntrada">Fecha de entrada</string>
-    <string name="FechaSalida">Fecha de salida</string>
+    <string name="FechaEntrada">Fecha entrada</string>
+    <string name="FechaSalida">Fecha salida</string>
     <string name="precioTotal">Precio total</string>
 
     <string name="parcela">Parcela</string>

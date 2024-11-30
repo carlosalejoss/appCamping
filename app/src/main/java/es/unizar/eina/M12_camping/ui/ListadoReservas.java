@@ -188,7 +188,9 @@ public class ListadoReservas extends AppCompatActivity {
         mStartUpdateReserva.launch(intent);
     }
 
-
+    /**
+     *
+     */
     private void sendReservaInfo(Reserva reserva) {
         if (reserva == null) {
             Toast.makeText(this, "Reserva no encontrada para enviar información.", Toast.LENGTH_SHORT).show();
@@ -216,8 +218,14 @@ public class ListadoReservas extends AppCompatActivity {
                 }
             }
 
-            // Mostrar el diálogo para seleccionar método de envío
+            // Verificar que el mensaje no esté vacío
             String message = messageBuilder.toString();
+            if (message.isEmpty()) {
+                Toast.makeText(this, "No hay información suficiente para enviar.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Mostrar el diálogo para seleccionar el método de envío
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enviar información de la reserva")
                     .setItems(new CharSequence[]{"WhatsApp", "SMS"}, (dialog, which) -> {
@@ -234,6 +242,7 @@ public class ListadoReservas extends AppCompatActivity {
                                 return;
                         }
                         try {
+                            Log.d("sendReservaInfo", message);
                             sendAbstraction.send(String.valueOf(reserva.getNumeroMovil()), message);
                             Toast.makeText(this, "Información enviada correctamente.", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
@@ -291,6 +300,7 @@ public class ListadoReservas extends AppCompatActivity {
                     }
                 });
     }
+
 }
 
 /**

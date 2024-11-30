@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.content.Intent;
 
 import android.app.Activity;
+import android.util.Log;
 
 /** Concrete implementor utilizando la actividad de envío de SMS. No funciona en el emulador si no se ha configurado previamente */
 public class SMSImplementor implements SendImplementor {
@@ -34,10 +35,12 @@ public class SMSImplementor implements SendImplementor {
      * @param message cuerpo del mensaje
      */
     public void send (String phone, String message) {
+        Log.d("SMSImplementor", message);
         Uri smsUri = Uri.parse("sms: " + phone);
         Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsUri);
         sendIntent.putExtra("sms_body ", message);
         getSourceActivity().startActivity(sendIntent);
+        Log.d("SMSImplementor", "Se ha terminado la funcion send");
    }
 
 }

@@ -104,7 +104,6 @@ public class ReservaEdit extends AppCompatActivity {
         populateFields();
     }
 
-
     /**
      * Abre un diálogo para añadir una nueva parcela reservada a la reserva.
      */

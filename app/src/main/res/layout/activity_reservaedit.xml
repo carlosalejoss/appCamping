@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/nombreCliente"
                 android:layout_margin="@dimen/big_padding"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/nombreCliente"
@@ -30,7 +30,7 @@
                 android:hint="@string/hint_nombreCliente"
                 android:inputType="textAutoComplete"
                 android:minHeight="@dimen/min_height"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
 
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/telefono"
                 android:layout_margin="@dimen/big_padding"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/telefono"
@@ -51,9 +51,9 @@
                 android:layout_margin="@dimen/big_padding"
                 android:fontFamily="sans-serif-light"
                 android:hint="@string/hint_telefono"
-                android:inputType="textAutoComplete"
+                android:inputType="number"
                 android:minHeight="@dimen/min_height"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout android:orientation="horizontal"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/FechaEntrada"
                 android:layout_margin="@dimen/big_padding"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/fechaEntrada"
@@ -75,7 +75,7 @@
                 android:hint="@string/hint_fechaEntrada"
                 android:inputType="textAutoComplete"
                 android:minHeight="@dimen/min_height"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout android:orientation="horizontal"
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/FechaSalida"
                 android:layout_margin="@dimen/big_padding"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/fechaSalida"
@@ -96,7 +96,7 @@
                 android:hint="@string/hint_fechaSalida"
                 android:inputType="textAutoComplete"
                 android:minHeight="@dimen/min_height"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/precioTotal"
                 android:layout_margin="@dimen/big_padding"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/precioTotal"
@@ -117,7 +117,7 @@
                 android:layout_margin="@dimen/big_padding"
                 android:fontFamily="sans-serif-light"
                 android:hint="@string/hint_precioTotal"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/colorPrimary"
                 android:background="@android:color/transparent" />
         </LinearLayout>
