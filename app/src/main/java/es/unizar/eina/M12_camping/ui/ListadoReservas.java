@@ -35,7 +35,7 @@ import static androidx.activity.result.contract.ActivityResultContracts.StartAct
 
 
 /**
- * Pantalla principal de la aplicación ListadoReservas.
+ * Pantalla principal de la aplicacion ListadoReservas.
  * Esta actividad muestra una lista de reservas y permite realizar operaciones como
  * insertar, editar, eliminar y ordenar las reservas.
  */
@@ -43,7 +43,7 @@ public class ListadoReservas extends AppCompatActivity {
 
     private ReservaViewModel mReservaViewModel;
 
-    /** Identificadores para los elementos del menú */
+    /** Identificadores para los elementos del menu */
     static final int SEND_ID = Menu.FIRST;
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
@@ -57,8 +57,8 @@ public class ListadoReservas extends AppCompatActivity {
     FloatingActionButton mFab;
 
     /**
-     * Método que se llama al crear la actividad.
-     * Configura el RecyclerView, el adaptador, el ViewModel y el botón de acción flotante.
+     * Metodo que se llama al crear la actividad.
+     * Configura el RecyclerView, el adaptador, el ViewModel y el boton de accion flotante.
      *
      * @param savedInstanceState Estado anterior de la actividad, si se ha guardado.
      */
@@ -79,22 +79,22 @@ public class ListadoReservas extends AppCompatActivity {
             if (reservas != null) {
                 mAdapter.submitList(reservas); // Actualizar el adaptador con la lista de reservas
             } else {
-                Log.d("ListadoReservas", "La lista de reservas está vacía.");
+                Log.d("ListadoReservas", "La lista de reservas esta vacia.");
             }
         });
 
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(view -> createReserva());
 
-        // Registro para el menú contextual
+        // Registro para el menu contextual
         registerForContextMenu(mRecyclerView);
     }
 
     /**
-     * Crea el menú de opciones de la actividad.
+     * Crea el menu de opciones de la actividad.
      *
-     * @param menu El menú en el que se agregan las opciones.
-     * @return true si el menú fue creado exitosamente.
+     * @param menu El menu en el que se agregan las opciones.
+     * @return true si el menu fue creado exitosamente.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,9 +107,9 @@ public class ListadoReservas extends AppCompatActivity {
     }
 
     /**
-     * Maneja las selecciones de elementos en el menú de opciones.
+     * Maneja las selecciones de elementos en el menu de opciones.
      *
-     * @param item El elemento de menú que fue seleccionado.
+     * @param item El elemento de menu que fue seleccionado.
      * @return true si el evento fue manejado exitosamente.
      */
     @Override
@@ -140,9 +140,9 @@ public class ListadoReservas extends AppCompatActivity {
     }
 
     /**
-     * Maneja las selecciones de elementos en el menú contextual.
+     * Maneja las selecciones de elementos en el menu contextual.
      *
-     * @param item El elemento de menú que fue seleccionado.
+     * @param item El elemento de menu que fue seleccionado.
      * @return true si el evento fue manejado exitosamente.
      */
     public boolean onContextItemSelected(MenuItem item) {
@@ -189,18 +189,30 @@ public class ListadoReservas extends AppCompatActivity {
     }
 
     /**
+     * Envia la informacion detallada de una reserva utilizando los metodos de envio seleccionados
+     * (WhatsApp o SMS). La informacion incluye el nombre del cliente, numero de telefono, fechas de
+     * entrada y salida, precio total, y las parcelas reservadas con su numero de ocupantes.
+     * <p>
+     * La funcion construye el mensaje dinamicamente obteniendo los datos asociados a la reserva,
+     * y muestra un cuadro de dialogo al usuario para elegir el metodo de envio.
+     * </p>
      *
+     * @param reserva La reserva cuya informacion se enviara. Si es {@code null}, se muestra un
+     *                mensaje de error y no se realiza ninguna accion.
+     *
+     * @throws IllegalArgumentException si el metodo de envio seleccionado no es valido.
+     * @throws RuntimeException si ocurre un error durante el envio de la informacion.
      */
     private void sendReservaInfo(Reserva reserva) {
         if (reserva == null) {
-            Toast.makeText(this, "Reserva no encontrada para enviar información.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Reserva no encontrada para enviar informacion.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Construcción del mensaje
+        // Construccion del mensaje
         StringBuilder messageBuilder = new StringBuilder();
         messageBuilder.append("Reserva a nombre de: ").append(reserva.getNombreCliente())
-                .append("\nTeléfono: ").append(reserva.getNumeroMovil())
+                .append("\nTelefono: ").append(reserva.getNumeroMovil())
                 .append("\nFecha de entrada: ").append(new SimpleDateFormat("dd-MM-yyyy").format(reserva.getFechaEntrada()))
                 .append("\nFecha de salida: ").append(new SimpleDateFormat("dd-MM-yyyy").format(reserva.getFechaSalida()))
                 .append("\nPrecio total: ").append(reserva.getPrecioTotal());
@@ -218,16 +230,16 @@ public class ListadoReservas extends AppCompatActivity {
                 }
             }
 
-            // Verificar que el mensaje no esté vacío
+            // Verificar que el mensaje no este vacio
             String message = messageBuilder.toString();
             if (message.isEmpty()) {
-                Toast.makeText(this, "No hay información suficiente para enviar.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay informacion suficiente para enviar.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Mostrar el diálogo para seleccionar el método de envío
+            // Mostrar el dialogo para seleccionar el metodo de envio
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Enviar información de la reserva")
+            builder.setTitle("Enviar informacion de la reserva")
                     .setItems(new CharSequence[]{"WhatsApp", "SMS"}, (dialog, which) -> {
                         SendAbstraction sendAbstraction;
                         switch (which) {
@@ -238,16 +250,16 @@ public class ListadoReservas extends AppCompatActivity {
                                 sendAbstraction = new SendAbstractionImpl(this, "SMS");
                                 break;
                             default:
-                                Toast.makeText(this, "Opción inválida", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Opcion invalida", Toast.LENGTH_SHORT).show();
                                 return;
                         }
                         try {
                             Log.d("sendReservaInfo", message);
                             sendAbstraction.send(String.valueOf(reserva.getNumeroMovil()), message);
-                            Toast.makeText(this, "Información enviada correctamente.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Informacion enviada correctamente.", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                            Toast.makeText(this, "Error al enviar la información: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("sendReservaInfo", "Error enviando información: ", e);
+                            Toast.makeText(this, "Error al enviar la informacion: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("sendReservaInfo", "Error enviando informacion: ", e);
                         }
                     });
             builder.show();
@@ -255,7 +267,7 @@ public class ListadoReservas extends AppCompatActivity {
     }
 
     /**
-     * ActivityResultLauncher para la creación de nuevas reservas
+     * ActivityResultLauncher para la creacion de nuevas reservas
      */
     ActivityResultLauncher<Intent> mStartCreateReserva = newActivityResultLauncher(new ExecuteActivityResultReservas() {
         @Override
@@ -265,7 +277,7 @@ public class ListadoReservas extends AppCompatActivity {
     });
 
     /**
-     * ActivityResultLauncher para la actualización de reservas existentes
+     * ActivityResultLauncher para la actualizacion de reservas existentes
      */
     ActivityResultLauncher<Intent> mStartUpdateReserva = newActivityResultLauncher(new ExecuteActivityResultReservas() {
         @Override
@@ -277,9 +289,9 @@ public class ListadoReservas extends AppCompatActivity {
     });
 
     /**
-     * Crea un ActivityResultLauncher para manejar los resultados de las actividades de creación y edición de reservas.
+     * Crea un ActivityResultLauncher para manejar los resultados de las actividades de creacion y edicion de reservas.
      *
-     * @param executable La interfaz que define la acción a ejecutar al recibir el resultado.
+     * @param executable La interfaz que define la accion a ejecutar al recibir el resultado.
      * @return Un ActivityResultLauncher configurado para manejar los resultados de actividades.
      */
     ActivityResultLauncher<Intent> newActivityResultLauncher(ExecuteActivityResultReservas executable) {
@@ -308,7 +320,7 @@ public class ListadoReservas extends AppCompatActivity {
  */
 interface ExecuteActivityResultReservas {
     /**
-     * Método que se ejecuta al recibir el resultado de una actividad.
+     * Metodo que se ejecuta al recibir el resultado de una actividad.
      *
      * @param extras  Los datos adicionales de la actividad.
      * @param reserva La reserva creada o editada.

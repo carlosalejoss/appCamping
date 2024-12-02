@@ -6,9 +6,9 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
- * Representa la relación entre una reserva y una parcela reservada.
- * Cada instancia de esta clase asocia una parcela específica a una reserva concreta,
- * incluyendo el número de ocupantes asignados a esa parcela.
+ * Representa la relacion entre una reserva y una parcela reservada.
+ * Cada instancia de esta clase asocia una parcela especifica a una reserva concreta,
+ * incluyendo el numero de ocupantes asignados a esa parcela.
  */
 @Entity(tableName = "parcelaReservada",
         foreignKeys = {
@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey;
         })
 public class ParcelaReservada {
 
-    /** ID único de ParcelaReservada */
+    /** ID unico de ParcelaReservada */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
@@ -36,7 +36,7 @@ public class ParcelaReservada {
     @ColumnInfo(name = "parcelaId", index = true)
     private int parcelaId;
 
-    /** Número de ocupantes en la parcela */
+    /** Numero de ocupantes en la parcela */
     @ColumnInfo(name = "numeroOcupantes")
     private int numeroOcupantes;
 
@@ -45,7 +45,7 @@ public class ParcelaReservada {
      *
      * @param reservaId       ID de la reserva asociada.
      * @param parcelaId       ID de la parcela reservada.
-     * @param numeroOcupantes Número de ocupantes en la parcela.
+     * @param numeroOcupantes Numero de ocupantes en la parcela.
      */
     public ParcelaReservada(int reservaId, int parcelaId, int numeroOcupantes) {
         this.reservaId = reservaId;
@@ -54,7 +54,7 @@ public class ParcelaReservada {
     }
 
     /**
-     * Obtiene el ID único de ParcelaReservada.
+     * Obtiene el ID unico de ParcelaReservada.
      *
      * @return ID de ParcelaReservada.
      */
@@ -63,7 +63,7 @@ public class ParcelaReservada {
     }
 
     /**
-     * Establece el ID único de ParcelaReservada.
+     * Establece el ID unico de ParcelaReservada.
      *
      * @param id ID a establecer.
      */
@@ -108,18 +108,18 @@ public class ParcelaReservada {
     }
 
     /**
-     * Obtiene el número de ocupantes en la parcela.
+     * Obtiene el numero de ocupantes en la parcela.
      *
-     * @return Número de ocupantes.
+     * @return Numero de ocupantes.
      */
     public int getNumeroOcupantes() {
         return numeroOcupantes;
     }
 
     /**
-     * Establece el número de ocupantes en la parcela.
+     * Establece el numero de ocupantes en la parcela.
      *
-     * @param numeroOcupantes Número de ocupantes a asignar.
+     * @param numeroOcupantes Numero de ocupantes a asignar.
      */
     public void setNumeroOcupantes(int numeroOcupantes) {
         this.numeroOcupantes = numeroOcupantes;

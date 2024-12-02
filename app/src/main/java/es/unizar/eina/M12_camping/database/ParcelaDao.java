@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Definición de un Data Access Object (DAO) para las operaciones CRUD de las parcelas.
- * Proporciona métodos para insertar, actualizar, eliminar y consultar parcelas en la base de datos.
+ * Definicion de un Data Access Object (DAO) para las operaciones CRUD de las parcelas.
+ * Proporciona metodos para insertar, actualizar, eliminar y consultar parcelas en la base de datos.
  */
 @Dao
 public interface ParcelaDao {
@@ -32,16 +32,16 @@ public interface ParcelaDao {
      * Actualiza una parcela existente en la base de datos.
      *
      * @param parcela La parcela con los datos actualizados.
-     * @return El número de filas afectadas (debería ser 1 si la actualización es exitosa).
+     * @return El numero de filas afectadas (deberia ser 1 si la actualizacion es exitosa).
      */
     @Update
     int update(Parcela parcela);
 
     /**
-     * Elimina una parcela específica de la base de datos.
+     * Elimina una parcela especifica de la base de datos.
      *
      * @param parcela La parcela a eliminar.
-     * @return El número de filas afectadas (debería ser 1 si la eliminación es exitosa).
+     * @return El numero de filas afectadas (deberia ser 1 si la eliminacion es exitosa).
      */
     @Delete
     int delete(Parcela parcela);
@@ -53,7 +53,7 @@ public interface ParcelaDao {
     void deleteAll();
 
     /**
-     * Obtiene todas las parcelas sin ningún orden específico.
+     * Obtiene todas las parcelas sin ningun orden especifico.
      *
      * @return Un objeto LiveData que contiene una lista de todas las parcelas.
      */
@@ -61,7 +61,7 @@ public interface ParcelaDao {
     LiveData<List<Parcela>> getUnOrderedParcelas();
 
     /**
-     * Obtiene todas las parcelas ordenadas alfabéticamente por nombre.
+     * Obtiene todas las parcelas ordenadas alfabeticamente por nombre.
      *
      * @return Un objeto LiveData que contiene una lista de parcelas ordenadas por nombre en orden ascendente.
      */
@@ -69,9 +69,9 @@ public interface ParcelaDao {
     LiveData<List<Parcela>> getOrderedParcelasNombre();
 
     /**
-     * Obtiene todas las parcelas ordenadas por el número máximo de ocupantes.
+     * Obtiene todas las parcelas ordenadas por el numero maximo de ocupantes.
      *
-     * @return Un objeto LiveData que contiene una lista de parcelas ordenadas por el número máximo de ocupantes en orden ascendente.
+     * @return Un objeto LiveData que contiene una lista de parcelas ordenadas por el numero maximo de ocupantes en orden ascendente.
      */
     @Query("SELECT * FROM Parcela ORDER BY maxOcupantes ASC")
     LiveData<List<Parcela>> getOrderedParcelasMaxOcupantes();
@@ -95,10 +95,10 @@ public interface ParcelaDao {
 
     /**
      * Verifica si existe una parcela con el nombre especificado que no tenga el ID proporcionado.
-     * Este método es útil para la edición de parcelas, donde se permite que el nombre no cambie.
+     * Este metodo es util para la edicion de parcelas, donde se permite que el nombre no cambie.
      *
      * @param nombre El nombre a verificar.
-     * @param id     El ID de la parcela que se está editando.
+     * @param id     El ID de la parcela que se esta editando.
      * @return true si existe otra parcela con el mismo nombre, de lo contrario false.
      */
     @Query("SELECT COUNT(*) > 0 FROM Parcela WHERE nombre = :nombre AND id != :id")

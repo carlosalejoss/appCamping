@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * Repositorio que gestiona el acceso a los datos de las reservas.
- * Proporciona métodos para realizar operaciones CRUD, validaciones y cálculos relacionados con las reservas.
+ * Proporciona metodos para realizar operaciones CRUD, validaciones y calculos relacionados con las reservas.
  */
 public class ReservaRepository {
 
@@ -29,13 +29,13 @@ public class ReservaRepository {
     private final LiveData<List<Reserva>> mReservasOrdTelefono;
     private final LiveData<List<Reserva>> mReservasOrdFechaEntrada;
 
-    /** Tiempo máximo de espera para operaciones de base de datos en milisegundos */
+    /** Tiempo maximo de espera para operaciones de base de datos en milisegundos */
     private final long TIMEOUT = 15000;
 
     /**
      * Constructor del repositorio de reservas.
      *
-     * @param application La aplicación que proporciona el contexto para la base de datos.
+     * @param application La aplicacion que proporciona el contexto para la base de datos.
      */
     public ReservaRepository(Application application) {
         CampingRoomDatabase db = CampingRoomDatabase.getDatabase(application);
@@ -49,10 +49,10 @@ public class ReservaRepository {
         mReservasOrdFechaEntrada = mReservaDao.getOrderedReservasFechaEntrada();
     }
 
-    // Métodos para obtener listas de reservas
+    // Metodos para obtener listas de reservas
 
     /**
-     * Obtiene todas las reservas sin un orden específico.
+     * Obtiene todas las reservas sin un orden especifico.
      *
      * @return LiveData con la lista de todas las reservas.
      */
@@ -70,9 +70,9 @@ public class ReservaRepository {
     }
 
     /**
-     * Obtiene todas las reservas ordenadas por número de teléfono.
+     * Obtiene todas las reservas ordenadas por numero de telefono.
      *
-     * @return LiveData con la lista de reservas ordenadas por teléfono.
+     * @return LiveData con la lista de reservas ordenadas por telefono.
      */
     public LiveData<List<Reserva>> getReservasOrderedTelefono() {
         return mReservasOrdTelefono;
@@ -87,13 +87,13 @@ public class ReservaRepository {
         return mReservasOrdFechaEntrada;
     }
 
-    // Métodos CRUD
+    // Metodos CRUD
 
     /**
      * Inserta una nueva reserva en la base de datos.
      *
      * @param reserva La reserva a insertar.
-     * @return El ID de la reserva recién insertada.
+     * @return El ID de la reserva recien insertada.
      */
     public long insert(Reserva reserva) {
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mReservaDao.insert(reserva));
@@ -108,11 +108,11 @@ public class ReservaRepository {
 
     /**
      * Actualiza una reserva en la base de datos.
-     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     * La operacion se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
      * @param reserva La reserva que se desea actualizar. Debe tener un ID mayor que 0, y todos sus
      *                parametros no nulos y no vacios.
-     * @return El número de filas modificadas (1 si se actualiza correctamente,
+     * @return El numero de filas modificadas (1 si se actualiza correctamente,
      * 0 si no existe una reserva con ese ID).
      */
     public int update(Reserva reserva) {
@@ -130,7 +130,7 @@ public class ReservaRepository {
      * Elimina una reserva de la base de datos.
      *
      * @param reserva La reserva a eliminar.
-     * @return El número de filas afectadas.
+     * @return El numero de filas afectadas.
      */
     public int delete(Reserva reserva) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -164,7 +164,7 @@ public class ReservaRepository {
     }
 
     /**
-     * Obtiene una reserva específica por su ID.
+     * Obtiene una reserva especifica por su ID.
      *
      * @param id El ID de la reserva.
      * @return La reserva correspondiente, o null si no se encuentra.
@@ -180,7 +180,7 @@ public class ReservaRepository {
     }
 
     /**
-     * Obtiene las parcelas reservadas asociadas a una reserva específica.
+     * Obtiene las parcelas reservadas asociadas a una reserva especifica.
      *
      * @param reservaId El ID de la reserva.
      * @return Lista de ParcelasReservadas asociadas a la reserva.
@@ -193,7 +193,7 @@ public class ReservaRepository {
      * Inserta una nueva parcela reservada en la base de datos.
      *
      * @param parcelaReservada La parcela reservada que se desea insertar.
-     * @return El ID de la parcela reservada recién insertada.
+     * @return El ID de la parcela reservada recien insertada.
      */
     public long insertParcelaReservada(ParcelaReservada parcelaReservada) {
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mParcelaReservadaDao.insert(parcelaReservada));
@@ -209,7 +209,7 @@ public class ReservaRepository {
      * Actualiza una parcela reservada existente en la base de datos.
      *
      * @param parcelaReservada La parcela reservada con los datos actualizados.
-     * @return El número de filas afectadas por la actualización.
+     * @return El numero de filas afectadas por la actualizacion.
      */
     public int updateParcelaReservada(ParcelaReservada parcelaReservada) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -227,7 +227,7 @@ public class ReservaRepository {
      * Elimina una parcela reservada de la base de datos.
      *
      * @param parcelaReservada La parcela reservada que se desea eliminar.
-     * @return El número de filas afectadas por la eliminación.
+     * @return El numero de filas afectadas por la eliminacion.
      */
     public int deleteParcelaReservada(ParcelaReservada parcelaReservada) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -242,7 +242,7 @@ public class ReservaRepository {
     }
 
     /**
-     * Obtiene una lista de parcelas que no están reservadas en el rango de fechas especificado.
+     * Obtiene una lista de parcelas que no estan reservadas en el rango de fechas especificado.
      *
      * @param fechaInicio La fecha de inicio del rango.
      * @param fechaFin La fecha de fin del rango.

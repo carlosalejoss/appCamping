@@ -7,13 +7,13 @@ import androidx.room.PrimaryKey;
 
 /**
  * Esta clase representa una parcela en un camping.
- * La clase incluye el nombre, el número máximo de ocupantes,
- * el precio por persona y la descripción de la parcela.
+ * La clase incluye el nombre, el numero maximo de ocupantes,
+ * el precio por persona y la descripcion de la parcela.
  */
 @Entity(tableName = "parcela")
 public class Parcela {
 
-    /** ID único de la parcela */
+    /** ID unico de la parcela */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
@@ -23,7 +23,7 @@ public class Parcela {
     @ColumnInfo(name = "nombre")
     private String nombre;
 
-    /** Número máximo de ocupantes de la parcela */
+    /** Numero maximo de ocupantes de la parcela */
     @ColumnInfo(name = "maxOcupantes")
     private int maxOcupantes;
 
@@ -31,7 +31,7 @@ public class Parcela {
     @ColumnInfo(name = "precioXpersona")
     private double precioXpersona;
 
-    /** Descripción de la parcela */
+    /** Descripcion de la parcela */
     @ColumnInfo(name = "descripcion")
     private String descripcion;
 
@@ -39,13 +39,13 @@ public class Parcela {
      * Constructor para inicializar los detalles de la parcela.
      *
      * @param nombre         El nombre de la parcela.
-     * @param maxOcupantes   El número máximo de ocupantes de la parcela.
+     * @param maxOcupantes   El numero maximo de ocupantes de la parcela.
      * @param precioXpersona El precio por persona para esta parcela.
-     * @param descripcion    La descripción de la parcela.
+     * @param descripcion    La descripcion de la parcela.
      */
     public Parcela(@NonNull String nombre, int maxOcupantes, double precioXpersona, String descripcion) {
         if (maxOcupantes <= 0) {
-            throw new IllegalArgumentException("El número máximo de ocupantes debe ser mayor que 0.");
+            throw new IllegalArgumentException("El numero maximo de ocupantes debe ser mayor que 0.");
         }
         if (precioXpersona <= 0) {
             throw new IllegalArgumentException("El precio por persona debe ser mayor que 0.");
@@ -57,7 +57,7 @@ public class Parcela {
     }
 
     /**
-     * Devuelve el identificador único de la parcela.
+     * Devuelve el identificador unico de la parcela.
      *
      * @return El ID de la parcela.
      */
@@ -66,7 +66,7 @@ public class Parcela {
     }
 
     /**
-     * Permite actualizar el identificador único de una parcela.
+     * Permite actualizar el identificador unico de una parcela.
      *
      * @param id El nuevo ID de la parcela.
      */
@@ -94,22 +94,22 @@ public class Parcela {
     }
 
     /**
-     * Devuelve el número máximo de ocupantes permitido en la parcela.
+     * Devuelve el numero maximo de ocupantes permitido en la parcela.
      *
-     * @return El número máximo de ocupantes.
+     * @return El numero maximo de ocupantes.
      */
     public int getMaxOcupantes() {
         return this.maxOcupantes;
     }
 
     /**
-     * Permite actualizar el número máximo de ocupantes de una parcela.
+     * Permite actualizar el numero maximo de ocupantes de una parcela.
      *
-     * @param maxOcupantes El nuevo número máximo de ocupantes.
+     * @param maxOcupantes El nuevo numero maximo de ocupantes.
      */
     public void setMaxOcupantes(int maxOcupantes) {
         if (maxOcupantes <= 0) {
-            throw new IllegalArgumentException("El número máximo de ocupantes debe ser mayor que 0.");
+            throw new IllegalArgumentException("El numero maximo de ocupantes debe ser mayor que 0.");
         }
         this.maxOcupantes = maxOcupantes;
     }
@@ -136,18 +136,18 @@ public class Parcela {
     }
 
     /**
-     * Devuelve la descripción de la parcela.
+     * Devuelve la descripcion de la parcela.
      *
-     * @return La descripción de la parcela.
+     * @return La descripcion de la parcela.
      */
     public String getDescripcion() {
         return this.descripcion;
     }
 
     /**
-     * Permite actualizar la descripción de una parcela.
+     * Permite actualizar la descripcion de una parcela.
      *
-     * @param descripcion La nueva descripción de la parcela.
+     * @param descripcion La nueva descripcion de la parcela.
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;

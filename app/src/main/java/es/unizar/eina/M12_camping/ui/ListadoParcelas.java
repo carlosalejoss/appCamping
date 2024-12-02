@@ -22,7 +22,7 @@ import static androidx.activity.result.contract.ActivityResultContracts.StartAct
 import java.util.Objects;
 
 /**
- * Pantalla principal de la aplicación ListadoParcelas.
+ * Pantalla principal de la aplicacion ListadoParcelas.
  * Esta actividad muestra una lista de parcelas y permite realizar operaciones como
  * insertar, editar, eliminar y ordenar las parcelas.
  */
@@ -30,7 +30,7 @@ public class ListadoParcelas extends AppCompatActivity {
 
     private ParcelaViewModel mParcelaViewModel;
 
-    /** Identificadores para los elementos del menú */
+    /** Identificadores para los elementos del menu */
     static final int INSERT_ID = Menu.FIRST;
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
@@ -44,8 +44,8 @@ public class ListadoParcelas extends AppCompatActivity {
     FloatingActionButton mFab;
 
     /**
-     * Método que se llama al crear la actividad.
-     * Configura el RecyclerView, el adaptador, el ViewModel y el botón de acción flotante.
+     * Metodo que se llama al crear la actividad.
+     * Configura el RecyclerView, el adaptador, el ViewModel y el boton de accion flotante.
      *
      * @param savedInstanceState Estado anterior de la actividad, si se ha guardado.
      */
@@ -67,15 +67,15 @@ public class ListadoParcelas extends AppCompatActivity {
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(view -> createParcela());
 
-        // Registro para el menú contextual
+        // Registro para el menu contextual
         registerForContextMenu(mRecyclerView);
     }
 
     /**
-     * Crea el menú de opciones de la actividad.
+     * Crea el menu de opciones de la actividad.
      *
-     * @param menu El menú en el que se agregan las opciones.
-     * @return true si el menú fue creado exitosamente.
+     * @param menu El menu en el que se agregan las opciones.
+     * @return true si el menu fue creado exitosamente.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,9 +88,9 @@ public class ListadoParcelas extends AppCompatActivity {
     }
 
     /**
-     * Maneja las selecciones de elementos en el menú de opciones.
+     * Maneja las selecciones de elementos en el menu de opciones.
      *
-     * @param item El elemento de menú que fue seleccionado.
+     * @param item El elemento de menu que fue seleccionado.
      * @return true si el evento fue manejado exitosamente.
      */
     @Override
@@ -121,9 +121,9 @@ public class ListadoParcelas extends AppCompatActivity {
     }
 
     /**
-     * Maneja las selecciones de elementos en el menú contextual.
+     * Maneja las selecciones de elementos en el menu contextual.
      *
-     * @param item El elemento de menú que fue seleccionado.
+     * @param item El elemento de menu que fue seleccionado.
      * @return true si el evento fue manejado exitosamente.
      */
     public boolean onContextItemSelected(MenuItem item) {
@@ -166,7 +166,7 @@ public class ListadoParcelas extends AppCompatActivity {
     }
 
     /**
-     * ActivityResultLauncher para la creación de nuevas parcelas
+     * ActivityResultLauncher para la creacion de nuevas parcelas
      */
     ActivityResultLauncher<Intent> mStartCreateParcela = newActivityResultLauncher(new ExecuteActivityResultParcelas() {
         @Override
@@ -176,7 +176,7 @@ public class ListadoParcelas extends AppCompatActivity {
     });
 
     /**
-     * ActivityResultLauncher para la actualización de parcelas existentes
+     * ActivityResultLauncher para la actualizacion de parcelas existentes
      */
     ActivityResultLauncher<Intent> mStartUpdateParcela = newActivityResultLauncher(new ExecuteActivityResultParcelas() {
         @Override
@@ -188,9 +188,9 @@ public class ListadoParcelas extends AppCompatActivity {
     });
 
     /**
-     * Crea un ActivityResultLauncher para manejar los resultados de las actividades de creación y edición de parcelas.
+     * Crea un ActivityResultLauncher para manejar los resultados de las actividades de creacion y edicion de parcelas.
      *
-     * @param executable La interfaz que define la acción a ejecutar al recibir el resultado.
+     * @param executable La interfaz que define la accion a ejecutar al recibir el resultado.
      * @return Un ActivityResultLauncher configurado para manejar los resultados de actividades.
      */
     ActivityResultLauncher<Intent> newActivityResultLauncher(ExecuteActivityResultParcelas executable) {
@@ -217,7 +217,7 @@ public class ListadoParcelas extends AppCompatActivity {
  */
 interface ExecuteActivityResultParcelas {
     /**
-     * Método que se ejecuta al recibir el resultado de una actividad.
+     * Metodo que se ejecuta al recibir el resultado de una actividad.
      *
      * @param extras  Los datos adicionales de la actividad.
      * @param parcela La parcela creada o editada.

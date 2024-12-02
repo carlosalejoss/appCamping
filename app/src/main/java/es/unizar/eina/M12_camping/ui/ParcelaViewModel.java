@@ -12,7 +12,7 @@ import es.unizar.eina.M12_camping.database.ParcelaRepository;
 
 /**
  * ViewModel para gestionar la UI de parcelas y almacenar datos para la actividad ListadoParcelas.
- * Proporciona métodos para obtener listas de parcelas y realizar operaciones CRUD a través del repositorio.
+ * Proporciona metodos para obtener listas de parcelas y realizar operaciones CRUD a traves del repositorio.
  */
 public class ParcelaViewModel extends AndroidViewModel {
 
@@ -27,7 +27,7 @@ public class ParcelaViewModel extends AndroidViewModel {
      * Constructor de ParcelaViewModel.
      * Inicializa el repositorio y obtiene las listas de parcelas.
      *
-     * @param application La aplicación actual, que proporciona el contexto para inicializar el repositorio.
+     * @param application La aplicacion actual, que proporciona el contexto para inicializar el repositorio.
      */
     public ParcelaViewModel(Application application) {
         super(application);
@@ -39,7 +39,7 @@ public class ParcelaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene todas las parcelas sin un orden específico.
+     * Obtiene todas las parcelas sin un orden especifico.
      *
      * @return Un objeto LiveData que contiene la lista de todas las parcelas.
      */
@@ -50,14 +50,14 @@ public class ParcelaViewModel extends AndroidViewModel {
     /**
      * Obtiene todas las parcelas ordenadas por nombre.
      *
-     * @return Un objeto LiveData que contiene la lista de parcelas ordenadas alfabéticamente.
+     * @return Un objeto LiveData que contiene la lista de parcelas ordenadas alfabeticamente.
      */
     LiveData<List<Parcela>> getParcelasOrderedNombre() {
         return mParcelasOrdNombre;
     }
 
     /**
-     * Obtiene todas las parcelas ordenadas por el número máximo de ocupantes.
+     * Obtiene todas las parcelas ordenadas por el numero maximo de ocupantes.
      *
      * @return Un objeto LiveData que contiene la lista de parcelas ordenadas por ocupantes.
      */
@@ -112,10 +112,10 @@ public class ParcelaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela específica.
+     * Verifica si un nombre de parcela ya existe en la base de datos, excluyendo una parcela especifica.
      *
      * @param nombre El nombre de la parcela a verificar.
-     * @param id     El ID de la parcela que se está excluyendo de la verificación.
+     * @param id     El ID de la parcela que se esta excluyendo de la verificacion.
      * @return true si el nombre ya existe (excluyendo la parcela especificada), false en caso contrario.
      */
     public boolean isNombreDuplicadoExceptId(String nombre, int id) {

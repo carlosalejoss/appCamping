@@ -6,32 +6,32 @@ import android.content.Intent;
 import android.app.Activity;
 import android.util.Log;
 
-/** Concrete implementor utilizando la actividad de envío de SMS. No funciona en el emulador si no se ha configurado previamente */
+/** Concrete implementor utilizando la actividad de envio de SMS. No funciona en el emulador si no se ha configurado previamente */
 public class SMSImplementor implements SendImplementor {
 
-    /** actividad desde la cual se abrirá la actividad de envío de SMS */
+    /** actividad desde la cual se abrira la actividad de envio de SMS */
     private Activity sourceActivity;
 
     /** Constructor
-     * @param source actividad desde la cual se abrirá la actividad de envío de SMS
+     * @param source actividad desde la cual se abrira la actividad de envio de SMS
      */
     public SMSImplementor(Activity source){
         setSourceActivity(source);
     }
 
-    /**  Actualiza la actividad desde la cual se abrirá la actividad de envío de SMS */
+    /**  Actualiza la actividad desde la cual se abrira la actividad de envio de SMS */
     public void setSourceActivity(Activity source) {
         sourceActivity = source;
     }
 
-    /**  Recupera la actividad desde la cual se abrirá la actividad de envío de SMS */
+    /**  Recupera la actividad desde la cual se abrira la actividad de envio de SMS */
     public Activity getSourceActivity(){
         return sourceActivity;
     }
 
     /**
-     * Implementación del método send utilizando la aplicación de envío de SMS
-     * @param phone teléfono
+     * Implementacion del metodo send utilizando la aplicacion de envio de SMS
+     * @param phone telefono
      * @param message cuerpo del mensaje
      */
     public void send (String phone, String message) {

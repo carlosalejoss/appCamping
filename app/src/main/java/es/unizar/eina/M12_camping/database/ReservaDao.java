@@ -12,8 +12,8 @@ import java.util.List;
 
 /**
  * Interfaz DAO para acceder a los datos de las reservas.
- * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) y
- * consultas específicas relacionadas con las reservas en la base de datos.
+ * Proporciona metodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) y
+ * consultas especificas relacionadas con las reservas en la base de datos.
  */
 @Dao
 public interface ReservaDao {
@@ -31,16 +31,16 @@ public interface ReservaDao {
      * Actualiza una reserva existente en la base de datos.
      *
      * @param reserva La reserva a actualizar.
-     * @return El número de filas afectadas (1 si la actualización fue exitosa, 0 en caso contrario).
+     * @return El numero de filas afectadas (1 si la actualizacion fue exitosa, 0 en caso contrario).
      */
     @Update
     int update(Reserva reserva);
 
     /**
-     * Elimina una reserva específica de la base de datos.
+     * Elimina una reserva especifica de la base de datos.
      *
      * @param reserva La reserva a eliminar.
-     * @return El número de filas afectadas (1 si la eliminación fue exitosa, 0 en caso contrario).
+     * @return El numero de filas afectadas (1 si la eliminacion fue exitosa, 0 en caso contrario).
      */
     @Delete
     int delete(Reserva reserva);
@@ -52,7 +52,7 @@ public interface ReservaDao {
     void deleteAll();
 
     /**
-     * Obtiene todas las reservas sin un orden específico.
+     * Obtiene todas las reservas sin un orden especifico.
      *
      * @return Una lista LiveData de todas las reservas.
      */
@@ -68,9 +68,9 @@ public interface ReservaDao {
     LiveData<List<Reserva>> getOrderedReservasNombreCliente();
 
     /**
-     * Obtiene todas las reservas ordenadas por número de móvil en orden ascendente.
+     * Obtiene todas las reservas ordenadas por numero de movil en orden ascendente.
      *
-     * @return Una lista LiveData de reservas ordenadas por número de móvil.
+     * @return Una lista LiveData de reservas ordenadas por numero de movil.
      */
     @Query("SELECT * FROM reserva ORDER BY numeroMovil ASC")
     LiveData<List<Reserva>> getOrderedReservasTelefono();
@@ -84,7 +84,7 @@ public interface ReservaDao {
     LiveData<List<Reserva>> getOrderedReservasFechaEntrada();
 
     /**
-     * Obtiene una reserva específica por su ID.
+     * Obtiene una reserva especifica por su ID.
      *
      * @param id El ID de la reserva.
      * @return La reserva correspondiente, o null si no se encuentra.

@@ -10,13 +10,13 @@ import java.util.Date;
 
 /**
  * Clase que representa una reserva en el sistema de camping.
- * Cada reserva incluye información relevante sobre el cliente, las fechas de entrada y salida, y otros detalles.
- * Esta clase está anotada como una entidad de Room, lo que la convierte en una tabla de la base de datos.
+ * Cada reserva incluye informacion relevante sobre el cliente, las fechas de entrada y salida, y otros detalles.
+ * Esta clase esta anotada como una entidad de Room, lo que la convierte en una tabla de la base de datos.
  */
 @Entity(tableName = "reserva")
 public class Reserva {
 
-    /** ID único de la reserva, autogenerado. */
+    /** ID unico de la reserva, autogenerado. */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
@@ -26,7 +26,7 @@ public class Reserva {
     @ColumnInfo(name = "nombreCliente")
     private String nombreCliente;
 
-    /** Teléfono de contacto del cliente. */
+    /** Telefono de contacto del cliente. */
     @NonNull
     @ColumnInfo(name = "numeroMovil")
     private Integer numeroMovil;
@@ -51,7 +51,7 @@ public class Reserva {
      * Constructor para la clase Reserva.
      *
      * @param nombreCliente Nombre del cliente que realiza la reserva.
-     * @param numeroMovil   Teléfono de contacto del cliente.
+     * @param numeroMovil   Telefono de contacto del cliente.
      * @param fechaEntrada  Fecha de entrada de la reserva.
      * @param fechaSalida   Fecha de salida de la reserva.
      * @param precioTotal   Precio total de la reserva.
@@ -67,7 +67,7 @@ public class Reserva {
     }
 
     /**
-     * Obtiene el ID único de la reserva.
+     * Obtiene el ID unico de la reserva.
      *
      * @return El ID de la reserva.
      */
@@ -76,7 +76,7 @@ public class Reserva {
     }
 
     /**
-     * Establece el ID único de la reserva.
+     * Establece el ID unico de la reserva.
      *
      * @param id El ID de la reserva.
      */
@@ -104,9 +104,9 @@ public class Reserva {
     }
 
     /**
-     * Obtiene el número de contacto del cliente asociado a la reserva.
+     * Obtiene el numero de contacto del cliente asociado a la reserva.
      *
-     * @return El número de contacto del cliente.
+     * @return El numero de contacto del cliente.
      */
     @NonNull
     public Integer getNumeroMovil() {
@@ -114,9 +114,9 @@ public class Reserva {
     }
 
     /**
-     * Establece el número de contacto del cliente asociado a la reserva.
+     * Establece el numero de contacto del cliente asociado a la reserva.
      *
-     * @param numeroMovil El número de contacto del cliente.
+     * @param numeroMovil El numero de contacto del cliente.
      */
     public void setNumeroMovil(@NonNull Integer numeroMovil) {
         this.numeroMovil = numeroMovil;

@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 import es.unizar.eina.M12_camping.R;
 
 /**
- * Pantalla utilizada para la creación o edición de una parcela.
+ * Pantalla utilizada para la creacion o edicion de una parcela.
  * Esta actividad permite al usuario ingresar o modificar los detalles de una parcela.
- * Una vez completados los cambios, los datos se envían de vuelta a la actividad principal.
+ * Una vez completados los cambios, los datos se envian de vuelta a la actividad principal.
  */
 public class ParcelaEdit extends AppCompatActivity {
 
@@ -37,8 +37,8 @@ public class ParcelaEdit extends AppCompatActivity {
     Button mSaveButton;
 
     /**
-     * Método que se llama cuando se crea la actividad.
-     * Configura los elementos de la interfaz de usuario y carga los datos existentes si están disponibles.
+     * Metodo que se llama cuando se crea la actividad.
+     * Configura los elementos de la interfaz de usuario y carga los datos existentes si estan disponibles.
      *
      * @param savedInstanceState Estado anterior de la actividad, si se ha guardado.
      */
@@ -52,7 +52,7 @@ public class ParcelaEdit extends AppCompatActivity {
         mPrecioXpersona = findViewById(R.id.precioXpersona);
         mDescripcionText = findViewById(R.id.descripcion);
 
-        mParcelaViewModel = new ViewModelProvider(this).get(ParcelaViewModel.class); // Inicialización del ViewModel
+        mParcelaViewModel = new ViewModelProvider(this).get(ParcelaViewModel.class); // Inicializacion del ViewModel
 
         mSaveButton = findViewById(R.id.button_save);
         mSaveButton.setOnClickListener(view -> {
@@ -60,7 +60,7 @@ public class ParcelaEdit extends AppCompatActivity {
             String maxOcupantesStr = mMaxOcupantes.getText().toString();
             String precioXpersonaStr = mPrecioXpersona.getText().toString();
 
-            // Verificar si el nombre está vacío
+            // Verificar si el nombre esta vacio
             if (TextUtils.isEmpty(nombre)) {
                 Toast.makeText(getApplicationContext(), R.string.empty_not_saved_nombre, Toast.LENGTH_LONG).show();
                 return;
@@ -81,7 +81,7 @@ public class ParcelaEdit extends AppCompatActivity {
                 }
             }
 
-            // Validar número máximo de ocupantes
+            // Validar numero maximo de ocupantes
             if (TextUtils.isEmpty(maxOcupantesStr)) {
                 Toast.makeText(getApplicationContext(), R.string.empty_not_saved_ocupantes, Toast.LENGTH_LONG).show();
                 return;
@@ -134,7 +134,7 @@ public class ParcelaEdit extends AppCompatActivity {
     }
 
     /**
-     * Rellena los campos de texto con los datos de una parcela existente si están disponibles.
+     * Rellena los campos de texto con los datos de una parcela existente si estan disponibles.
      * Recupera los datos pasados en el Intent y los asigna a los campos correspondientes.
      */
     private void populateFields() {

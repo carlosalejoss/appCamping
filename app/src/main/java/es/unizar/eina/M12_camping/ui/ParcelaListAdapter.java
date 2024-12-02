@@ -18,18 +18,18 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
     private int position;
 
     /**
-     * Obtiene la posición actual seleccionada en la lista.
+     * Obtiene la posicion actual seleccionada en la lista.
      *
-     * @return La posición del elemento actual.
+     * @return La posicion del elemento actual.
      */
     public int getPosition() {
         return position;
     }
 
     /**
-     * Establece la posición actual seleccionada en la lista.
+     * Establece la posicion actual seleccionada en la lista.
      *
-     * @param position La posición del elemento actual.
+     * @param position La posicion del elemento actual.
      */
     public void setPosition(int position) {
         this.position = position;
@@ -48,7 +48,7 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
     /**
      * Crea un nuevo ParcelaViewHolder para representar un elemento en la lista.
      *
-     * @param parent El ViewGroup al que se añadirá el nuevo View.
+     * @param parent El ViewGroup al que se añadira el nuevo View.
      * @param viewType El tipo de vista de la nueva vista.
      * @return Un ParcelaViewHolder que contiene la vista para un elemento de la lista.
      */
@@ -58,7 +58,7 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
     }
 
     /**
-     * Obtiene el elemento actual en la posición seleccionada.
+     * Obtiene el elemento actual en la posicion seleccionada.
      *
      * @return La parcela seleccionada.
      */
@@ -67,10 +67,10 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
     }
 
     /**
-     * Vincula un ParcelaViewHolder con los datos de una parcela específica.
+     * Vincula un ParcelaViewHolder con los datos de una parcela especifica.
      *
      * @param holder El ParcelaViewHolder que debe ser actualizado con los datos de la parcela.
-     * @param position La posición de la parcela en la lista.
+     * @param position La posicion de la parcela en la lista.
      */
     @Override
     public void onBindViewHolder(ParcelaViewHolder holder, int position) {

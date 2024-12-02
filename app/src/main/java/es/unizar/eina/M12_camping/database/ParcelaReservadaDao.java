@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * DAO para acceder a los datos de la entidad ParcelaReservada.
- * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * Proporciona metodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
  * sobre la tabla de ParcelasReservadas en la base de datos.
  */
 @Dao
@@ -30,7 +30,7 @@ public interface ParcelaReservadaDao {
      * Actualiza una ParcelaReservada existente en la base de datos.
      *
      * @param parcelaReservada La reserva a actualizar.
-     * @return El número de filas afectadas.
+     * @return El numero de filas afectadas.
      */
     @Update
     int update(ParcelaReservada parcelaReservada);
@@ -39,7 +39,7 @@ public interface ParcelaReservadaDao {
      * Elimina una ParcelaReservada.
      *
      * @param parcelaReservada La ParcelaReservada a eliminar.
-     * @return El número de filas afectadas.
+     * @return El numero de filas afectadas.
      */
     @Delete
     int delete(ParcelaReservada parcelaReservada);
@@ -51,7 +51,7 @@ public interface ParcelaReservadaDao {
     void deleteAll();
 
     /**
-     * Obtiene las parcelas reservadas de una reserva específica.
+     * Obtiene las parcelas reservadas de una reserva especifica.
      *
      * @param reservaId El ID de la reserva.
      * @return Lista de ParcelasReservadas asociadas.

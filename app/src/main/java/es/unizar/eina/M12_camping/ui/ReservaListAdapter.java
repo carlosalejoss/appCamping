@@ -18,18 +18,18 @@ public class ReservaListAdapter extends ListAdapter<Reserva, ReservaViewHolder> 
     private int position;
 
     /**
-     * Obtiene la posición actual seleccionada en la lista.
+     * Obtiene la posicion actual seleccionada en la lista.
      *
-     * @return La posición del elemento actual.
+     * @return La posicion del elemento actual.
      */
     public int getPosition() {
         return position;
     }
 
     /**
-     * Establece la posición actual seleccionada en la lista.
+     * Establece la posicion actual seleccionada en la lista.
      *
-     * @param position La posición del elemento actual.
+     * @param position La posicion del elemento actual.
      */
     public void setPosition(int position) {
         this.position = position;
@@ -48,7 +48,7 @@ public class ReservaListAdapter extends ListAdapter<Reserva, ReservaViewHolder> 
     /**
      * Crea un nuevo ReservaViewHolder para representar un elemento en la lista.
      *
-     * @param parent El ViewGroup al que se añadirá el nuevo View.
+     * @param parent El ViewGroup al que se añadira el nuevo View.
      * @param viewType El tipo de vista de la nueva vista.
      * @return Un ReservaViewHolder que contiene la vista para un elemento de la lista.
      */
@@ -58,7 +58,7 @@ public class ReservaListAdapter extends ListAdapter<Reserva, ReservaViewHolder> 
     }
 
     /**
-     * Obtiene el elemento actual en la posición seleccionada.
+     * Obtiene el elemento actual en la posicion seleccionada.
      *
      * @return La reserva seleccionada.
      */
@@ -67,10 +67,10 @@ public class ReservaListAdapter extends ListAdapter<Reserva, ReservaViewHolder> 
     }
 
     /**
-     * Vincula un ReservaViewHolder con los datos de una reserva específica.
+     * Vincula un ReservaViewHolder con los datos de una reserva especifica.
      *
      * @param holder El ReservaViewHolder que debe ser actualizado con los datos de la reserva.
-     * @param position La posición de la reserva en la lista.
+     * @param position La posicion de la reserva en la lista.
      */
     @Override
     public void onBindViewHolder(ReservaViewHolder holder, int position) {

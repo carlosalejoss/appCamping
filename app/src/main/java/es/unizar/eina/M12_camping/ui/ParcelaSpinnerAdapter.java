@@ -34,7 +34,7 @@ public class ParcelaSpinnerAdapter extends ArrayAdapter<Parcela> {
     /**
      * Obtiene la vista para el elemento seleccionado del Spinner.
      *
-     * @param position    La posición del elemento en la lista.
+     * @param position    La posicion del elemento en la lista.
      * @param convertView La vista reutilizable.
      * @param parent      El contenedor padre.
      * @return La vista para el elemento seleccionado.
@@ -53,7 +53,7 @@ public class ParcelaSpinnerAdapter extends ArrayAdapter<Parcela> {
     /**
      * Obtiene la vista para los elementos desplegables del Spinner.
      *
-     * @param position    La posición del elemento en la lista.
+     * @param position    La posicion del elemento en la lista.
      * @param convertView La vista reutilizable.
      * @param parent      El contenedor padre.
      * @return La vista para el elemento desplegable.

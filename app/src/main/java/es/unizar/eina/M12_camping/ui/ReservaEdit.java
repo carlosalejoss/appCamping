@@ -57,8 +57,8 @@ public class ReservaEdit extends AppCompatActivity {
 
 
     /**
-     * Método que se llama al crear la actividad.
-     * Configura los elementos de la interfaz de usuario y carga los datos existentes si están disponibles.
+     * Metodo que se llama al crear la actividad.
+     * Configura los elementos de la interfaz de usuario y carga los datos existentes si estan disponibles.
      *
      * @param savedInstanceState El estado guardado de la actividad.
      */
@@ -87,17 +87,17 @@ public class ReservaEdit extends AppCompatActivity {
         mRecyclerViewParcelas.setAdapter(mParcelaReservadaAdapter);
         mRecyclerViewParcelas.setLayoutManager(new LinearLayoutManager(this));
 
-        // Configurar observador único para las parcelas disponibles
+        // Configurar observador unico para las parcelas disponibles
         mReservaViewModel.getAllParcelas().observe(this, parcelas -> {
             if (parcelas != null) {
                 actualizarSpinnerParcelasDisponibles(parcelas);
             }
         });
 
-        // Configurar botón para añadir parcelas
+        // Configurar boton para añadir parcelas
         addParcelaButton.setOnClickListener(view -> openAddParcelaDialog());
 
-        // Configurar botón para guardar reserva
+        // Configurar boton para guardar reserva
         saveReservaButton.setOnClickListener(view -> saveReserva());
 
         // Rellenar campos si estamos editando
@@ -105,7 +105,7 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
-     * Abre un diálogo para añadir una nueva parcela reservada a la reserva.
+     * Abre un dialogo para añadir una nueva parcela reservada a la reserva.
      */
     private void openAddParcelaDialog() {
         if (mRowId == null) {
@@ -115,7 +115,7 @@ public class ReservaEdit extends AppCompatActivity {
             String fechaEntradaStr = mFechaEntradaText.getText().toString();
             String fechaSalidaStr = mFechaSalidaText.getText().toString();
 
-            // Validaciones básicas antes de guardar la reserva
+            // Validaciones basicas antes de guardar la reserva
             if (TextUtils.isEmpty(nombreCliente)) {
                 Toast.makeText(this, R.string.empty_not_saved_nombre, Toast.LENGTH_SHORT).show();
                 return;
@@ -234,19 +234,19 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
-     * Método que se ejecuta cuando una parcela reservada es editada.
+     * Metodo que se ejecuta cuando una parcela reservada es editada.
      *
      * @param parcelaReservada La parcela reservada que se va a editar.
      */
     private void onParcelaReservadaEdited(ParcelaReservada parcelaReservada) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.edit_ocupantes)); // Asegúrate de tener esta cadena en strings.xml
+        builder.setTitle(getString(R.string.edit_ocupantes)); // Asegurate de tener esta cadena en strings.xml
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_ocupantes, null); // Diseña un layout simple
         builder.setView(dialogView);
 
         EditText numeroOcupantesText = dialogView.findViewById(R.id.numero_ocupantes);
 
-        // Prellenar el campo con el número actual de ocupantes
+        // Prellenar el campo con el numero actual de ocupantes
         numeroOcupantesText.setText(String.valueOf(parcelaReservada.getNumeroOcupantes()));
 
         builder.setPositiveButton(getString(R.string.button_save), (dialog, which) -> {
@@ -259,16 +259,16 @@ public class ReservaEdit extends AppCompatActivity {
 
             int numeroOcupantes = Integer.parseInt(numeroOcupantesStr);
 
-            // Validar que el número de ocupantes sea válido
+            // Validar que el numero de ocupantes sea valido
             Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
             if (numeroOcupantes <= 0 || numeroOcupantes > parcela.getMaxOcupantes()) {
                 Toast.makeText(this, R.string.invalid_max_ocupantes, Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Actualizar el número de ocupantes
+            // Actualizar el numero de ocupantes
             parcelaReservada.setNumeroOcupantes(numeroOcupantes);
-            mReservaViewModel.updateParcelaReservada(parcelaReservada); // Asegúrate de tener este método en el ViewModel
+            mReservaViewModel.updateParcelaReservada(parcelaReservada); // Asegurate de tener este metodo en el ViewModel
 
             mParcelaReservadaAdapter.notifyDataSetChanged(); // Reflejar los cambios en el RecyclerView
             updatePrecioTotal(); // Recalcular el precio total
@@ -279,7 +279,7 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
-     * Método que se ejecuta cuando una parcela reservada es eliminada.
+     * Metodo que se ejecuta cuando una parcela reservada es eliminada.
      *
      * @param parcelaReservada La parcela reservada que se va a eliminar.
      */
@@ -288,7 +288,7 @@ public class ReservaEdit extends AppCompatActivity {
         mParcelaReservadaAdapter.notifyDataSetChanged();
         updatePrecioTotal();
 
-        // Eliminar la parcela reservada de la base de datos si tiene un ID válido
+        // Eliminar la parcela reservada de la base de datos si tiene un ID valido
         if (parcelaReservada.getId() > 0) {
             mReservaViewModel.deleteParcelaReservada(parcelaReservada);
         }
@@ -297,7 +297,12 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
+     * Filtra las parcelas disponibles excluyendo aquellas que ya han sido reservadas
+     * en la reserva actual. Compara las parcelas en la lista proporcionada con las
+     * parcelas reservadas temporalmente y devuelve solo las que no estan reservadas.
      *
+     * @param todasParcelas Lista de todas las parcelas disponibles en la base de datos.
+     * @return Una lista de parcelas que no estan reservadas en la reserva actual.
      */
     private List<Parcela> filtrarParcelasDisponibles(List<Parcela> todasParcelas) {
         List<Parcela> parcelasDisponibles = new ArrayList<>();
@@ -317,13 +322,18 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
+     * Actualiza el adaptador del Spinner con las parcelas disponibles, excluyendo
+     * las parcelas que ya estan reservadas en la reserva actual. Este metodo se utiliza
+     * para garantizar que el usuario no pueda seleccionar parcelas ya reservadas
+     * en las fechas seleccionadas.
      *
+     * @param parcelas Lista completa de parcelas desde la base de datos.
      */
     private void actualizarSpinnerParcelasDisponibles(List<Parcela> parcelas) {
         // Filtrar parcelas disponibles (excluir las ya añadidas)
         List<Parcela> disponibles = filtrarParcelasDisponibles(parcelas);
 
-        // Actualizar el adaptador del Spinner en el diálogo de añadir parcela
+        // Actualizar el adaptador del Spinner en el dialogo de añadir parcela
         if (disponibles.isEmpty()) {
             Log.d("Comprobaciones", "No hay parcelas disponibles.");
         } else {
@@ -343,16 +353,16 @@ public class ReservaEdit extends AppCompatActivity {
             Date fechaSalida = dateFormat.parse(mFechaSalidaText.getText().toString());
 
             if (fechaEntrada != null && fechaSalida != null) {
-                // Calcular la diferencia en días
+                // Calcular la diferencia en dias
                 long diffInMillis = fechaSalida.getTime() - fechaEntrada.getTime();
                 int dias = (int) (diffInMillis / (1000 * 60 * 60 * 24));
 
                 if (dias <= 0) {
                     Toast.makeText(this, R.string.invalid_date_logic, Toast.LENGTH_SHORT).show();
-                    return 0; // Precio total es 0 si las fechas no son válidas
+                    return 0; // Precio total es 0 si las fechas no son validas
                 }
 
-                // Calcular el precio total en función de días, ocupantes y precio por persona
+                // Calcular el precio total en funcion de dias, ocupantes y precio por persona
                 for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
                     Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
                     if (parcela != null) {
@@ -382,17 +392,17 @@ public class ReservaEdit extends AppCompatActivity {
             Date fechaSalida = dateFormat.parse(mFechaSalidaText.getText().toString());
 
             if (fechaEntrada != null && fechaSalida != null) {
-                // Calcular la diferencia en días
+                // Calcular la diferencia en dias
                 long diffInMillis = fechaSalida.getTime() - fechaEntrada.getTime();
                 int dias = (int) (diffInMillis / (1000 * 60 * 60 * 24));
 
                 if (dias <= 0) {
                     Toast.makeText(this, R.string.invalid_date_logic, Toast.LENGTH_SHORT).show();
                     mPrecioTotalText.setText("0");
-                    return; // Precio total es 0 si las fechas no son válidas
+                    return; // Precio total es 0 si las fechas no son validas
                 }
 
-                // Calcular el precio total en función de días, ocupantes y precio por persona
+                // Calcular el precio total en funcion de dias, ocupantes y precio por persona
                 for (ParcelaReservada parcelaReservada : mParcelasReservadasTemp) {
                     Parcela parcela = mReservaViewModel.getParcelaById(parcelaReservada.getParcelaId());
                     if (parcela != null) {
@@ -466,7 +476,7 @@ public class ReservaEdit extends AppCompatActivity {
                 nuevaReserva.setId(mRowId);
                 mReservaViewModel.update(nuevaReserva);
             } else {
-                mReservaViewModel.insert(nuevaReserva); // Llama al método insert que usa LiveData
+                mReservaViewModel.insert(nuevaReserva); // Llama al metodo insert que usa LiveData
                 mReservaViewModel.getInsertResult().observe(this, reservaId -> {
                     if (reservaId == -1) {
                         Toast.makeText(this, "Error al guardar la reserva", Toast.LENGTH_SHORT).show();
@@ -493,7 +503,7 @@ public class ReservaEdit extends AppCompatActivity {
     }
 
     /**
-     * Rellena los campos de la reserva si se están editando.
+     * Rellena los campos de la reserva si se estan editando.
      */
     private void populateFields() {
         // Obtener los datos del Intent

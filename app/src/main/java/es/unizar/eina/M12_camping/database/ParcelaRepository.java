@@ -13,8 +13,8 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * Clase que gestiona el acceso a la fuente de datos para las parcelas.
- * Interactúa con la base de datos a través de las clases {@link CampingRoomDatabase} y {@link ParcelaDao}.
- * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en las parcelas.
+ * Interactua con la base de datos a traves de las clases {@link CampingRoomDatabase} y {@link ParcelaDao}.
+ * Proporciona metodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en las parcelas.
  */
 public class ParcelaRepository {
 
@@ -24,14 +24,14 @@ public class ParcelaRepository {
     private final LiveData<List<Parcela>> mParcelasOrdOcupantes;
     private final LiveData<List<Parcela>> mParcelasOrdPrecio;
 
-    /** Tiempo máximo de espera para operaciones de base de datos en milisegundos */
+    /** Tiempo maximo de espera para operaciones de base de datos en milisegundos */
     private final long TIMEOUT = 15000;
 
     /**
      * Constructor de ParcelaRepository.
-     * Utiliza el contexto de la aplicación para obtener la instancia de la base de datos.
+     * Utiliza el contexto de la aplicacion para obtener la instancia de la base de datos.
      *
-     * @param application La aplicación que proporciona el contexto para instanciar la base de datos.
+     * @param application La aplicacion que proporciona el contexto para instanciar la base de datos.
      */
     public ParcelaRepository(Application application) {
         CampingRoomDatabase db = CampingRoomDatabase.getDatabase(application);
@@ -43,7 +43,7 @@ public class ParcelaRepository {
     }
 
     /**
-     * Obtiene todas las parcelas en la base de datos sin un orden específico.
+     * Obtiene todas las parcelas en la base de datos sin un orden especifico.
      * Room ejecuta todas las consultas en un hilo separado, y LiveData notifica a los observadores cuando los datos cambian.
      *
      * @return Un objeto LiveData con la lista de todas las parcelas.
@@ -53,7 +53,7 @@ public class ParcelaRepository {
     }
 
     /**
-     * Obtiene todas las parcelas ordenadas alfabéticamente por nombre.
+     * Obtiene todas las parcelas ordenadas alfabeticamente por nombre.
      *
      * @return Un objeto LiveData con la lista de parcelas ordenadas por nombre en orden ascendente.
      */
@@ -62,9 +62,9 @@ public class ParcelaRepository {
     }
 
     /**
-     * Obtiene todas las parcelas ordenadas por el número máximo de ocupantes.
+     * Obtiene todas las parcelas ordenadas por el numero maximo de ocupantes.
      *
-     * @return Un objeto LiveData con la lista de parcelas ordenadas por número máximo de ocupantes en orden ascendente.
+     * @return Un objeto LiveData con la lista de parcelas ordenadas por numero maximo de ocupantes en orden ascendente.
      */
     public LiveData<List<Parcela>> getParcelasOrderedOcupantes() {
         return mParcelasOrdOcupantes;
@@ -81,10 +81,10 @@ public class ParcelaRepository {
 
     /**
      * Inserta una nueva parcela en la base de datos.
-     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     * La operacion se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
-     * @param parcela La parcela a insertar. Debe tener un nombre no nulo y no vacío.
-     * @return El identificador de la parcela insertada, o -1 si la inserción falla.
+     * @param parcela La parcela a insertar. Debe tener un nombre no nulo y no vacio.
+     * @return El identificador de la parcela insertada, o -1 si la insercion falla.
      */
     public long insert(Parcela parcela) {
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -99,11 +99,11 @@ public class ParcelaRepository {
 
     /**
      * Actualiza una parcela en la base de datos.
-     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     * La operacion se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
-     * @param parcela La parcela que se desea actualizar. Debe tener un ID mayor que 0, un nombre no nulo y no vacío,
-     *                un número máximo de ocupantes, un precio por persona y una descripción.
-     * @return El número de filas modificadas (1 si se actualiza correctamente, 0 si no existe una parcela con ese ID).
+     * @param parcela La parcela que se desea actualizar. Debe tener un ID mayor que 0, un nombre no nulo y no vacio,
+     *                un numero maximo de ocupantes, un precio por persona y una descripcion.
+     * @return El numero de filas modificadas (1 si se actualiza correctamente, 0 si no existe una parcela con ese ID).
      */
     public int update(Parcela parcela) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -118,10 +118,10 @@ public class ParcelaRepository {
 
     /**
      * Elimina una parcela de la base de datos.
-     * La operación se ejecuta en un hilo separado y espera un resultado utilizando Future.
+     * La operacion se ejecuta en un hilo separado y espera un resultado utilizando Future.
      *
      * @param parcela La parcela a eliminar. Debe tener un ID mayor que 0.
-     * @return El número de filas eliminadas (1 si se elimina correctamente, 0 si no existe una parcela con ese ID).
+     * @return El numero de filas eliminadas (1 si se elimina correctamente, 0 si no existe una parcela con ese ID).
      */
     public int delete(Parcela parcela) {
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
@@ -155,7 +155,7 @@ public class ParcelaRepository {
      * Verifica si existe una parcela con el nombre especificado que no tenga el ID proporcionado.
      *
      * @param nombre El nombre a verificar.
-     * @param id     El ID de la parcela que se está editando.
+     * @param id     El ID de la parcela que se esta editando.
      * @return true si existe otra parcela con el mismo nombre, de lo contrario false.
      */
     public boolean isNombreDuplicadoExceptId(String nombre, int id) {
@@ -176,7 +176,7 @@ public class ParcelaRepository {
         try {
             String nombreParcela = future.get(TIMEOUT, TimeUnit.MILLISECONDS);
             if (nombreParcela == null) {
-                Log.d("ParcelaRepository", "getNombreParcelaById: No se encontró nombre para parcelaId = " + parcelaId);
+                Log.d("ParcelaRepository", "getNombreParcelaById: No se encontro nombre para parcelaId = " + parcelaId);
             } else {
                 Log.d("ParcelaRepository", "getNombreParcelaById: Nombre de parcela = " + nombreParcela);
             }

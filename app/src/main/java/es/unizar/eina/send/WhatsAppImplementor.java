@@ -9,13 +9,13 @@ import android.content.pm.PackageManager;
 import android.app.Activity;
 import android.widget.Toast;
 
-/** Concrete implementor utilizando la aplicación de WhatsApp. No funciona en el emulador si no se ha configurado previamente */
+/** Concrete implementor utilizando la aplicacion de WhatsApp. No funciona en el emulador si no se ha configurado previamente */
 public class WhatsAppImplementor implements SendImplementor{
 
-   /** actividad desde la cual se abrirá la aplicación de WhatsApp */
+   /** actividad desde la cual se abrira la aplicacion de WhatsApp */
    private Activity sourceActivity;
    /** Constructor
-    * @param source actividad desde la cual se abrira la aplicación de Whatsapp
+    * @param source actividad desde la cual se abrira la aplicacion de Whatsapp
     */
    public WhatsAppImplementor(Activity source){
 	   setSourceActivity(source);
@@ -26,14 +26,14 @@ public class WhatsAppImplementor implements SendImplementor{
 	   sourceActivity = source;
    }
 
-   /**  Recupera la actividad desde la cual se abrira la aplicación de Whatsapp */
+   /**  Recupera la actividad desde la cual se abrira la aplicacion de Whatsapp */
    public Activity getSourceActivity(){
      return sourceActivity;
    }
 
    /**
     * Implementacion del metodo send utilizando la aplicacion de WhatsApp
-    * @param phone teléfono
+    * @param phone telefono
     * @param message cuerpo del mensaje
     */
    public void send (String phone, String message) {

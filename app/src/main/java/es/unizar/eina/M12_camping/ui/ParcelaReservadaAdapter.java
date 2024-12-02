@@ -19,7 +19,7 @@ import es.unizar.eina.M12_camping.database.ParcelaReservada;
 
 /**
  * Adaptador para mostrar una lista de parcelas reservadas en un RecyclerView.
- * Permite la edición y eliminación de parcelas reservadas.
+ * Permite la edicion y eliminacion de parcelas reservadas.
  */
 public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReservadaAdapter.ParcelaReservadaViewHolder> {
 
@@ -32,8 +32,8 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
      * Constructor para inicializar el adaptador.
      *
      * @param parcelasReservadas Lista de parcelas reservadas.
-     * @param editListener       Listener para manejar la edición.
-     * @param deleteListener     Listener para manejar la eliminación.
+     * @param editListener       Listener para manejar la edicion.
+     * @param deleteListener     Listener para manejar la eliminacion.
      */
     public ParcelaReservadaAdapter(List<ParcelaReservada> parcelasReservadas,
                                    OnParcelaReservadaEditListener editListener,
@@ -59,7 +59,7 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
 
         String nombreParcela = mReservaViewModel.getNombreParcelaById(parcelaReservada.getParcelaId());
         if (nombreParcela == null) {
-            Log.d("Comprobaciones", "onBindViewHolder: No se encontró nombre para parcelaId = " + parcelaReservada.getParcelaId());
+            Log.d("Comprobaciones", "onBindViewHolder: No se encontro nombre para parcelaId = " + parcelaReservada.getParcelaId());
             holder.parcelaNombre.setText("Parcela desconocida");
         } else {
             Log.d("Comprobaciones", "onBindViewHolder: Nombre de parcela = " + nombreParcela);
@@ -67,10 +67,10 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
         }
         holder.numeroOcupantes.setText(String.valueOf(parcelaReservada.getNumeroOcupantes()));
 
-        // Listener para el botón de editar
+        // Listener para el boton de editar
         holder.editButton.setOnClickListener(v -> onEditListener.onEdit(parcelaReservada));
 
-        // Listener para el botón de eliminar
+        // Listener para el boton de eliminar
         holder.deleteButton.setOnClickListener(v -> {
             onDeleteListener.onDelete(parcelaReservada); // Llama al listener definido en ReservaEdit
             mParcelasReservadas.remove(position); // Elimina localmente la parcela
@@ -95,7 +95,7 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     }
 
     /**
-     * ViewHolder para gestionar la visualización de cada ítem de parcela reservada.
+     * ViewHolder para gestionar la visualizacion de cada item de parcela reservada.
      */
     static class ParcelaReservadaViewHolder extends RecyclerView.ViewHolder {
         private final TextView parcelaNombre;
@@ -113,14 +113,14 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     }
 
     /**
-     * Interfaz para manejar la edición de una parcela reservada.
+     * Interfaz para manejar la edicion de una parcela reservada.
      */
     public interface OnParcelaReservadaEditListener {
         void onEdit(ParcelaReservada parcelaReservada);
     }
 
     /**
-     * Interfaz para manejar la eliminación de una parcela reservada.
+     * Interfaz para manejar la eliminacion de una parcela reservada.
      */
     public interface OnParcelaReservadaDeleteListener {
         void onDelete(ParcelaReservada parcelaReservada);

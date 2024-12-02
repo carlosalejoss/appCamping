@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Clase que representa la base de datos del camping utilizando Room.
- * Define la estructura de la base de datos y proporciona métodos para obtener
+ * Define la estructura de la base de datos y proporciona metodos para obtener
  * la instancia de la base de datos y el DAO de Parcela.
  */
 @Database(entities = {Parcela.class, Reserva.class, ParcelaReservada.class}, version = 1, exportSchema = false)
@@ -40,16 +40,16 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
     public abstract ReservaDao reservaDao();
 
     /**
-     * Proporciona acceso al DAO de la relación parcela - reserva.
+     * Proporciona acceso al DAO de la relacion parcela - reserva.
      *
      * @return El DAO de ParcelaReservada.
      */
     public abstract ParcelaReservadaDao parcelaReservadaDao();
 
-    /** Instancia única de la base de datos */
+    /** Instancia unica de la base de datos */
     private static volatile CampingRoomDatabase INSTANCE;
 
-    /** Número de hilos para las operaciones de base de datos */
+    /** Numero de hilos para las operaciones de base de datos */
     private static final int NUMBER_OF_THREADS = 4;
 
     /** Executor para realizar operaciones de escritura en la base de datos en segundo plano */
@@ -57,11 +57,11 @@ public abstract class CampingRoomDatabase extends RoomDatabase {
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     /**
-     * Obtiene la instancia única de la base de datos.
-     * Si la instancia aún no se ha creado, se inicializa en un contexto sincronizado.
+     * Obtiene la instancia unica de la base de datos.
+     * Si la instancia aun no se ha creado, se inicializa en un contexto sincronizado.
      *
-     * @param context El contexto de la aplicación.
-     * @return La instancia única de CampingRoomDatabase.
+     * @param context El contexto de la aplicacion.
+     * @return La instancia unica de CampingRoomDatabase.
      */
     static CampingRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {

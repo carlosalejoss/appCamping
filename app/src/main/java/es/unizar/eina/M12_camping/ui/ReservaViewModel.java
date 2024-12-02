@@ -19,8 +19,8 @@ import es.unizar.eina.M12_camping.database.Reserva;
 import es.unizar.eina.M12_camping.database.ReservaRepository;
 
 /**
- * ViewModel que proporciona la lógica de acceso a los datos de reservas.
- * Facilita la comunicación entre la UI y el repositorio de datos.
+ * ViewModel que proporciona la logica de acceso a los datos de reservas.
+ * Facilita la comunicacion entre la UI y el repositorio de datos.
  */
 public class ReservaViewModel extends AndroidViewModel {
 
@@ -39,7 +39,7 @@ public class ReservaViewModel extends AndroidViewModel {
      * Constructor del ViewModel de reservas.
      * Inicializa el repositorio y obtiene las listas de reservas.
      *
-     * @param application La aplicación actual, que proporciona el contexto para inicializar el repositorio.
+     * @param application La aplicacion actual, que proporciona el contexto para inicializar el repositorio.
      */
     public ReservaViewModel(Application application) {
         super(application);
@@ -60,12 +60,12 @@ public class ReservaViewModel extends AndroidViewModel {
     public void insert(Reserva reserva) {
         executorService.execute(() -> {
             long id = mRepository.insert(reserva);
-            insertResult.postValue(id); // Publicar el resultado de la inserción
+            insertResult.postValue(id); // Publicar el resultado de la insercion
         });
     }
 
     /**
-     * Observa el resultado de la última operación de inserción.
+     * Observa el resultado de la ultima operacion de insercion.
      *
      * @return LiveData con el ID de la reserva insertada.
      */
@@ -92,7 +92,7 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene todas las reservas sin un orden específico.
+     * Obtiene todas las reservas sin un orden especifico.
      *
      * @return Un objeto LiveData que contiene la lista de todas las reservas.
      */
@@ -120,7 +120,7 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene una reserva específica por su ID.
+     * Obtiene una reserva especifica por su ID.
      *
      * @param id El ID de la reserva.
      * @return La reserva correspondiente, o null si no se encuentra.
@@ -130,7 +130,7 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene las parcelas reservadas asociadas a una reserva específica.
+     * Obtiene las parcelas reservadas asociadas a una reserva especifica.
      *
      * @param reservaId El ID de la reserva.
      * @return Lista de ParcelasReservadas asociadas a la reserva.
@@ -167,7 +167,7 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene una lista de parcelas que no están reservadas en el rango de fechas especificado.
+     * Obtiene una lista de parcelas que no estan reservadas en el rango de fechas especificado.
      *
      * @param fechaInicio La fecha de inicio.
      * @param fechaFin La fecha de fin.
@@ -178,7 +178,7 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
-     * Obtiene el nombre de una parcela específica por su ID.
+     * Obtiene el nombre de una parcela especifica por su ID.
      *
      * @param parcelaId El ID de la parcela.
      * @return El nombre de la parcela, o null si no se encuentra.
@@ -187,7 +187,7 @@ public class ReservaViewModel extends AndroidViewModel {
         Log.d("Comprobaciones", "getNombreParcelaById: parcelaId = " + parcelaId);
         String nombreParcela = mParcelaRepository.getNombreParcelaById(parcelaId);
         if (nombreParcela == null) {
-            Log.d("Comprobaciones", "getNombreParcelaById: No se encontró nombre para parcelaId = " + parcelaId);
+            Log.d("Comprobaciones", "getNombreParcelaById: No se encontro nombre para parcelaId = " + parcelaId);
         } else {
             Log.d("Comprobaciones", "getNombreParcelaById: Nombre de parcela = " + nombreParcela);
         }
@@ -197,16 +197,16 @@ public class ReservaViewModel extends AndroidViewModel {
     /**
      * Obtiene todas las reservas ordenadas por el nombre del cliente.
      *
-     * @return Un objeto LiveData con la lista de reservas ordenadas alfabéticamente por el nombre del cliente.
+     * @return Un objeto LiveData con la lista de reservas ordenadas alfabeticamente por el nombre del cliente.
      */
     public LiveData<List<Reserva>> getReservasOrderedNombreCliente() {
         return mReservasOrdNombreCliente;
     }
 
     /**
-     * Obtiene todas las reservas ordenadas por el número de teléfono del cliente.
+     * Obtiene todas las reservas ordenadas por el numero de telefono del cliente.
      *
-     * @return Un objeto LiveData con la lista de reservas ordenadas por el número de teléfono en orden ascendente.
+     * @return Un objeto LiveData con la lista de reservas ordenadas por el numero de telefono en orden ascendente.
      */
     public LiveData<List<Reserva>> getReservasOrderedTelefono() {
         return mReservasOrdTelefono;
