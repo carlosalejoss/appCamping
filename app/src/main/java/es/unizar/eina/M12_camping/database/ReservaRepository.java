@@ -49,8 +49,6 @@ public class ReservaRepository {
         mReservasOrdFechaEntrada = mReservaDao.getOrderedReservasFechaEntrada();
     }
 
-    // Metodos para obtener listas de reservas
-
     /**
      * Obtiene todas las reservas sin un orden especifico.
      *
@@ -87,8 +85,6 @@ public class ReservaRepository {
         return mReservasOrdFechaEntrada;
     }
 
-    // Metodos CRUD
-
     /**
      * Inserta una nueva reserva en la base de datos.
      *
@@ -104,7 +100,6 @@ public class ReservaRepository {
             return -1; // Devuelve -1 en caso de error.
         }
     }
-
 
     /**
      * Actualiza una reserva en la base de datos.
@@ -142,8 +137,6 @@ public class ReservaRepository {
             return -1;
         }
     }
-
-
 
     /**
      * Obtiene una parcela por su ID.

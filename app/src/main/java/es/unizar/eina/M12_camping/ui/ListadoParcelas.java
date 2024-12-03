@@ -31,13 +31,12 @@ public class ListadoParcelas extends AppCompatActivity {
     private ParcelaViewModel mParcelaViewModel;
 
     /** Identificadores para los elementos del menu */
-    static final int INSERT_ID = Menu.FIRST;
-    static final int DELETE_ID = Menu.FIRST + 1;
-    static final int EDIT_ID = Menu.FIRST + 2;
-    static final int CHANGE_ID = Menu.FIRST + 3;
-    static final int ORDER_ID_NOMBRE = Menu.FIRST + 4;
-    static final int ORDER_ID_MAXOCUPANTES = Menu.FIRST + 5;
-    static final int ORDER_ID_PRECIOXPERSONA = Menu.FIRST + 6;
+    static final int DELETE_ID = Menu.FIRST;
+    static final int EDIT_ID = Menu.FIRST + 1;
+    static final int CHANGE_ID = Menu.FIRST + 2;
+    static final int ORDER_ID_NOMBRE = Menu.FIRST + 3;
+    static final int ORDER_ID_MAXOCUPANTES = Menu.FIRST + 4;
+    static final int ORDER_ID_PRECIOXPERSONA = Menu.FIRST + 5;
 
     RecyclerView mRecyclerView;
     ParcelaListAdapter mAdapter;
@@ -113,14 +112,6 @@ public class ListadoParcelas extends AppCompatActivity {
     }
 
     /**
-     * Cambia a la pantalla de listado de reservas.
-     */
-    private void listadoReservas() {
-        Intent intent = new Intent(this, ListadoReservas.class); // que redireccione a MenuReservas
-        startActivity(intent);
-    }
-
-    /**
      * Maneja las selecciones de elementos en el menu contextual.
      *
      * @param item El elemento de menu que fue seleccionado.
@@ -141,6 +132,14 @@ public class ListadoParcelas extends AppCompatActivity {
                 return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    /**
+     * Cambia a la pantalla de listado de reservas.
+     */
+    private void listadoReservas() {
+        Intent intent = new Intent(this, ListadoReservas.class); // que redireccione a MenuReservas
+        startActivity(intent);
     }
 
     /**

@@ -32,6 +32,7 @@ public class Parcela {
     private double precioXpersona;
 
     /** Descripcion de la parcela */
+    @NonNull
     @ColumnInfo(name = "descripcion")
     private String descripcion;
 
@@ -43,7 +44,7 @@ public class Parcela {
      * @param precioXpersona El precio por persona para esta parcela.
      * @param descripcion    La descripcion de la parcela.
      */
-    public Parcela(@NonNull String nombre, int maxOcupantes, double precioXpersona, String descripcion) {
+    public Parcela(@NonNull String nombre, int maxOcupantes, double precioXpersona, @NonNull String descripcion) {
         if (maxOcupantes <= 0) {
             throw new IllegalArgumentException("El numero maximo de ocupantes debe ser mayor que 0.");
         }
@@ -140,6 +141,7 @@ public class Parcela {
      *
      * @return La descripcion de la parcela.
      */
+    @NonNull
     public String getDescripcion() {
         return this.descripcion;
     }
@@ -149,7 +151,7 @@ public class Parcela {
      *
      * @param descripcion La nueva descripcion de la parcela.
      */
-    public void setDescripcion(String descripcion) {
+    public void setDescripcion(@NonNull String descripcion) {
         this.descripcion = descripcion;
     }
 

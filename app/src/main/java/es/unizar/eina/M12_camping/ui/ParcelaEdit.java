@@ -20,7 +20,6 @@ import es.unizar.eina.M12_camping.R;
 public class ParcelaEdit extends AppCompatActivity {
 
     /** Constantes para identificar los datos que se pasan en el Intent */
-    /** Constantes para identificar los datos que se pasan en el Intent */
     public static final String PARCELA_NOMBRE = "nombre";
     public static final String PARCELA_MAXOCUPANTES = "maxOcupantes";
     public static final String PARCELA_PRECIOXPERSONA = "precioXpersona";
@@ -59,9 +58,10 @@ public class ParcelaEdit extends AppCompatActivity {
             String nombre = mNombreText.getText().toString();
             String maxOcupantesStr = mMaxOcupantes.getText().toString();
             String precioXpersonaStr = mPrecioXpersona.getText().toString();
+            String descripcion = mDescripcionText.getText().toString();
 
             // Verificar si el nombre esta vacio
-            if (TextUtils.isEmpty(nombre)) {
+            if (TextUtils.isEmpty(nombre) || nombre.trim().isEmpty()) {
                 Toast.makeText(getApplicationContext(), R.string.empty_not_saved_nombre, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -112,6 +112,11 @@ public class ParcelaEdit extends AppCompatActivity {
 
             if (TextUtils.isEmpty(mPrecioXpersona.getText())) {
                 Toast.makeText(getApplicationContext(), R.string.empty_not_saved_precio, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(mDescripcionText.getText()) || descripcion.trim().isEmpty()) {
+                Toast.makeText(getApplicationContext(), R.string.empty_not_saved_descripcion, Toast.LENGTH_LONG).show();
                 return;
             }
 

@@ -36,9 +36,9 @@ public class SMSImplementor implements SendImplementor {
      */
     public void send (String phone, String message) {
         Log.d("SMSImplementor", message);
-        Uri smsUri = Uri.parse("sms: " + phone);
+        Uri smsUri = Uri.parse("sms:" + phone);
         Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsUri);
-        sendIntent.putExtra("sms_body ", message);
+        sendIntent.putExtra("sms_body", message);
         getSourceActivity().startActivity(sendIntent);
         Log.d("SMSImplementor", "Se ha terminado la funcion send");
    }

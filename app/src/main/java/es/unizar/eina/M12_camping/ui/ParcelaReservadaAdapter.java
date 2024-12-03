@@ -125,4 +125,5 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
     public interface OnParcelaReservadaDeleteListener {
         void onDelete(ParcelaReservada parcelaReservada);
     }
+
 }

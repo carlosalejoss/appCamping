@@ -18,6 +18,16 @@ public class ReservaListAdapter extends ListAdapter<Reserva, ReservaViewHolder> 
     private int position;
 
     /**
+     * Constructor de ReservaListAdapter.
+     * Recibe un callback de DiffUtil para comparar los elementos de la lista.
+     *
+     * @param diffCallback El callback utilizado para calcular diferencias en la lista.
+     */
+    public ReservaListAdapter(@NonNull DiffUtil.ItemCallback<Reserva> diffCallback) {
+        super(diffCallback);
+    }
+
+    /**
      * Obtiene la posicion actual seleccionada en la lista.
      *
      * @return La posicion del elemento actual.
@@ -33,16 +43,6 @@ public class ReservaListAdapter extends ListAdapter<Reserva, ReservaViewHolder> 
      */
     public void setPosition(int position) {
         this.position = position;
-    }
-
-    /**
-     * Constructor de ReservaListAdapter.
-     * Recibe un callback de DiffUtil para comparar los elementos de la lista.
-     *
-     * @param diffCallback El callback utilizado para calcular diferencias en la lista.
-     */
-    public ReservaListAdapter(@NonNull DiffUtil.ItemCallback<Reserva> diffCallback) {
-        super(diffCallback);
     }
 
     /**

@@ -26,7 +26,7 @@ public class ParcelaRepository {
 
     /** Tiempo maximo de espera para operaciones de base de datos en milisegundos */
     private final long TIMEOUT = 15000;
-
+ 
     /**
      * Constructor de ParcelaRepository.
      * Utiliza el contexto de la aplicacion para obtener la instancia de la base de datos.

@@ -110,6 +110,33 @@ public class ReservaViewModel extends AndroidViewModel {
     }
 
     /**
+     * Obtiene todas las reservas ordenadas por el nombre del cliente.
+     *
+     * @return Un objeto LiveData con la lista de reservas ordenadas alfabeticamente por el nombre del cliente.
+     */
+    public LiveData<List<Reserva>> getReservasOrderedNombreCliente() {
+        return mReservasOrdNombreCliente;
+    }
+
+    /**
+     * Obtiene todas las reservas ordenadas por el numero de telefono del cliente.
+     *
+     * @return Un objeto LiveData con la lista de reservas ordenadas por el numero de telefono en orden ascendente.
+     */
+    public LiveData<List<Reserva>> getReservasOrderedTelefono() {
+        return mReservasOrdTelefono;
+    }
+
+    /**
+     * Obtiene todas las reservas ordenadas por la fecha de entrada.
+     *
+     * @return Un objeto LiveData con la lista de reservas ordenadas por la fecha de entrada en orden ascendente.
+     */
+    public LiveData<List<Reserva>> getReservasOrderedFechaEntrada() {
+        return mReservasOrdFechaEntrada;
+    }
+
+    /**
      * Obtiene una parcela por su ID.
      *
      * @param parcelaId El ID de la parcela.
@@ -192,33 +219,6 @@ public class ReservaViewModel extends AndroidViewModel {
             Log.d("Comprobaciones", "getNombreParcelaById: Nombre de parcela = " + nombreParcela);
         }
         return nombreParcela;
-    }
-
-    /**
-     * Obtiene todas las reservas ordenadas por el nombre del cliente.
-     *
-     * @return Un objeto LiveData con la lista de reservas ordenadas alfabeticamente por el nombre del cliente.
-     */
-    public LiveData<List<Reserva>> getReservasOrderedNombreCliente() {
-        return mReservasOrdNombreCliente;
-    }
-
-    /**
-     * Obtiene todas las reservas ordenadas por el numero de telefono del cliente.
-     *
-     * @return Un objeto LiveData con la lista de reservas ordenadas por el numero de telefono en orden ascendente.
-     */
-    public LiveData<List<Reserva>> getReservasOrderedTelefono() {
-        return mReservasOrdTelefono;
-    }
-
-    /**
-     * Obtiene todas las reservas ordenadas por la fecha de entrada.
-     *
-     * @return Un objeto LiveData con la lista de reservas ordenadas por la fecha de entrada en orden ascendente.
-     */
-    public LiveData<List<Reserva>> getReservasOrderedFechaEntrada() {
-        return mReservasOrdFechaEntrada;
     }
 
     @Override

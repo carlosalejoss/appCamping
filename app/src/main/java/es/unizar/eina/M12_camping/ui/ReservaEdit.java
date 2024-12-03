@@ -116,7 +116,7 @@ public class ReservaEdit extends AppCompatActivity {
             String fechaSalidaStr = mFechaSalidaText.getText().toString();
 
             // Validaciones basicas antes de guardar la reserva
-            if (TextUtils.isEmpty(nombreCliente)) {
+            if (TextUtils.isEmpty(nombreCliente) || nombreCliente.trim().isEmpty()) {
                 Toast.makeText(this, R.string.empty_not_saved_nombre, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -452,11 +452,19 @@ public class ReservaEdit extends AppCompatActivity {
 
         try {
             int telefono = Integer.parseInt(telefonoStr);
+            dateFormat.setLenient(false); // No permitir fechas invalidas
             Date fechaEntrada = dateFormat.parse(fechaEntradaStr);
             Date fechaSalida = dateFormat.parse(fechaSalidaStr);
+            Date fechaActual = new Date(); // Fecha actual
 
             if (fechaEntrada == null || fechaSalida == null) {
                 return; // Error ya manejado en parseDate()
+            }
+
+            // Validación: Fecha de entrada y salida no pueden ser anteriores a la fecha actual
+            if (fechaEntrada.before(fechaActual) || fechaSalida.before(fechaActual)) {
+                Toast.makeText(this, R.string.invalid_date_current, Toast.LENGTH_SHORT).show();
+                return;
             }
 
             if (fechaSalida.before(fechaEntrada)) {
@@ -498,7 +506,7 @@ public class ReservaEdit extends AppCompatActivity {
         } catch (NumberFormatException e) {
             Toast.makeText(this, R.string.invalid_phone_number, Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            Toast.makeText(this, R.string.invalid_date_incorrect, Toast.LENGTH_SHORT).show();
         }
     }
 

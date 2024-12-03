@@ -48,9 +48,9 @@ public class ListadoReservas extends AppCompatActivity {
     static final int DELETE_ID = Menu.FIRST + 1;
     static final int EDIT_ID = Menu.FIRST + 2;
     static final int CHANGE_ID = Menu.FIRST + 3;
-    static final int ORDER_ID_NOMBRE = Menu.FIRST + 4;
-    static final int ORDER_ID_MAXOCUPANTES = Menu.FIRST + 5;
-    static final int ORDER_ID_PRECIOXPERSONA = Menu.FIRST + 6;
+    static final int ORDER_ID_NOMBRECLIENTE = Menu.FIRST + 4;
+    static final int ORDER_ID_TELEFONO = Menu.FIRST + 5;
+    static final int ORDER_ID_FECHAE = Menu.FIRST + 6;
 
     RecyclerView mRecyclerView;
     ReservaListAdapter mAdapter;
@@ -100,9 +100,9 @@ public class ListadoReservas extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, CHANGE_ID, Menu.NONE, R.string.cambiar_a_parcelas);
-        menu.add(Menu.NONE, ORDER_ID_NOMBRE, Menu.NONE, R.string.ordenar_por_nombreCliente);
-        menu.add(Menu.NONE, ORDER_ID_MAXOCUPANTES, Menu.NONE, R.string.ordenar_por_telefono);
-        menu.add(Menu.NONE, ORDER_ID_PRECIOXPERSONA, Menu.NONE, R.string.ordenar_por_fechaEntrada);
+        menu.add(Menu.NONE, ORDER_ID_NOMBRECLIENTE, Menu.NONE, R.string.ordenar_por_nombreCliente);
+        menu.add(Menu.NONE, ORDER_ID_TELEFONO, Menu.NONE, R.string.ordenar_por_telefono);
+        menu.add(Menu.NONE, ORDER_ID_FECHAE, Menu.NONE, R.string.ordenar_por_fechaEntrada);
         return result;
     }
 
@@ -116,27 +116,19 @@ public class ListadoReservas extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case CHANGE_ID:
-                listadoReservas();
+                listadoParcelas();
                 break;
-            case ORDER_ID_NOMBRE:
+            case ORDER_ID_NOMBRECLIENTE:
                 mReservaViewModel.getReservasOrderedNombreCliente().observe(this, reservas -> mAdapter.submitList(reservas));
                 break;
-            case ORDER_ID_MAXOCUPANTES:
+            case ORDER_ID_TELEFONO:
                 mReservaViewModel.getReservasOrderedTelefono().observe(this, reservas -> mAdapter.submitList(reservas));
                 break;
-            case ORDER_ID_PRECIOXPERSONA:
+            case ORDER_ID_FECHAE:
                 mReservaViewModel.getReservasOrderedFechaEntrada().observe(this, reservas -> mAdapter.submitList(reservas));
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Cambia a la pantalla de listado de reservas.
-     */
-    private void listadoReservas() {
-        Intent intent = new Intent(this, ListadoParcelas.class); // que redireccione a MenuReservas
-        startActivity(intent);
     }
 
     /**
@@ -163,6 +155,14 @@ public class ListadoReservas extends AppCompatActivity {
                 return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    /**
+     * Cambia a la pantalla de listado de reservas.
+     */
+    private void listadoParcelas() {
+        Intent intent = new Intent(this, ListadoParcelas.class); // que redireccione a MenuReservas
+        startActivity(intent);
     }
 
     /**

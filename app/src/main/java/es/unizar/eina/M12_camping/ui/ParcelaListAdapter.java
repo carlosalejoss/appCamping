@@ -18,6 +18,16 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
     private int position;
 
     /**
+     * Constructor de ParcelaListAdapter.
+     * Recibe un callback de DiffUtil para comparar los elementos de la lista.
+     *
+     * @param diffCallback El callback utilizado para calcular diferencias en la lista.
+     */
+    public ParcelaListAdapter(@NonNull DiffUtil.ItemCallback<Parcela> diffCallback) {
+        super(diffCallback);
+    }
+
+    /**
      * Obtiene la posicion actual seleccionada en la lista.
      *
      * @return La posicion del elemento actual.
@@ -33,16 +43,6 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
      */
     public void setPosition(int position) {
         this.position = position;
-    }
-
-    /**
-     * Constructor de ParcelaListAdapter.
-     * Recibe un callback de DiffUtil para comparar los elementos de la lista.
-     *
-     * @param diffCallback El callback utilizado para calcular diferencias en la lista.
-     */
-    public ParcelaListAdapter(@NonNull DiffUtil.ItemCallback<Parcela> diffCallback) {
-        super(diffCallback);
     }
 
     /**
@@ -116,4 +116,5 @@ public class ParcelaListAdapter extends ListAdapter<Parcela, ParcelaViewHolder> 
             return oldItem.getNombre().equals(newItem.getNombre());
         }
     }
+
 }
