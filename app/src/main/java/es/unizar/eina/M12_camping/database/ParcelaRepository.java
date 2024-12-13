@@ -87,6 +87,9 @@ public class ParcelaRepository {
      * @return El identificador de la parcela insertada, o -1 si la insercion falla.
      */
     public long insert(Parcela parcela) {
+//        if(mParcelaDao.isNombreDuplicado(parcela.getNombre())) {
+//            throw new IllegalArgumentException("Ya existe una parcela con el mismo nombre.");
+//        }
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
                 () -> mParcelaDao.insert(parcela));
         try {
@@ -106,6 +109,10 @@ public class ParcelaRepository {
      * @return El numero de filas modificadas (1 si se actualiza correctamente, 0 si no existe una parcela con ese ID).
      */
     public int update(Parcela parcela) {
+//        if(mParcelaDao.isNombreDuplicadoExceptId(parcela.getNombre(), parcela.getId())) {
+//            throw new IllegalArgumentException("Ya existe una parcela con el mismo nombre.");
+//        }
+
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
                 () -> mParcelaDao.update(parcela));
         try {
@@ -183,6 +190,24 @@ public class ParcelaRepository {
             return nombreParcela;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             Log.e("ParcelaRepository", "getNombreParcelaById: Error al obtener nombre de parcela: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene una parcela por su ID.
+     *
+     * @param parcelaId El ID de la parcela.
+     * @return La parcela correspondiente, o null si no se encuentra.
+     */
+    public Parcela getParcelaById(int parcelaId) {
+        Future<Parcela> future = CampingRoomDatabase.databaseWriteExecutor.submit(
+                () -> mParcelaDao.getParcelaById(parcelaId)
+        );
+        try {
+            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Log.e("ReservaRepository", "Error obteniendo parcela por ID: " + e.getMessage());
             return null;
         }
     }

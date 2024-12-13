@@ -8,14 +8,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import es.unizar.eina.M12_camping.R;
 import es.unizar.eina.M12_camping.database.Parcela;
+import es.unizar.eina.M12_camping.database.ParcelaRepository;
+import es.unizar.eina.M12_camping.database.ReservaRepository;
+import es.unizar.eina.M12_camping.utils.UnitTests;
 
 import static androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 
@@ -39,7 +44,7 @@ public class ListadoParcelas extends AppCompatActivity {
     static final int ORDER_ID_PRECIOXPERSONA = Menu.FIRST + 5;
 
     RecyclerView mRecyclerView;
-    ParcelaListAdapter mAdapter;
+    ParcelaListAdapter mParcelaListAdapter;
     FloatingActionButton mFab;
 
     /**
@@ -54,20 +59,34 @@ public class ListadoParcelas extends AppCompatActivity {
         setContentView(R.layout.activity_listado_parcelas); // Cambiar nombre de pantallas
 
         mRecyclerView = findViewById(R.id.recyclerview);
-        mAdapter = new ParcelaListAdapter(new ParcelaListAdapter.ParcelaDiff());
-        mRecyclerView.setAdapter(mAdapter);
+        mParcelaListAdapter = new ParcelaListAdapter(new ParcelaListAdapter.ParcelaDiff());
+        mRecyclerView.setAdapter(mParcelaListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mParcelaViewModel = new ViewModelProvider(this).get(ParcelaViewModel.class);
-
-        // Observa los cambios en la lista de parcelas y actualiza el adaptador
-        mParcelaViewModel.getAllParcelas().observe(this, parcelas -> mAdapter.submitList(parcelas));
+        mParcelaViewModel.getAllParcelas().observe(this, parcelas -> mParcelaListAdapter.submitList(parcelas));
 
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(view -> createParcela());
 
         // Registro para el menu contextual
         registerForContextMenu(mRecyclerView);
+
+        // Configurar el botón de pruebas automáticas
+        Button botonEjecutarTests = findViewById(R.id.button_run_tests); // Asegúrate de tener un botón en el XML
+        botonEjecutarTests.setOnClickListener(view -> {
+                    // Inicialización de los repositorios
+                    ParcelaRepository parcelaRepository = new ParcelaRepository(getApplication());
+                    ReservaRepository reservaRepository = new ReservaRepository(getApplication());
+
+                    // Inicialización de UnitTests
+                    UnitTests unitTests = UnitTests.getInstance(parcelaRepository, reservaRepository);
+
+                    // Ejecución de las pruebas
+                    unitTests.ejecutarTests();
+
+                    Toast.makeText(this, "Pruebas completadas. Revisa el Logcat.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     /**
@@ -99,13 +118,13 @@ public class ListadoParcelas extends AppCompatActivity {
                 listadoReservas();
                 break;
             case ORDER_ID_NOMBRE:
-                mParcelaViewModel.getParcelasOrderedNombre().observe(this, parcelas -> mAdapter.submitList(parcelas));
+                mParcelaViewModel.getParcelasOrderedNombre().observe(this, parcelas -> mParcelaListAdapter.submitList(parcelas));
                 break;
             case ORDER_ID_MAXOCUPANTES:
-                mParcelaViewModel.getParcelasOrderedOcupantes().observe(this, parcelas -> mAdapter.submitList(parcelas));
+                mParcelaViewModel.getParcelasOrderedOcupantes().observe(this, parcelas -> mParcelaListAdapter.submitList(parcelas));
                 break;
             case ORDER_ID_PRECIOXPERSONA:
-                mParcelaViewModel.getParcelasOrderedPrecio().observe(this, parcelas -> mAdapter.submitList(parcelas));
+                mParcelaViewModel.getParcelasOrderedPrecio().observe(this, parcelas -> mParcelaListAdapter.submitList(parcelas));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -118,7 +137,7 @@ public class ListadoParcelas extends AppCompatActivity {
      * @return true si el evento fue manejado exitosamente.
      */
     public boolean onContextItemSelected(MenuItem item) {
-        Parcela current = mAdapter.getCurrent();
+        Parcela current = mParcelaListAdapter.getCurrent();
         switch (item.getItemId()) {
             case DELETE_ID:
                 Toast.makeText(

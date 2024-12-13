@@ -139,24 +139,6 @@ public class ReservaRepository {
     }
 
     /**
-     * Obtiene una parcela por su ID.
-     *
-     * @param parcelaId El ID de la parcela.
-     * @return La parcela correspondiente, o null si no se encuentra.
-     */
-    public Parcela getParcelaById(int parcelaId) {
-        Future<Parcela> future = CampingRoomDatabase.databaseWriteExecutor.submit(
-                () -> mParcelaDao.getParcelaById(parcelaId)
-        );
-        try {
-            return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            Log.e("ReservaRepository", "Error obteniendo parcela por ID: " + e.getMessage());
-            return null;
-        }
-    }
-
-    /**
      * Obtiene una reserva especifica por su ID.
      *
      * @param id El ID de la reserva.

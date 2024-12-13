@@ -143,7 +143,7 @@ public class ReservaViewModel extends AndroidViewModel {
      * @return La parcela correspondiente.
      */
     public Parcela getParcelaById(int parcelaId) {
-        return mRepository.getParcelaById(parcelaId);
+        return mParcelaRepository.getParcelaById(parcelaId);
     }
 
     /**

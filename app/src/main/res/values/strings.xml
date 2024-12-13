@@ -96,6 +96,7 @@
     <string name="invalid_date_current">La fecha de entrada y salida debe ser igual o posterior a la fecha actual.</string>
     <string name="invalid_date_incorrect">El día o el mes son inválidos.</string>
     <string name="empty_not_saved_descripcion">Parcela no guardada porque no hay descripcion.</string>
+    <string name="run_tests">Run Tests</string>
 
 
 </resources>

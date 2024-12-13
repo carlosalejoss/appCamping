@@ -31,28 +31,20 @@ public class WhatsAppImplementor implements SendImplementor{
      return sourceActivity;
    }
 
-   /**
-    * Implementacion del metodo send utilizando la aplicacion de WhatsApp
-    * @param phone telefono
-    * @param message cuerpo del mensaje
-    */
-   public void send (String phone, String message) {
-//      PackageManager pm = getSourceActivity().getPackageManager();
-//      boolean app_installed;
-//      try {
-//         pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES);
-//         app_installed = true ;
-//      } catch (PackageManager.NameNotFoundException e) {
-//         app_installed = false ;
-//      }
-//      if (app_installed) {
-         Uri smsUri = Uri.parse("sms:" + phone );
-         Intent sendIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
-         sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-         sendIntent.setPackage("com.whatsapp");
-         getSourceActivity().startActivity(sendIntent);
-//      } else {
-//         Toast.makeText(getSourceActivity(), "WhatsApp not Installed", Toast.LENGTH_SHORT).show();
-//      }
-   }
+    /**
+     * Implementacion del metodo send utilizando la aplicacion de WhatsApp
+     * @param phone telefono
+     * @param message cuerpo del mensaje
+     */
+    public void send (String phone, String message) {
+        try {
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + Uri.encode(message);
+            Intent sendIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            sendIntent.setPackage("com.whatsapp");
+            getSourceActivity().startActivity(sendIntent);
+        } catch (Exception e) {
+            Toast.makeText(getSourceActivity(), "Error al abrir WhatsApp", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
 }
