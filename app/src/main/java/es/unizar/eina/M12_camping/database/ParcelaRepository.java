@@ -87,9 +87,13 @@ public class ParcelaRepository {
      * @return El identificador de la parcela insertada, o -1 si la insercion falla.
      */
     public long insert(Parcela parcela) {
-//        if(mParcelaDao.isNombreDuplicado(parcela.getNombre())) {
-//            throw new IllegalArgumentException("Ya existe una parcela con el mismo nombre.");
+        if (parcela.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de la parcela no puede estar vacío.");
+        }
+//        if (mParcelaDao.isNombreDuplicado(parcela.getNombre())) {
+//            throw new IllegalArgumentException("El nombre de la parcela ya existe en el sistema.");
 //        }
+
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(
                 () -> mParcelaDao.insert(parcela));
         try {
@@ -109,6 +113,9 @@ public class ParcelaRepository {
      * @return El numero de filas modificadas (1 si se actualiza correctamente, 0 si no existe una parcela con ese ID).
      */
     public int update(Parcela parcela) {
+        if (parcela.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de la parcela no puede estar vacío.");
+        }
 //        if(mParcelaDao.isNombreDuplicadoExceptId(parcela.getNombre(), parcela.getId())) {
 //            throw new IllegalArgumentException("Ya existe una parcela con el mismo nombre.");
 //        }

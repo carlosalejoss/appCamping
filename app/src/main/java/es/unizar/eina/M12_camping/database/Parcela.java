@@ -108,7 +108,7 @@ public class Parcela {
      *
      * @param maxOcupantes El nuevo numero maximo de ocupantes.
      */
-    public void setMaxOcupantes(int maxOcupantes) {
+    public void setMaxOcupantes(Integer maxOcupantes) {
         if (maxOcupantes <= 0) {
             throw new IllegalArgumentException("El numero maximo de ocupantes debe ser mayor que 0.");
         }
@@ -129,7 +129,7 @@ public class Parcela {
      *
      * @param precioXpersona El nuevo precio por persona.
      */
-    public void setPrecioXpersona(double precioXpersona) {
+    public void setPrecioXpersona(Double precioXpersona) {
         if (precioXpersona <= 0) {
             throw new IllegalArgumentException("El precio por persona debe ser mayor que 0.");
         }

@@ -92,6 +92,10 @@ public class ReservaRepository {
      * @return El ID de la reserva recien insertada.
      */
     public long insert(Reserva reserva) {
+        if (reserva.getNombreCliente().trim().isEmpty()) {
+           throw new IllegalArgumentException("El nombre del cliente no puede estar vacío.");
+        }
+
         Future<Long> future = CampingRoomDatabase.databaseWriteExecutor.submit(() -> mReservaDao.insert(reserva));
         try {
             return future.get(TIMEOUT, TimeUnit.MILLISECONDS);
@@ -111,6 +115,10 @@ public class ReservaRepository {
      * 0 si no existe una reserva con ese ID).
      */
     public int update(Reserva reserva) {
+        if (reserva.getNombreCliente().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del cliente no puede estar vacío.");
+        }
+
         Future<Integer> future = CampingRoomDatabase.databaseWriteExecutor.submit(
                 () -> mReservaDao.update(reserva));
         try {
