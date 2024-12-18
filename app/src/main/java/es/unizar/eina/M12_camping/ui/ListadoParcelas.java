@@ -73,7 +73,7 @@ public class ListadoParcelas extends AppCompatActivity {
         registerForContextMenu(mRecyclerView);
 
         // Configurar el botón de pruebas automáticas
-        Button botonEjecutarTests = findViewById(R.id.button_run_tests); // Asegúrate de tener un botón en el XML
+        Button botonEjecutarTests = findViewById(R.id.button_run_tests);
         botonEjecutarTests.setOnClickListener(view -> {
                     // Inicialización de los repositorios
                     ParcelaRepository parcelaRepository = new ParcelaRepository(getApplication());
@@ -87,6 +87,36 @@ public class ListadoParcelas extends AppCompatActivity {
 
                     Toast.makeText(this, "Pruebas completadas. Revisa el Logcat.", Toast.LENGTH_SHORT).show();
                 });
+        // Configurar el botón de pruebas automáticas
+        Button botonEjecutarTestsVolumen = findViewById(R.id.button_run_test_volumen);
+        botonEjecutarTestsVolumen.setOnClickListener(view -> {
+            // Inicialización de los repositorios
+            ParcelaRepository parcelaRepository = new ParcelaRepository(getApplication());
+            ReservaRepository reservaRepository = new ReservaRepository(getApplication());
+
+            // Inicialización de UnitTests
+            UnitTests unitTests = UnitTests.getInstance(parcelaRepository, reservaRepository);
+
+            // Ejecución de las pruebas
+            unitTests.testVolumen();
+
+            Toast.makeText(this, "Prueba de volumen completada. Revisa el Logcat.", Toast.LENGTH_SHORT).show();
+        });
+        // Configurar el botón de pruebas automáticas
+        Button botonEjecutarTestsSobrecarga = findViewById(R.id.button_run_test_sobrecarga);
+        botonEjecutarTestsSobrecarga.setOnClickListener(view -> {
+            // Inicialización de los repositorios
+            ParcelaRepository parcelaRepository = new ParcelaRepository(getApplication());
+            ReservaRepository reservaRepository = new ReservaRepository(getApplication());
+
+            // Inicialización de UnitTests
+            UnitTests unitTests = UnitTests.getInstance(parcelaRepository, reservaRepository);
+
+            // Ejecución de las pruebas
+            unitTests.testSobrecarga();
+
+            Toast.makeText(this, "Prueba de sobrecarga completada. Revisa el Logcat.", Toast.LENGTH_SHORT).show();
+        });
     }
 
     /**

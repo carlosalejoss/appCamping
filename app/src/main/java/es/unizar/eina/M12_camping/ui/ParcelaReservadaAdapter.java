@@ -45,6 +45,13 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
         this.mReservaViewModel = mReservaViewModel;
     }
 
+    /**
+     * Crea un nuevo ParcelaReservadaViewHolder para representar un elemento en la lista.
+     *
+     * @param parent   El ViewGroup al que se añadira el nuevo View.
+     * @param viewType El tipo de vista de la nueva vista.
+     * @return Un ParcelaReservadaViewHolder que contiene la vista para un elemento de la lista.
+     */
     @NonNull
     @Override
     public ParcelaReservadaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,6 +59,12 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
         return new ParcelaReservadaViewHolder(view);
     }
 
+    /**
+     * Vincula los datos de una parcela reservada con un ViewHolder.
+     *
+     * @param holder   El ViewHolder que representa un elemento de la lista.
+     * @param position La posicion del elemento en la lista.
+     */
     @Override
     public void onBindViewHolder(@NonNull ParcelaReservadaViewHolder holder, int position) {
         ParcelaReservada parcelaReservada = mParcelasReservadas.get(position);
@@ -79,6 +92,11 @@ public class ParcelaReservadaAdapter extends RecyclerView.Adapter<ParcelaReserva
 
     }
 
+    /**
+     * Obtiene el numero total de elementos en la lista de parcelas reservadas.
+     *
+     * @return El numero total de elementos en la lista.
+     */
     @Override
     public int getItemCount() {
         return mParcelasReservadas.size();

@@ -183,6 +183,12 @@ public class ParcelaRepository {
         }
     }
 
+    /**
+     * Obtiene el nombre de una parcela por su ID.
+     *
+     * @param parcelaId El ID de la parcela.
+     * @return El nombre de la parcela correspondiente, o null si no se encuentra.
+     */
     public String getNombreParcelaById(int parcelaId) {
         Log.d("ParcelaRepository", "getNombreParcelaById: parcelaId = " + parcelaId);
 

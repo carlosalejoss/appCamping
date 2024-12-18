@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import es.unizar.eina.M12_camping.database.Parcela;
@@ -22,13 +23,24 @@ public class UnitTests {
     private final ParcelaRepository parcelaRepository;
     private final ReservaRepository reservaRepository;
 
-    // Constructor
+    /**
+     * Constructor de la clase UnitTests.
+     *
+     * @param parcelaRepository Repositorio de parcelas.
+     * @param reservaRepository Repositorio de reservas.
+     */
     public UnitTests(ParcelaRepository parcelaRepository, ReservaRepository reservaRepository) {
         this.parcelaRepository = parcelaRepository;
         this.reservaRepository = reservaRepository;
     }
 
-    // Método para obtener la instancia singleton
+    /**
+     * Obtiene la instancia única de UnitTests.
+     *
+     * @param parcelaRepository Repositorio de parcelas.
+     * @param reservaRepository Repositorio de reservas.
+     * @return Instancia única de UnitTests.
+     */
     public static UnitTests getInstance(ParcelaRepository parcelaRepository, ReservaRepository reservaRepository) {
         if (unitTests == null) {
             unitTests = new UnitTests(parcelaRepository, reservaRepository);
@@ -36,7 +48,9 @@ public class UnitTests {
         return unitTests;
     }
 
-
+    /**
+     * Ejecuta todas las pruebas unitarias.
+     */
     public static void ejecutarTests() {
         if (unitTests == null) {
             Log.e("UnitTests", "Error: UnitTests no está inicializado.");
@@ -723,4 +737,104 @@ public class UnitTests {
 
         Log.i("UnitTests", "==== FINALIZADO testBorrarReserva ====");
     }
+
+    /**
+     * Prueba de volumen: Inserta masivamente 100 parcelas y 10.000 reservas en la base de datos.
+     * Se comprueba el funcionamiento del sistema con una carga esperada de datos.
+     */
+    public void testVolumen() {
+        Log.i("UnitTestsVolumen", "==== INICIANDO testVolumen ====");
+        final int NUM_PARCELAS = 100;
+        final int NUM_RESERVAS = 10000;
+
+        // Insertar 100 parcelas
+        for (int i = 1; i <= NUM_PARCELAS; i++) {
+            Parcela parcela = new Parcela("Parcela_" + i, 5, 5.5, "Descripción");
+            try {
+                long id = parcelaRepository.insert(parcela);
+                if (id > 0) {
+                    Log.d("UnitTestsVolumen", "Parcela creada: " + parcela.getNombre() + " (ID: " + id + ")");
+                } else {
+                    Log.e("UnitTestsVolumen", "Error al insertar Parcela: " + parcela.getNombre());
+                }
+            } catch (Exception e) {
+                Log.e("UnitTestsVolumen", "Excepción al insertar Parcela: " + e.getMessage());
+            }
+        }
+        Parcela parcela = new Parcela("Parcela_101", 5, 5.5, "Descripción");
+        long id = parcelaRepository.insert(parcela);
+        if (id > 0) {
+            Log.d("UnitTestsVolumen", "Parcela creada: " + parcela.getNombre() + " (ID: " + id + ")");
+        } else {
+            Log.e("UnitTestsVolumen", "Error al insertar Parcela: " + parcela.getNombre());
+        }
+
+        // Insertar 10,000 reservas
+        for (int i = 1; i <= NUM_RESERVAS; i++) {
+            Reserva reserva = new Reserva("Cliente_" + i, 123456789, obtenerFecha("20-12-2025"), obtenerFecha("30-12-2025"), 0.0);
+
+            try {
+                long reservaId = reservaRepository.insert(reserva);
+                if (reservaId > 0) {
+                    Log.d("UnitTestsVolumen", "Reserva creada: " + reserva.getNombreCliente() + " (ID: " + reservaId + ")");
+                    // Asociar la reserva a una parcela
+                    ParcelaReservada parcelaReservada = new ParcelaReservada((int) reservaId, (int) id, 5);
+                    long idParRes = reservaRepository.insertParcelaReservada(parcelaReservada);
+                    if (idParRes <= 0) {
+                        Log.e("UnitTestsVolumen", "Error al insertar ParcelaReservada: " + id);
+                    }
+                } else {
+                    Log.e("UnitTestsVolumen", "Error al insertar Reserva: " + reserva.getNombreCliente());
+                }
+            } catch (Exception e) {
+                Log.e("UnitTestsVolumen", "Excepción al insertar Reserva: " + e.getMessage());
+            }
+        }
+
+        Log.i("UnitTestsVolumen", "==== FINALIZADO testVolumen ====");
+    }
+
+    /**
+     * Prueba de sobrecarga: Inserta parcelas con descripciones de longitud creciente.
+     * Se intenta insertar parcelas con descripciones de longitud creciente, hasta alcanzar el límite.
+     */
+    public void testSobrecarga() {
+        Log.i("UnitTestSobrecarga", "==== INICIANDO testSobrecargaDescripcionParcela ====");
+
+        String baseDescripcion = "A"; // Base inicial para la descripción
+        int incremento = 100; // Incremento en longitud de la descripción en cada iteración
+        boolean insercionExitosa = true;
+        int longitudActual = 258000;
+        int longitudMaxima = 259000; // Longitud máxima de la descripción
+
+        while (insercionExitosa && longitudActual <= longitudMaxima) {
+            try {
+                // Generar una descripción con longitud actual
+                String descripcion = baseDescripcion.repeat(longitudActual / baseDescripcion.length());
+
+                // Crear una parcela con la descripción
+                Parcela parcela = new Parcela("Sobrecarga" + longitudActual, 5, 10.0, descripcion);
+
+                // Intentar insertar la parcela
+                long id = parcelaRepository.insert(parcela);
+                if (id > 0) {
+                    Log.d("UnitTestSobrecarga", "Parcela insertada con descripción de longitud: " + longitudActual);
+                } else {
+                    Log.e("UnitTestSobrecarga", "Fallo en la inserción con descripción de longitud: " + longitudActual);
+                    insercionExitosa = false;
+                }
+
+                // Incrementar la longitud para la siguiente iteración
+                longitudActual += incremento;
+
+            } catch (Exception e) {
+                Log.e("UnitTestSobrecarga", "Excepción al insertar con longitud: " + longitudActual + " - " + e.getMessage());
+                insercionExitosa = false;
+            }
+        }
+
+        Log.i("UnitTestSobrecarga", "Última longitud insertada con éxito: " + (longitudActual - incremento));
+        Log.i("UnitTestSobrecarga", "==== FINALIZADO testSobrecargaDescripcionParcela ====");
+    }
+
 }

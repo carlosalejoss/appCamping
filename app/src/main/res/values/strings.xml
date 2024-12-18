@@ -97,6 +97,8 @@
     <string name="invalid_date_incorrect">El día o el mes son inválidos.</string>
     <string name="empty_not_saved_descripcion">Parcela no guardada porque no hay descripcion.</string>
     <string name="run_tests">Run Tests</string>
+    <string name="run_test_volumen">Test Volumen</string>ç
+    <string name="run_test_sobrecarga">Test Sobrecarga</string>
 
 
 </resources>
